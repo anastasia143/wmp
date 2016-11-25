@@ -26,7 +26,7 @@
             <div class="navbar-collapse collapse">
                 <ul id="tool-buttons-left-area" class="nav navbar-nav">
                     <li id="file-menu" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fileeee<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="createNewDiagram()">New</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams"
@@ -34,6 +34,14 @@
                             <li><a href="" role="menuitem" tabindex="-1" ng-click="saveCurrentDiagram()">Save</a></li>
                             <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams"
                                    ng-click="saveDiagramAs()">SaveAs</a></li>
+                        </ul>
+                    </li>
+                    <li id="layout-menu" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Layout<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="" role="menuitem" tabindex="-1" ng-click="layoutDiagram()">New</a></li>
+                            <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams"
+                                   ng-click="openFolderWindow()">Layout diagram</a></li>
                         </ul>
                     </li>
                     <li>
