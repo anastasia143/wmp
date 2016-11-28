@@ -129,16 +129,16 @@ class DiagramEditorController {
         });
     }
 
-    private buildGraphFromAdjacencyList(adjacencyList) {
+    private buildGraphFromAdjacencyList(oldElements, oldLinks) {
         var elements = [];
         var links = [];
 
-        _.each(adjacencyList, function(edges, parentElementLabel) {
-            elements.push(this.makeElement(parentElementLabel));
+        _.each(oldElements, function (oldElements, element) {
+            elements.push(this.makeElement(element));
+        });
 
-            _.each(edges, function(childElementLabel) {
-                links.push(this.makeLink(parentElementLabel, childElementLabel));
-            });
+        _.each(oldLinks, function (oldLinks, link) {
+            elements.push(this.makeLink(link.source, link.target));
         });
 
         return elements.concat(links);
@@ -146,11 +146,9 @@ class DiagramEditorController {
 
     public layoutDiagram(diagramId: Number): void {
         var graph = this.diagramEditor.getGraph();
-        var scene = this.diagramEditor.getScene();
 
-        var adjacencyList;
-        var cells = this.buildGraphFromAdjacencyList(adjacencyList);
-        graph.resetCells(cells);
+        var newCells = this.buildGraphFromAdjacencyList(graph.getElements(), graph.getLinks());
+        graph.resetCells(newCells);
 
         joint.layout.DirectedGraph.layout(graph, { setLinkVertices: false });
     }
