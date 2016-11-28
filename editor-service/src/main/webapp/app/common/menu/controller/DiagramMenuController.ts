@@ -377,15 +377,15 @@ class DiagramMenuController {
     }
 
     public layoutDiagram() {
-        /*console.log("Shared entered")
         var menuManager = this;
-        $('#user-name-to-share-folder').empty();
-        $('#enter-name-share-folder').modal('show');
-        $('#name-share-folder-entered').click(function () {
-            var name = $('.share-path input:text').val();
-            var id = menuManager.currentFolder.findChildByName(folderName).getId();
-            menuManager.getClient().addUserToOwners(id, name)
-            $('#enter-name-share-folder').modal('hide');
-        });*/
+        this.currentDiagramFolder = this.currentFolder;
+        this.currentFolder = this.folderTree;
+
+        try {
+            menuManager.diagramEditorController.layoutDiagram(menuManager.currentDiagramFolder.getDiagramIdByName(this.currentDiagramName));
+        }
+        catch (ouch) {
+            console.log("Error: can't layout the diagram");
+        }
     }
 }

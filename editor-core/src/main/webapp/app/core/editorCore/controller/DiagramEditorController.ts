@@ -98,4 +98,60 @@ class DiagramEditorController {
         scene.addNodesFromMap(diagramParts.nodesMap);
         scene.addLinksFromMap(diagramParts.linksMap);
     }
+
+    private makeLink(parentElementLabel, childElementLabel) {
+        return new joint.dia.Link({
+            source: { id: parentElementLabel },
+            target: { id: childElementLabel },
+            attrs: { '.marker-target': { d: 'M 4 0 L 0 2 L 4 4 z' } },
+            smooth: true
+        });
+    }
+
+    private makeElement(label) {
+        var maxLineLength = _.max(label.split('\n'), function(l) { return l.length; }).length;
+
+        var letterSize = 8;
+        var width = 2 * (letterSize * (0.6 * maxLineLength + 1));
+        var height = 2 * ((label.split('\n').length + 1) * letterSize);
+
+        return new joint.shapes.basic.Rect({
+            id: label,
+            size: { width: width, height: height },
+            attrs: {
+                text: { text: label, 'font-size': letterSize, 'font-family': 'monospace' },
+                rect: {
+                    width: width, height: height,
+                    rx: 5, ry: 5,
+                    stroke: '#555'
+                }
+            }
+        });
+    }
+
+    private buildGraphFromAdjacencyList(adjacencyList) {
+        var elements = [];
+        var links = [];
+
+        _.each(adjacencyList, function(edges, parentElementLabel) {
+            elements.push(this.makeElement(parentElementLabel));
+
+            _.each(edges, function(childElementLabel) {
+                links.push(this.makeLink(parentElementLabel, childElementLabel));
+            });
+        });
+
+        return elements.concat(links);
+    }
+
+    public layoutDiagram(diagramId: Number): void {
+        var graph = this.diagramEditor.getGraph();
+        var scene = this.diagramEditor.getScene();
+
+        var adjacencyList;
+        var cells = this.buildGraphFromAdjacencyList(adjacencyList);
+        graph.resetCells(cells);
+
+        joint.layout.DirectedGraph.layout(graph, { setLinkVertices: false });
+    }
 }

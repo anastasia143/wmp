@@ -26,6 +26,7 @@ declare module joint {
             disconnectLinks(cell:Cell) : void;
             removeLinks(cell:Cell) : void;
             findModelsFromPoint(point:{x : number; y: number}):Element[];
+            resetCells(cells:Cell[]) : void;
 
             getLinks();
             getElements();
@@ -167,4 +168,9 @@ declare module joint {
         function deepSupplement(objects:any[], defaultIndicator?:any):any;
     }
 
+    module layout {
+        module DirectedGraph {
+            function layout(objects:any, objects:any):any;
+        }
+    }
 }
