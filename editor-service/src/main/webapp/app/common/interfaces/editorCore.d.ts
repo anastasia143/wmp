@@ -269,7 +269,7 @@ declare abstract class DiagramEditorController {
     public getDiagramParts(): DiagramParts;
     public getNodeTypes(): Map<NodeType>;
     public addFromMap(diagramParts: DiagramParts): void;
-
+    public layoutDiagram(diagramId: Number): void;
 }
 
 declare class SceneController {

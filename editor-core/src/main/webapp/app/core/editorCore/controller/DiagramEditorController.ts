@@ -108,7 +108,7 @@ class DiagramEditorController {
         });
     }
 
-    private makeElement(label) {
+    private makeElement(label: string) {
         var maxLineLength = _.max(label.split('\n'), function(l) { return l.length; }).length;
 
         var letterSize = 8;
@@ -129,16 +129,16 @@ class DiagramEditorController {
         });
     }
 
-    private buildGraphFromAdjacencyList(oldElements, oldLinks) {
+    private buildGraphFromAdjacencyList(oldElements:  joint.dia.Element[], oldLinks:  joint.dia.Link[]) {
         var elements = [];
         var links = [];
 
-        _.each(oldElements, function (oldElements, element) {
-            elements.push(this.makeElement(element));
+        _.each(oldElements, function (element) {
+            elements.push(this.makeElement(element.get('label')));
         });
 
-        _.each(oldLinks, function (oldLinks, link) {
-            elements.push(this.makeLink(link.source, link.target));
+        _.each(oldLinks, function (link) {
+            links.push(this.makeLink(link.get('source').id, link.get('target').id));
         });
 
         return elements.concat(links);
@@ -146,7 +146,6 @@ class DiagramEditorController {
 
     public layoutDiagram(diagramId: Number): void {
         var graph = this.diagramEditor.getGraph();
-
         var newCells = this.buildGraphFromAdjacencyList(graph.getElements(), graph.getLinks());
         graph.resetCells(newCells);
 
