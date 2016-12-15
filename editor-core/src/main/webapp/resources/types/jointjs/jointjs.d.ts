@@ -1,9 +1,11 @@
-// Type definitions for Joint JS 0.9.3
+// Type definitions for Joint JS 1.0.1
 // Project: http://www.jointjs.com/
-// Definitions by: Aidan Reel <http://github.com/areel>, David Durman <http://github.com/DavidDurman>, Ewout Van Gossum <https://github.com/DenEwout>
-// Definitions: https://github.com/borisyankov/DefinitelyTyped
+// Definitions by: Aidan Reel <http://github.com/areel>, David Durman <http://github.com/DavidDurman>, Ewout Van Gossum <https://github.com/DenEwout>, Federico Caselli <https://github.com/CaselIT>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// typings: https://github.com/CaselIT/typings-jointjs
 
 /// <reference path="../backbone/backbone.d.ts" />
+
 
 declare namespace joint {
     export var g: any;
@@ -492,11 +494,31 @@ declare namespace joint {
             }
             class Image extends Generic {
             }
+            class ImageWithPorts extends Generic {
+            }
             class Path extends Generic {
             }
             class Polygon extends Generic {
             }
             class Polyline extends Generic {
+            }
+            class PortsViewInterface {
+
+            }
+        }
+
+        namespace devs {
+
+            class Model extends joint.shapes.basic.Generic {
+            }
+
+            class Atomic extends Model {
+            }
+
+            class Coupled extends Model {
+            }
+
+            class Link extends joint.dia.Link {
             }
         }
     }

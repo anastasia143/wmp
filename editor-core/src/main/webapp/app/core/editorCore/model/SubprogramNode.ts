@@ -17,13 +17,13 @@ class SubprogramNode extends DefaultDiagramNode {
         var fontSize: number = 16;
         var width: number = (0.5 * name.length) * fontSize;
         var height: number = (name.split('\n').length) * fontSize;
-        this.textObject = new  joint.shapes.basic.Text({
+        this.textObject = new joint.shapes.basic.Text({
             position: { x: x - 10, y: y - 20 },
             size: { width: width, height: height },
             attrs: {
-                text: {
+                text: <{ [key: string]: string | number; text?: string; }>  {
                     text: name,
-                    style: {'pointer-events':'none'}
+                    'pointer-events':'none',
                 },
             },
         });

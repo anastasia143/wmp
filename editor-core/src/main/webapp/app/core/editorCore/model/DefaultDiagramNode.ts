@@ -5,10 +5,11 @@
 /// <reference path="PropertyEditElement.ts" />
 /// <reference path="../../../vendor.d.ts" />
 
+import SVGAttributes = joint.dia.SVGAttributes;
 class DefaultDiagramNode implements DiagramNode {
 
     private logicalId: string;
-    private jointObject: joint.shapes.devs.ImageWithPorts;
+    private jointObject: joint.shapes.basic.ImageWithPorts;
     private name: string;
     private type: string;
     private constPropertiesPack: PropertiesPack;
@@ -31,18 +32,19 @@ class DefaultDiagramNode implements DiagramNode {
             position: { x: x, y: y },
             size: { width: 50, height: 50 },
             outPorts: [''],
-            attrs: {
-                image: {
-                    'xlink:href': imagePath
-                },
-            }
+            attrs: <{ [selector: string]: { [key: string]: string} }>
+                {
+                    image: {
+                        'xlink:href': imagePath
+                    }
+                }
         };
 
         if (id) {
             jQuery.extend(jointObjectAttributes, {id: id});
         }
 
-        this.jointObject = new joint.shapes.devs.ImageWithPorts(jointObjectAttributes);
+        this.jointObject = new joint.shapes.basic.ImageWithPorts(jointObjectAttributes);
         this.changeableProperties = properties;
         this.imagePath = imagePath;
     }
