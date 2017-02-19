@@ -5,6 +5,7 @@
 // typings: https://github.com/CaselIT/typings-jointjs
 
 /// <reference path="../backbone/backbone.d.ts" />
+/// <reference path="../lodash/lodash.d.ts" />
 
 
 declare namespace joint {

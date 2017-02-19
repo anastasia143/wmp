@@ -5,6 +5,7 @@
 // typings: https://github.com/CaselIT/typings-jointjs
 
 /// <reference path="../backbone/backbone.d.ts" />
+/// <reference path="../lodash/lodash.d.ts" />
 
 
 declare namespace joint {
@@ -494,11 +495,31 @@ declare namespace joint {
             }
             class Image extends Generic {
             }
+            class ImageWithPorts extends Generic {
+            }
             class Path extends Generic {
             }
             class Polygon extends Generic {
             }
             class Polyline extends Generic {
+            }
+            class PortsViewInterface {
+
+            }
+        }
+
+        namespace devs {
+
+            class Model extends joint.shapes.basic.Generic {
+            }
+
+            class Atomic extends Model {
+            }
+
+            class Coupled extends Model {
+            }
+
+            class Link extends joint.dia.Link {
             }
         }
     }

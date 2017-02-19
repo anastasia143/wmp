@@ -5,7 +5,6 @@
 /// <reference path="PropertyEditElement.ts" />
 /// <reference path="../../../vendor.d.ts" />
 
-import SVGAttributes = joint.dia.SVGAttributes;
 class DefaultDiagramNode implements DiagramNode {
 
     private logicalId: string;

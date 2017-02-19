@@ -5,17 +5,20 @@
  License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+/// <reference path="../backbone/backbone.d.ts" />
+
 (function(root, factory) {
 
     if (typeof define === 'function' && define.amd) {
 
         // For AMD.
 
-        define(['backbone', 'lodash', 'jquery'], function(Backbone, _, $) {
+        define(['backbone', 'lodash', 'jquery'], function(Backbone, __, $) {
 
             Backbone.$ = $;
 
-            return factory(root, Backbone, _, $);
+            return factory(root, Backbone, __, $);
         });
 
     } else if (typeof exports !== 'undefined') {
@@ -23,25 +26,28 @@
         // For Node.js or CommonJS.
 
         var Backbone = require('backbone');
-        var _ = require('lodash');
+        var __ = require('lodash');
         var $ = Backbone.$ = require('jquery');
 
-        module.exports = factory(root, Backbone, _, $);
+        module.exports = factory(root, Backbone, __, $);
 
     } else {
 
         // As a browser global.
 
         var Backbone = root.Backbone;
-        var _ = root._;
+        var __ = root.__;
         var $ = Backbone.$ = root.jQuery || root.$;
 
-        root.joint = factory(root, Backbone, _, $);
+        root.joint = factory(root, Backbone, __, $);
         root.g = root.joint.g;
         root.V = root.Vectorizer = root.joint.V;
+
     }
 
-}(this, function(root, Backbone, _, $) {
+
+
+}(this, function(root, Backbone, __, $) {
 
     (function() {
 
@@ -122,7 +128,7 @@
             return this.slice(start, end);
         }
 
-        function set_(array, offset) {
+        function set__(array, offset) {
 
             if (arguments.length < 2) {
                 offset = 0;
@@ -147,7 +153,7 @@
             result.subarray = subarray;
             result.buffer = result;
             result.byteLength = result.length;
-            result.set = set_;
+            result.set = set__;
             if (typeof arg1 === 'object' && arg1.buffer) {
                 result.buffer = arg1.buffer;
             }
@@ -1468,8 +1474,8 @@
             // Setting `dominant-baseline` on the `<text>` element doesn't work in IE9.
             // In order to have the 0,0 coordinate of the `<text>` element (or the first `<tspan>`)
             // in the top left corner we translate the `<text>` element by `0.8em`.
-            // See `http://www.w3.org/Graphics/SVG/WG/wiki/How_to_determine_dominant_baseline`.
-            // See also `http://apike.ca/prog_svg_text_style.html`.
+            // See `http://www.w3.org/Graphics/SVG/WG/wiki/How__to__determine__dominant__baseline`.
+            // See also `http://apike.ca/prog__svg__text__style.html`.
             var y = this.attr('y');
             if (!y) {
                 this.attr('y', '0.8em');
@@ -1781,7 +1787,7 @@
             var node = this.node.previousSibling;
 
             while (node) {
-                // nodeType 1 for ELEMENT_NODE
+                // nodeType 1 for ELEMENT__NODE
                 if (node.nodeType === 1) index++;
                 node = node.previousSibling;
             }
@@ -2397,7 +2403,8 @@
             var r1 = outerRadius;
             var a0 = startAngle;
             var a1 = endAngle;
-            var da = (a1 < a0 && (da = a0, a0 = a1, a1 = da), a1 - a0);
+            var da2;
+            var da = (a1 < a0 && (da2 = a0, a0 = a1, a1 = da2), a1 - a0);
             var df = da < Math.PI ? '0' : '1';
             var c0 = Math.cos(a0);
             var s0 = Math.sin(a0);
@@ -2812,7 +2819,7 @@
 
             opt = opt || {};
 
-            _.invoke(joint.mvc.views, 'setTheme', theme, opt);
+            __.invoke(joint.mvc.views, 'setTheme', theme, opt);
 
             // Update the default theme on the view prototype.
             joint.mvc.View.prototype.defaultTheme = theme;
@@ -2821,9 +2828,9 @@
         // `joint.env` namespace.
         env: {
 
-            _results: {},
+            __results: {},
 
-            _tests: {
+            __tests: {
 
                 svgforeignobject: function() {
                     return !!document.createElementNS &&
@@ -2833,18 +2840,18 @@
 
             addTest: function(name, fn) {
 
-                return joint.env._tests[name] = fn;
+                return joint.env.__tests[name] = fn;
             },
 
             test: function(name) {
 
-                var fn = joint.env._tests[name];
+                var fn = joint.env.__tests[name];
 
                 if (!fn) {
                     throw new Error('Test not defined ("' + name + '"). Use `joint.env.addTest(name, fn) to add a new test.`');
                 }
 
-                var result = joint.env._results[name];
+                var result = joint.env.__results[name];
 
                 if (typeof result !== 'undefined') {
                     return result;
@@ -2857,7 +2864,7 @@
                 }
 
                 // Cache the test result.
-                joint.env._results[name] = result;
+                joint.env.__results[name] = result;
 
                 return result;
             }
@@ -2989,27 +2996,27 @@
             guid: function(obj) {
 
                 this.guid.id = this.guid.id || 1;
-                obj.id = (obj.id === undefined ? 'j_' + this.guid.id++ : obj.id);
+                obj.id = (obj.id === undefined ? 'j__' + this.guid.id++ : obj.id);
                 return obj.id;
             },
 
             // Copy all the properties to the first argument from the following arguments.
             // All the properties will be overwritten by the properties from the following
             // arguments. Inherited properties are ignored.
-            mixin: _.assign,
+            mixin: __.assign,
 
             // Copy all properties to the first argument from the following
             // arguments only in case if they don't exists in the first argument.
             // All the function propererties in the first argument will get
             // additional property base pointing to the extenders same named
             // property function's call method.
-            supplement: _.defaults,
+            supplement: __.defaults,
 
             // Same as `mixin()` but deep version.
-            deepMixin: _.mixin,
+            deepMixin: __.mixin,
 
             // Same as `supplement()` but deep version.
-            deepSupplement: _.defaultsDeep,
+            deepSupplement: __.defaultsDeep,
 
             normalizeEvent: function(evt) {
 
@@ -3059,7 +3066,7 @@
 
                 return function(callback, context) {
                     return context
-                        ? raf(_.bind(callback, context))
+                        ? raf(__.bind(callback, context))
                         : raf(callback);
                 };
 
@@ -3085,7 +3092,7 @@
 
                 caf = caf || clearTimeout;
 
-                return client ? _.bind(caf, window) : caf;
+                return client ? __.bind(caf, window) : caf;
 
             })(),
 
@@ -3331,10 +3338,10 @@
                 var legacyHandler = function(xhr, callback) {
 
                     var Uint8ToString = function(u8a) {
-                        var CHUNK_SZ = 0x8000;
+                        var CHUNK__SZ = 0x8000;
                         var c = [];
-                        for (var i = 0; i < u8a.length; i += CHUNK_SZ) {
-                            c.push(String.fromCharCode.apply(null, u8a.subarray(i, i + CHUNK_SZ)));
+                        for (var i = 0; i < u8a.length; i += CHUNK__SZ) {
+                            c.push(String.fromCharCode.apply(null, u8a.subarray(i, i + CHUNK__SZ)));
                         }
                         return c.join('');
                     };
@@ -3447,13 +3454,13 @@
 
                 var $element = $(element);
 
-                _.each(attrs, function(attrs, selector) {
+                __.each(attrs, function(attrs, selector) {
                     var $elements = $element.find(selector).addBack().filter(selector);
                     // Make a special case for setting classes.
                     // We do not want to overwrite any existing class.
-                    if (_.has(attrs, 'class')) {
+                    if (__.has(attrs, 'class')) {
                         $elements.addClass(attrs['class']);
-                        attrs = _.omit(attrs, 'class');
+                        attrs = __.omit(attrs, 'class');
                     }
                     $elements.attr(attrs);
                 });
@@ -3559,7 +3566,7 @@
                 },
 
                 object: function(a, b) {
-                    var s = _.keys(a);
+                    var s = __.keys(a);
                     return function(t) {
                         var i, p;
                         var r = {};
@@ -3620,12 +3627,12 @@
 
                     var tpl = '<filter><feFlood flood-color="${color}" flood-opacity="${opacity}" result="colored"/><feMorphology in="SourceAlpha" result="morphedOuter" operator="dilate" radius="${outerRadius}" /><feMorphology in="SourceAlpha" result="morphedInner" operator="dilate" radius="${innerRadius}" /><feComposite result="morphedOuterColored" in="colored" in2="morphedOuter" operator="in"/><feComposite operator="xor" in="morphedOuterColored" in2="morphedInner" result="outline"/><feMerge><feMergeNode in="outline"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
 
-                    var margin = _.isFinite(args.margin) ? args.margin : 2;
-                    var width = _.isFinite(args.width) ? args.width : 1;
+                    var margin = __.isFinite(args.margin) ? args.margin : 2;
+                    var width = __.isFinite(args.width) ? args.width : 1;
 
                     return joint.util.template(tpl)({
                         color: args.color || 'blue',
-                        opacity: _.isFinite(args.opacity) ? args.opacity : 1,
+                        opacity: __.isFinite(args.opacity) ? args.opacity : 1,
                         outerRadius: margin + width,
                         innerRadius: margin
                     });
@@ -3641,9 +3648,9 @@
 
                     return joint.util.template(tpl)({
                         color: args.color || 'red',
-                        width: _.isFinite(args.width) ? args.width : 1,
-                        blur: _.isFinite(args.blur) ? args.blur : 0,
-                        opacity: _.isFinite(args.opacity) ? args.opacity : 1
+                        width: __.isFinite(args.width) ? args.width : 1,
+                        blur: __.isFinite(args.blur) ? args.blur : 0,
+                        opacity: __.isFinite(args.opacity) ? args.opacity : 1
                     });
                 },
 
@@ -3651,10 +3658,10 @@
                 // `y` ... vertical blur (optional)
                 blur: function(args) {
 
-                    var x = _.isFinite(args.x) ? args.x : 2;
+                    var x = __.isFinite(args.x) ? args.x : 2;
 
                     return joint.util.template('<filter><feGaussianBlur stdDeviation="${stdDeviation}"/></filter>')({
-                        stdDeviation: _.isFinite(args.y) ? [x, args.y] : x
+                        stdDeviation: __.isFinite(args.y) ? [x, args.y] : x
                     });
                 },
 
@@ -3672,16 +3679,16 @@
                     return joint.util.template(tpl)({
                         dx: args.dx || 0,
                         dy: args.dy || 0,
-                        opacity: _.isFinite(args.opacity) ? args.opacity : 1,
+                        opacity: __.isFinite(args.opacity) ? args.opacity : 1,
                         color: args.color || 'black',
-                        blur: _.isFinite(args.blur) ? args.blur : 4
+                        blur: __.isFinite(args.blur) ? args.blur : 4
                     });
                 },
 
                 // `amount` ... the proportion of the conversion. A value of 1 is completely grayscale. A value of 0 leaves the input unchanged.
                 grayscale: function(args) {
 
-                    var amount = _.isFinite(args.amount) ? args.amount : 1;
+                    var amount = __.isFinite(args.amount) ? args.amount : 1;
 
                     return joint.util.template('<filter><feColorMatrix type="matrix" values="${a} ${b} ${c} 0 0 ${d} ${e} ${f} 0 0 ${g} ${b} ${h} 0 0 0 0 0 1 0"/></filter>')({
                         a: 0.2126 + 0.7874 * (1 - amount),
@@ -3698,7 +3705,7 @@
                 // `amount` ... the proportion of the conversion. A value of 1 is completely sepia. A value of 0 leaves the input unchanged.
                 sepia: function(args) {
 
-                    var amount = _.isFinite(args.amount) ? args.amount : 1;
+                    var amount = __.isFinite(args.amount) ? args.amount : 1;
 
                     return joint.util.template('<filter><feColorMatrix type="matrix" values="${a} ${b} ${c} 0 0 ${d} ${e} ${f} 0 0 ${g} ${h} ${i} 0 0 0 0 0 1 0"/></filter>')({
                         a: 0.393 + 0.607 * (1 - amount),
@@ -3716,7 +3723,7 @@
                 // `amount` ... the proportion of the conversion. A value of 0 is completely un-saturated. A value of 1 leaves the input unchanged.
                 saturate: function(args) {
 
-                    var amount = _.isFinite(args.amount) ? args.amount : 1;
+                    var amount = __.isFinite(args.amount) ? args.amount : 1;
 
                     return joint.util.template('<filter><feColorMatrix type="saturate" values="${amount}"/></filter>')({
                         amount: 1 - amount
@@ -3734,7 +3741,7 @@
                 // `amount` ... the proportion of the conversion. A value of 1 is completely inverted. A value of 0 leaves the input unchanged.
                 invert: function(args) {
 
-                    var amount = _.isFinite(args.amount) ? args.amount : 1;
+                    var amount = __.isFinite(args.amount) ? args.amount : 1;
 
                     return joint.util.template('<filter><feComponentTransfer><feFuncR type="table" tableValues="${amount} ${amount2}"/><feFuncG type="table" tableValues="${amount} ${amount2}"/><feFuncB type="table" tableValues="${amount} ${amount2}"/></feComponentTransfer></filter>')({
                         amount: amount,
@@ -3746,14 +3753,14 @@
                 brightness: function(args) {
 
                     return joint.util.template('<filter><feComponentTransfer><feFuncR type="linear" slope="${amount}"/><feFuncG type="linear" slope="${amount}"/><feFuncB type="linear" slope="${amount}"/></feComponentTransfer></filter>')({
-                        amount: _.isFinite(args.amount) ? args.amount : 1
+                        amount: __.isFinite(args.amount) ? args.amount : 1
                     });
                 },
 
                 // `amount` ... proportion of the conversion. A value of 0 will create an image that is completely black. A value of 1 leaves the input unchanged.
                 contrast: function(args) {
 
-                    var amount = _.isFinite(args.amount) ? args.amount : 1;
+                    var amount = __.isFinite(args.amount) ? args.amount : 1;
 
                     return joint.util.template('<filter><feComponentTransfer><feFuncR type="linear" slope="${amount}" intercept="${amount2}"/><feFuncG type="linear" slope="${amount}" intercept="${amount2}"/><feFuncB type="linear" slope="${amount}" intercept="${amount2}"/></feComponentTransfer></filter>')({
                         amount: amount,
@@ -3975,7 +3982,7 @@
 
                 prefix: function(value, precision) {
 
-                    var prefixes = _.map(['y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', '', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'], function(d, i) {
+                    var prefixes = __.map(['y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', '', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'], function(d, i) {
                         var k = Math.pow(10, Math.abs(8 - i) * 3);
                         return {
                             scale: i > 8 ? function(d) { return d / k; } : function(d) { return d * k; },
@@ -4012,18 +4019,18 @@
                     return html.replace(regex, function(match) {
 
                         var args = Array.prototype.slice.call(arguments);
-                        var attr = _.find(args.slice(1, 4), function(_attr) {
-                            return !!_attr;
+                        var attr = __.find(args.slice(1, 4), function(__attr) {
+                            return !!__attr;
                         });
 
                         var attrArray = attr.split('.');
                         var value = data[attrArray.shift()];
 
-                        while (!_.isUndefined(value) && attrArray.length) {
+                        while (!__.isUndefined(value) && attrArray.length) {
                             value = value[attrArray.shift()];
                         }
 
-                        return !_.isUndefined(value) ? value : '';
+                        return !__.isUndefined(value) ? value : '';
                     });
                 };
             },
@@ -4041,8 +4048,8 @@
                     for (var i = 0; i < prefixes.length; i++) {
                         var prefix = prefixes[i];
                         var propName = prefix ? (prefix + prop) : (prop.substr(0, 1).toLowerCase() + prop.substr(1));
-                        if (!_.isUndefined(el[propName])) {
-                            return _.isFunction(el[propName]) ? el[propName]() : el[propName];
+                        if (!__.isUndefined(el[propName])) {
+                            return __.isFunction(el[propName]) ? el[propName]() : el[propName];
                         }
                     }
                 }
@@ -4058,13 +4065,13 @@
 
                 if (!className) return className;
 
-                return _.map(className.toString().split(' '), function(_className) {
+                return __.map(className.toString().split(' '), function(__className) {
 
-                    if (_className.substr(0, joint.config.classNamePrefix.length) !== joint.config.classNamePrefix) {
-                        _className = joint.config.classNamePrefix + _className;
+                    if (__className.substr(0, joint.config.classNamePrefix.length) !== joint.config.classNamePrefix) {
+                        __className = joint.config.classNamePrefix + __className;
                     }
 
-                    return _className;
+                    return __className;
 
                 }).join(' ');
             },
@@ -4073,20 +4080,20 @@
 
                 if (!className) return className;
 
-                return _.map(className.toString().split(' '), function(_className) {
+                return __.map(className.toString().split(' '), function(__className) {
 
-                    if (_className.substr(0, joint.config.classNamePrefix.length) === joint.config.classNamePrefix) {
-                        _className = _className.substr(joint.config.classNamePrefix.length);
+                    if (__className.substr(0, joint.config.classNamePrefix.length) === joint.config.classNamePrefix) {
+                        __className = __className.substr(joint.config.classNamePrefix.length);
                     }
 
-                    return _className;
+                    return __className;
 
                 }).join(' ');
             },
 
             wrapWith: function(object, methods, wrapper) {
 
-                if (_.isString(wrapper)) {
+                if (__.isString(wrapper)) {
 
                     if (!joint.util.wrappers[wrapper]) {
                         throw new Error('Unknown wrapper: "' + wrapper + '"');
@@ -4095,11 +4102,11 @@
                     wrapper = joint.util.wrappers[wrapper];
                 }
 
-                if (!_.isFunction(wrapper)) {
+                if (!__.isFunction(wrapper)) {
                     throw new Error('Wrapper must be a function.');
                 }
 
-                _.each(methods, function(method) {
+                __.each(methods, function(method) {
                     object[method] = wrapper(object[method]);
                 });
             },
@@ -4119,16 +4126,16 @@
                     return function() {
 
                         var args = Array.prototype.slice.call(arguments);
-                        var cells = args.length > 0 && _.first(args) || [];
-                        var opt = args.length > 1 && _.last(args) || {};
+                        var cells = args.length > 0 && __.first(args) || [];
+                        var opt = args.length > 1 && __.last(args) || {};
 
-                        if (!_.isArray(cells)) {
+                        if (!__.isArray(cells)) {
 
                             if (opt instanceof joint.dia.Cell) {
                                 cells = args;
                                 opt = {};
                             } else {
-                                cells = _.initial(args);
+                                cells = __.initial(args);
                             }
                         }
 
@@ -4159,20 +4166,20 @@
 
             this.requireSetThemeOverride = options && !!options.theme;
 
-            this.options = _.extend({}, this.options, options);
+            this.options = __.extend({}, this.options, options);
 
-            _.bindAll(this, 'setTheme', 'onSetTheme', 'remove', 'onRemove');
+            __.bindAll(this, 'setTheme', 'onSetTheme', 'remove', 'onRemove');
 
             joint.mvc.views[this.cid] = this;
 
             this.setTheme(this.options.theme || this.defaultTheme);
-            this._ensureElClassName();
+            this.__ensureElClassName();
             this.init();
         },
 
-        _ensureElClassName: function() {
+        __ensureElClassName: function() {
 
-            var className = _.result(this, 'className');
+            var className = __.result(this, 'className');
             var prefixedClassName = joint.util.addClassNamePrefix(className);
 
             this.$el.removeClass(className);
@@ -4251,7 +4258,7 @@
 
     (function() {
 
-        joint.mvc.View._extend = joint.mvc.View.extend;
+        joint.mvc.View.__extend = joint.mvc.View.extend;
 
         joint.mvc.View.extend = function(protoProps, staticProps) {
 
@@ -4273,7 +4280,7 @@
                 return this;
             };
 
-            return joint.mvc.View._extend.call(this, protoProps, staticProps);
+            return joint.mvc.View.__extend.call(this, protoProps, staticProps);
         };
 
     })();
@@ -4307,7 +4314,7 @@
 
             var cell = new ModelClass(attrs, options);
             // Add a reference to the graph. It is necessary to do this here because this is the earliest place
-            // where a new model is created from a plain JS object. For other objects, see `joint.dia.Graph>>_prepareCell()`.
+            // where a new model is created from a plain JS object. For other objects, see `joint.dia.Graph>>__prepareCell()`.
             cell.graph = collection.graph;
 
             return cell;
@@ -4323,7 +4330,7 @@
 
     joint.dia.Graph = Backbone.Model.extend({
 
-        _batches: {},
+        __batches: {},
 
         initialize: function(attrs, opt) {
 
@@ -4345,8 +4352,8 @@
 
             // Backbone automatically doesn't trigger re-sort if models attributes are changed later when
             // they're already in the collection. Therefore, we're triggering sort manually here.
-            this.on('change:z', this._sortOnChangeZ, this);
-            this.on('batch:stop', this._onBatchStop, this);
+            this.on('change:z', this.__sortOnChangeZ, this);
+            this.on('batch:stop', this.__onBatchStop, this);
 
             // `joint.dia.Graph` keeps an internal data structure (an adjacency list)
             // for fast graph queries. All changes that affect the structure of the graph
@@ -4357,35 +4364,35 @@
             // Outgoing edges per node. Note that we use a hash-table for the list
             // of outgoing edges for a faster lookup.
             // [node ID] -> Object [edge] -> true
-            this._out = {};
+            this.__out = {};
             // Ingoing edges per node.
             // [node ID] -> Object [edge] -> true
-            this._in = {};
-            // `_nodes` is useful for quick lookup of all the elements in the graph, without
+            this.__in = {};
+            // `__nodes` is useful for quick lookup of all the elements in the graph, without
             // having to go through the whole cells array.
             // [node ID] -> true
-            this._nodes = {};
-            // `_edges` is useful for quick lookup of all the links in the graph, without
+            this.__nodes = {};
+            // `__edges` is useful for quick lookup of all the links in the graph, without
             // having to go through the whole cells array.
             // [edge ID] -> true
-            this._edges = {};
+            this.__edges = {};
 
-            cells.on('add', this._restructureOnAdd, this);
-            cells.on('remove', this._restructureOnRemove, this);
-            cells.on('reset', this._restructureOnReset, this);
-            cells.on('change:source', this._restructureOnChangeSource, this);
-            cells.on('change:target', this._restructureOnChangeTarget, this);
-            cells.on('remove', this._removeCell, this);
+            cells.on('add', this.__restructureOnAdd, this);
+            cells.on('remove', this.__restructureOnRemove, this);
+            cells.on('reset', this.__restructureOnReset, this);
+            cells.on('change:source', this.__restructureOnChangeSource, this);
+            cells.on('change:target', this.__restructureOnChangeTarget, this);
+            cells.on('remove', this.__removeCell, this);
         },
 
-        _sortOnChangeZ: function() {
+        __sortOnChangeZ: function() {
 
             if (!this.hasActiveBatch('to-front') && !this.hasActiveBatch('to-back')) {
                 this.get('cells').sort();
             }
         },
 
-        _onBatchStop: function(data) {
+        __onBatchStop: function(data) {
 
             var batchName = data && data.batchName;
             if ((batchName === 'to-front' || batchName === 'to-back') && !this.hasActiveBatch(batchName)) {
@@ -4393,74 +4400,74 @@
             }
         },
 
-        _restructureOnAdd: function(cell) {
+        __restructureOnAdd: function(cell) {
 
             if (cell.isLink()) {
-                this._edges[cell.id] = true;
+                this.__edges[cell.id] = true;
                 var source = cell.get('source');
                 var target = cell.get('target');
                 if (source.id) {
-                    (this._out[source.id] || (this._out[source.id] = {}))[cell.id] = true;
+                    (this.__out[source.id] || (this.__out[source.id] = {}))[cell.id] = true;
                 }
                 if (target.id) {
-                    (this._in[target.id] || (this._in[target.id] = {}))[cell.id] = true;
+                    (this.__in[target.id] || (this.__in[target.id] = {}))[cell.id] = true;
                 }
             } else {
-                this._nodes[cell.id] = true;
+                this.__nodes[cell.id] = true;
             }
         },
 
-        _restructureOnRemove: function(cell) {
+        __restructureOnRemove: function(cell) {
 
             if (cell.isLink()) {
-                delete this._edges[cell.id];
+                delete this.__edges[cell.id];
                 var source = cell.get('source');
                 var target = cell.get('target');
-                if (source.id && this._out[source.id] && this._out[source.id][cell.id]) {
-                    delete this._out[source.id][cell.id];
+                if (source.id && this.__out[source.id] && this.__out[source.id][cell.id]) {
+                    delete this.__out[source.id][cell.id];
                 }
-                if (target.id && this._in[target.id] && this._in[target.id][cell.id]) {
-                    delete this._in[target.id][cell.id];
+                if (target.id && this.__in[target.id] && this.__in[target.id][cell.id]) {
+                    delete this.__in[target.id][cell.id];
                 }
             } else {
-                delete this._nodes[cell.id];
+                delete this.__nodes[cell.id];
             }
         },
 
-        _restructureOnReset: function(cells) {
+        __restructureOnReset: function(cells) {
 
             // Normalize into an array of cells. The original `cells` is GraphCells Backbone collection.
             cells = cells.models;
 
-            this._out = {};
-            this._in = {};
-            this._nodes = {};
-            this._edges = {};
+            this.__out = {};
+            this.__in = {};
+            this.__nodes = {};
+            this.__edges = {};
 
-            _.each(cells, this._restructureOnAdd, this);
+            __.each(cells, this.__restructureOnAdd, this);
         },
 
-        _restructureOnChangeSource: function(link) {
+        __restructureOnChangeSource: function(link) {
 
             var prevSource = link.previous('source');
-            if (prevSource.id && this._out[prevSource.id]) {
-                delete this._out[prevSource.id][link.id];
+            if (prevSource.id && this.__out[prevSource.id]) {
+                delete this.__out[prevSource.id][link.id];
             }
             var source = link.get('source');
             if (source.id) {
-                (this._out[source.id] || (this._out[source.id] = {}))[link.id] = true;
+                (this.__out[source.id] || (this.__out[source.id] = {}))[link.id] = true;
             }
         },
 
-        _restructureOnChangeTarget: function(link) {
+        __restructureOnChangeTarget: function(link) {
 
             var prevTarget = link.previous('target');
-            if (prevTarget.id && this._in[prevTarget.id]) {
-                delete this._in[prevTarget.id][link.id];
+            if (prevTarget.id && this.__in[prevTarget.id]) {
+                delete this.__in[prevTarget.id][link.id];
             }
             var target = link.get('target');
             if (target.id) {
-                (this._in[target.id] || (this._in[target.id] = {}))[link.id] = true;
+                (this.__in[target.id] || (this.__in[target.id] = {}))[link.id] = true;
             }
         },
 
@@ -4468,14 +4475,14 @@
         // of the form: [edge] -> true
         getOutboundEdges: function(node) {
 
-            return (this._out && this._out[node]) || {};
+            return (this.__out && this.__out[node]) || {};
         },
 
         // Return all inbound edges for the node. Return value is an object
         // of the form: [edge] -> true
         getInboundEdges: function(node) {
 
-            return (this._in && this._in[node]) || {};
+            return (this.__in && this.__in[node]) || {};
         },
 
         toJSON: function() {
@@ -4512,7 +4519,7 @@
             // Make sure that `cells` attribute is handled separately via resetCells().
             if (attrs.hasOwnProperty('cells')) {
                 this.resetCells(attrs.cells, opt);
-                attrs = _.omit(attrs, 'cells');
+                attrs = __.omit(attrs, 'cells');
             }
 
             // The rest of the attributes are applied via original set method.
@@ -4521,7 +4528,7 @@
 
         clear: function(opt) {
 
-            opt = _.extend({}, opt, { clear: true });
+            opt = __.extend({}, opt, { clear: true });
 
             var collection = this.get('cells');
 
@@ -4549,7 +4556,7 @@
             return this;
         },
 
-        _prepareCell: function(cell) {
+        __prepareCell: function(cell) {
 
             var attrs;
             if (cell instanceof Backbone.Model) {
@@ -4562,7 +4569,7 @@
                 attrs = cell;
             }
 
-            if (!_.isString(attrs.type)) {
+            if (!__.isString(attrs.type)) {
                 throw new TypeError('dia.Graph: cell type must be a string.');
             }
 
@@ -4577,7 +4584,7 @@
 
         addCell: function(cell, options) {
 
-            if (_.isArray(cell)) {
+            if (__.isArray(cell)) {
 
                 return this.addCells(cell, options);
             }
@@ -4588,12 +4595,12 @@
                     cell.set('z', this.maxZIndex() + 1);
                 }
 
-            } else if (_.isUndefined(cell.z)) {
+            } else if (__.isUndefined(cell.z)) {
 
                 cell.z = this.maxZIndex() + 1;
             }
 
-            this.get('cells').add(this._prepareCell(cell), options || {});
+            this.get('cells').add(this.__prepareCell(cell), options || {});
 
             return this;
         },
@@ -4602,11 +4609,11 @@
 
             if (cells.length) {
 
-                cells = _.flattenDeep(cells);
+                cells = __.flattenDeep(cells);
                 opt.position = cells.length;
 
                 this.startBatch('add');
-                _.each(cells, function(cell) {
+                __.each(cells, function(cell) {
                     opt.position--;
                     this.addCell(cell, opt);
                 }, this);
@@ -4621,7 +4628,7 @@
         // Useful for bulk operations and optimizations.
         resetCells: function(cells, opt) {
 
-            this.get('cells').reset(_.map(cells, this._prepareCell, this), opt);
+            this.get('cells').reset(__.map(cells, this.__prepareCell, this), opt);
 
             return this;
         },
@@ -4631,14 +4638,14 @@
             if (cells.length) {
 
                 this.startBatch('remove');
-                _.invoke(cells, 'remove', opt);
+                __.invoke(cells, 'remove', opt);
                 this.stopBatch('remove');
             }
 
             return this;
         },
 
-        _removeCell: function(cell, collection, options) {
+        __removeCell: function(cell, collection, options) {
 
             options = options || {};
 
@@ -4677,12 +4684,12 @@
 
         getElements: function() {
 
-            return _.map(this._nodes, function(exists, node) { return this.getCell(node); }, this);
+            return __.map(this.__nodes, function(exists, node) { return this.getCell(node); }, this);
         },
 
         getLinks: function() {
 
-            return _.map(this._edges, function(exists, edge) { return this.getCell(edge); }, this);
+            return __.map(this.__edges, function(exists, edge) { return this.getCell(edge); }, this);
         },
 
         getFirstCell: function() {
@@ -4702,7 +4709,7 @@
 
             var inbound = opt.inbound;
             var outbound = opt.outbound;
-            if (_.isUndefined(inbound) && _.isUndefined(outbound)) {
+            if (__.isUndefined(inbound) && __.isUndefined(outbound)) {
                 inbound = outbound = true;
             }
 
@@ -4713,7 +4720,7 @@
             var edges = {};
 
             if (outbound) {
-                _.each(this.getOutboundEdges(model.id), function(exists, edge) {
+                __.each(this.getOutboundEdges(model.id), function(exists, edge) {
                     if (!edges[edge]) {
                         links.push(this.getCell(edge));
                         edges[edge] = true;
@@ -4721,7 +4728,7 @@
                 }, this);
             }
             if (inbound) {
-                _.each(this.getInboundEdges(model.id), function(exists, edge) {
+                __.each(this.getInboundEdges(model.id), function(exists, edge) {
                     // Skip links that were already added. Those must be self-loop links
                     // because they are both inbound and outbond edges of the same element.
                     if (!edges[edge]) {
@@ -4739,15 +4746,15 @@
                 // In the first round, we collect all the embedded edges so that we can exclude
                 // them from the final result.
                 var embeddedEdges = {};
-                _.each(embeddedCells, function(cell) {
+                __.each(embeddedCells, function(cell) {
                     if (cell.isLink()) {
                         embeddedEdges[cell.id] = true;
                     }
                 });
-                _.each(embeddedCells, function(cell) {
+                __.each(embeddedCells, function(cell) {
                     if (cell.isLink()) return;
                     if (outbound) {
-                        _.each(this.getOutboundEdges(cell.id), function(exists, edge) {
+                        __.each(this.getOutboundEdges(cell.id), function(exists, edge) {
                             if (!edges[edge] && !embeddedEdges[edge]) {
                                 links.push(this.getCell(edge));
                                 edges[edge] = true;
@@ -4755,7 +4762,7 @@
                         }, this);
                     }
                     if (inbound) {
-                        _.each(this.getInboundEdges(cell.id), function(exists, edge) {
+                        __.each(this.getInboundEdges(cell.id), function(exists, edge) {
                             if (!edges[edge] && !embeddedEdges[edge]) {
                                 links.push(this.getCell(edge));
                                 edges[edge] = true;
@@ -4774,18 +4781,18 @@
 
             var inbound = opt.inbound;
             var outbound = opt.outbound;
-            if (_.isUndefined(inbound) && _.isUndefined(outbound)) {
+            if (__.isUndefined(inbound) && __.isUndefined(outbound)) {
                 inbound = outbound = true;
             }
 
-            var neighbors = _.transform(this.getConnectedLinks(model, opt), function(res, link) {
+            var neighbors = __.transform(this.getConnectedLinks(model, opt), function(res, link) {
 
                 var source = link.get('source');
                 var target = link.get('target');
                 var loop = link.hasLoop(opt);
 
                 // Discard if it is a point, or if the neighbor was already added.
-                if (inbound && _.has(source, 'id') && !res[source.id]) {
+                if (inbound && __.has(source, 'id') && !res[source.id]) {
 
                     var sourceElement = this.getCell(source.id);
 
@@ -4795,7 +4802,7 @@
                 }
 
                 // Discard if it is a point, or if the neighbor was already added.
-                if (outbound && _.has(target, 'id') && !res[target.id]) {
+                if (outbound && __.has(target, 'id') && !res[target.id]) {
 
                     var targetElement = this.getCell(target.id);
 
@@ -4806,12 +4813,12 @@
 
             }, {}, this);
 
-            return _.values(neighbors);
+            return __.values(neighbors);
         },
 
         getCommonAncestor: function(/* cells */) {
 
-            var cellsAncestors = _.map(arguments, function(cell) {
+            var cellsAncestors = __.map(arguments, function(cell) {
 
                 var ancestors = [];
                 var parentId = cell.get('parent');
@@ -4826,12 +4833,12 @@
 
             }, this);
 
-            cellsAncestors = _.sortBy(cellsAncestors, 'length');
+            cellsAncestors = __.sortBy(cellsAncestors, 'length');
 
-            var commonAncestor = _.find(cellsAncestors.shift(), function(ancestor) {
+            var commonAncestor = __.find(cellsAncestors.shift(), function(ancestor) {
 
-                return _.every(cellsAncestors, function(cellAncestors) {
-                    return _.contains(cellAncestors, ancestor);
+                return __.every(cellsAncestors, function(cellAncestors) {
+                    return __.contains(cellAncestors, ancestor);
                 });
             });
 
@@ -4850,7 +4857,7 @@
                 if (el !== element) {
                     res.push(el);
                 }
-            }, _.extend({}, opt, { outbound: true }));
+            }, __.extend({}, opt, { outbound: true }));
             return res;
         },
 
@@ -4865,16 +4872,16 @@
         // the source and target of the link `L2` is changed to point to `A2` and `B2`.
         cloneCells: function(cells) {
 
-            cells = _.unique(cells);
+            cells = __.unique(cells);
 
             // A map of the form [original cell ID] -> [clone] helping
             // us to reconstruct references for source/target and parent/embeds.
             // This is also the returned value.
-            var cloneMap = _.transform(cells, function(map, cell) {
+            var cloneMap = __.transform(cells, function(map, cell) {
                 map[cell.id] = cell.clone();
             }, {});
 
-            _.each(cells, function(cell) {
+            __.each(cells, function(cell) {
 
                 var clone = cloneMap[cell.id];
                 // assert(clone exists)
@@ -4901,7 +4908,7 @@
                 }
 
                 // Find the embeds of the original cell
-                var embeds = _.reduce(cell.get('embeds'), function(newEmbeds, embed) {
+                var embeds = __.reduce(cell.get('embeds'), function(newEmbeds, embed) {
                     // Embedded cells that are not being cloned can not be carried
                     // over with other embedded cells.
                     if (cloneMap[embed]) {
@@ -4910,7 +4917,7 @@
                     return newEmbeds;
                 }, []);
 
-                if (!_.isEmpty(embeds)) {
+                if (!__.isEmpty(embeds)) {
                     clone.set('embeds', embeds);
                 }
             });
@@ -4943,7 +4950,7 @@
             var elements = [];
             var links = [];
 
-            _.each(cells, function(cell) {
+            __.each(cells, function(cell) {
                 if (!cellMap[cell.id]) {
                     subgraph.push(cell);
                     cellMap[cell.id] = cell;
@@ -4956,7 +4963,7 @@
 
                 if (opt.deep) {
                     var embeds = cell.getEmbeddedCells({ deep: true });
-                    _.each(embeds, function(embed) {
+                    __.each(embeds, function(embed) {
                         if (!cellMap[embed.id]) {
                             subgraph.push(embed);
                             cellMap[embed.id] = embed;
@@ -4970,7 +4977,7 @@
                 }
             });
 
-            _.each(links, function(link) {
+            __.each(links, function(link) {
                 // For links, return their source & target (if they are elements - not points).
                 var source = link.get('source');
                 var target = link.get('target');
@@ -4988,10 +4995,10 @@
                 }
             }, this);
 
-            _.each(elements, function(element) {
+            __.each(elements, function(element) {
                 // For elements, include their connected links if their source/target is in the subgraph;
                 var links = this.getConnectedLinks(element, opt);
-                _.each(links, function(link) {
+                __.each(links, function(link) {
                     var source = link.get('source');
                     var target = link.get('target');
                     if (!cellMap[link.id] && source.id && cellMap[source.id] && target.id && cellMap[target.id]) {
@@ -5016,7 +5023,7 @@
                 if (el !== element) {
                     res.push(el);
                 }
-            }, _.extend({}, opt, { inbound: true }));
+            }, __.extend({}, opt, { inbound: true }));
             return res;
         },
 
@@ -5060,7 +5067,7 @@
                 if (!visited[next.id]) {
                     visited[next.id] = true;
                     if (iteratee(next, distance[next.id]) === false) return;
-                    _.each(this.getNeighbors(next, opt), function(neighbor) {
+                    __.each(this.getNeighbors(next, opt), function(neighbor) {
                         distance[neighbor.id] = distance[next.id] + 1;
                         queue.push(neighbor);
                     });
@@ -5073,15 +5080,15 @@
         // If `opt.inbound` is `true`, reverse the search direction (it's like reversing all the link directions).
         // `iteratee` is a function of the form `function(element, distance) {}`.
         // If `iteratee` explicitely returns `false`, the search stops.
-        dfs: function(element, iteratee, opt, _visited, _distance) {
+        dfs: function(element, iteratee, opt, __visited, __distance) {
 
             opt = opt || {};
-            var visited = _visited || {};
-            var distance = _distance || 0;
+            var visited = __visited || {};
+            var distance = __distance || 0;
             if (iteratee(element, distance) === false) return;
             visited[element.id] = true;
 
-            _.each(this.getNeighbors(element, opt), function(neighbor) {
+            __.each(this.getNeighbors(element, opt), function(neighbor) {
                 if (!visited[neighbor.id]) {
                     this.dfs(neighbor, iteratee, opt, visited, distance + 1);
                 }
@@ -5092,8 +5099,8 @@
         getSources: function() {
 
             var sources = [];
-            _.each(this._nodes, function(exists, node) {
-                if (!this._in[node] || _.isEmpty(this._in[node])) {
+            __.each(this.__nodes, function(exists, node) {
+                if (!this.__in[node] || __.isEmpty(this.__in[node])) {
                     sources.push(this.getCell(node));
                 }
             }, this);
@@ -5104,8 +5111,8 @@
         getSinks: function() {
 
             var sinks = [];
-            _.each(this._nodes, function(exists, node) {
-                if (!this._out[node] || _.isEmpty(this._out[node])) {
+            __.each(this.__nodes, function(exists, node) {
+                if (!this.__out[node] || __.isEmpty(this.__out[node])) {
                     sinks.push(this.getCell(node));
                 }
             }, this);
@@ -5115,13 +5122,13 @@
         // Return `true` if `element` is a root. Time complexity: O(1).
         isSource: function(element) {
 
-            return !this._in[element.id] || _.isEmpty(this._in[element.id]);
+            return !this.__in[element.id] || __.isEmpty(this.__in[element.id]);
         },
 
         // Return `true` if `element` is a leaf. Time complexity: O(1).
         isSink: function(element) {
 
-            return !this._out[element.id] || _.isEmpty(this._out[element.id]);
+            return !this.__out[element.id] || __.isEmpty(this.__out[element.id]);
         },
 
         // Return `true` is `elementB` is a successor of `elementA`. Return `false` otherwise.
@@ -5161,25 +5168,25 @@
 
             var inbound = opt.inbound;
             var outbound = opt.outbound;
-            if (_.isUndefined(inbound) && _.isUndefined(outbound)) {
+            if (__.isUndefined(inbound) && __.isUndefined(outbound)) {
                 inbound = outbound = true;
             }
 
             var isNeighbor = false;
 
-            _.each(this.getConnectedLinks(elementA, opt), function(link) {
+            __.each(this.getConnectedLinks(elementA, opt), function(link) {
 
                 var source = link.get('source');
                 var target = link.get('target');
 
                 // Discard if it is a point.
-                if (inbound && _.has(source, 'id') && source.id === elementB.id) {
+                if (inbound && __.has(source, 'id') && source.id === elementB.id) {
                     isNeighbor = true;
                     return false;
                 }
 
                 // Discard if it is a point, or if the neighbor was already added.
-                if (outbound && _.has(target, 'id') && target.id === elementB.id) {
+                if (outbound && __.has(target, 'id') && target.id === elementB.id) {
                     isNeighbor = true;
                     return false;
                 }
@@ -5191,7 +5198,7 @@
         // Disconnect links connected to the cell `model`.
         disconnectLinks: function(model, options) {
 
-            _.each(this.getConnectedLinks(model), function(link) {
+            __.each(this.getConnectedLinks(model), function(link) {
 
                 link.set(link.get('source').id === model.id ? 'source' : 'target', g.point(0, 0), options);
             });
@@ -5200,13 +5207,13 @@
         // Remove links connected to the cell `model` completely.
         removeLinks: function(model, options) {
 
-            _.invoke(this.getConnectedLinks(model), 'remove', options);
+            __.invoke(this.getConnectedLinks(model), 'remove', options);
         },
 
         // Find all elements at given point
         findModelsFromPoint: function(p) {
 
-            return _.filter(this.getElements(), function(el) {
+            return __.filter(this.getElements(), function(el) {
                 return el.getBBox().containsPoint(p);
             });
         },
@@ -5215,11 +5222,11 @@
         findModelsInArea: function(rect, opt) {
 
             rect = g.rect(rect);
-            opt = _.defaults(opt || {}, { strict: false });
+            opt = __.defaults(opt || {}, { strict: false });
 
             var method = opt.strict ? 'containsRect' : 'intersect';
 
-            return _.filter(this.getElements(), function(el) {
+            return __.filter(this.getElements(), function(el) {
                 return rect[method](el.getBBox());
             });
         },
@@ -5227,7 +5234,7 @@
         // Find all elements under the given element.
         findModelsUnderElement: function(element, opt) {
 
-            opt = _.defaults(opt || {}, { searchBy: 'bbox' });
+            opt = __.defaults(opt || {}, { searchBy: 'bbox' });
 
             var bbox = element.getBBox();
             var elements = (opt.searchBy == 'bbox')
@@ -5235,7 +5242,7 @@
                 : this.findModelsFromPoint(bbox[opt.searchBy]());
 
             // don't account element itself or any of its descendents
-            return _.reject(elements, function(el) {
+            return __.reject(elements, function(el) {
                 return element.id == el.id || el.isEmbeddedIn(element);
             });
         },
@@ -5251,7 +5258,7 @@
         // Links are being ignored.
         getCellsBBox: function(cells, opt) {
 
-            return _.reduce(cells, function(memo, cell) {
+            return __.reduce(cells, function(memo, cell) {
                 if (cell.isLink()) return memo;
                 if (memo) {
                     return memo.union(cell.getBBox(opt));
@@ -5264,11 +5271,11 @@
         translate: function(dx, dy, opt) {
 
             // Don't translate cells that are embedded in any other cell.
-            var cells = _.reject(this.getCells(), function(cell) {
+            var cells = __.reject(this.getCells(), function(cell) {
                 return cell.isEmbedded();
             });
 
-            _.invoke(cells, 'translate', dx, dy, opt);
+            __.invoke(cells, 'translate', dx, dy, opt);
         },
 
         resize: function(width, height, opt) {
@@ -5284,7 +5291,7 @@
             if (bbox) {
                 var sx = Math.max(width / bbox.width, 0);
                 var sy = Math.max(height / bbox.height, 0);
-                _.invoke(cells, 'scale', sx, sy, bbox.origin(), opt);
+                __.invoke(cells, 'scale', sx, sy, bbox.origin(), opt);
             }
 
             return this;
@@ -5293,24 +5300,24 @@
         startBatch: function(name, data) {
 
             data = data || {};
-            this._batches[name] = (this._batches[name] || 0) + 1;
+            this.__batches[name] = (this.__batches[name] || 0) + 1;
 
-            return this.trigger('batch:start', _.extend({}, data, { batchName: name }));
+            return this.trigger('batch:start', __.extend({}, data, { batchName: name }));
         },
 
         stopBatch: function(name, data) {
 
             data = data || {};
-            this._batches[name] = (this._batches[name] || 0) - 1;
+            this.__batches[name] = (this.__batches[name] || 0) - 1;
 
-            return this.trigger('batch:stop', _.extend({}, data, { batchName: name }));
+            return this.trigger('batch:stop', __.extend({}, data, { batchName: name }));
         },
 
         hasActiveBatch: function(name) {
             if (name) {
-                return this._batches[name];
+                return this.__batches[name];
             } else {
-                return _.any(this._batches, function(batches) { return batches > 0; });
+                return __.any(this.__batches, function(batches) { return batches > 0; });
             }
         }
     });
@@ -5325,20 +5332,20 @@
 
     joint.dia.Cell = Backbone.Model.extend({
 
-        // This is the same as Backbone.Model with the only difference that is uses _.merge
-        // instead of just _.extend. The reason is that we want to mixin attributes set in upper classes.
+        // This is the same as Backbone.Model with the only difference that is uses __.merge
+        // instead of just __.extend. The reason is that we want to mixin attributes set in upper classes.
         constructor: function(attributes, options) {
 
             var defaults;
             var attrs = attributes || {};
-            this.cid = _.uniqueId('c');
+            this.cid = __.uniqueId('c');
             this.attributes = {};
             if (options && options.collection) this.collection = options.collection;
             if (options && options.parse) attrs = this.parse(attrs, options) || {};
-            if ((defaults = _.result(this, 'defaults'))) {
+            if ((defaults = __.result(this, 'defaults'))) {
                 //<custom code>
-                // Replaced the call to _.defaults with _.merge.
-                attrs = _.merge({}, defaults, attrs);
+                // Replaced the call to __.defaults with __.merge.
+                attrs = __.merge({}, defaults, attrs);
                 //</custom code>
             }
             this.set(attrs, options);
@@ -5359,26 +5366,26 @@
 
             // Loop through all the attributes and
             // omit the default attributes as they are implicitly reconstructable by the cell 'type'.
-            _.each(attrs, function(attr, selector) {
+            __.each(attrs, function(attr, selector) {
 
                 var defaultAttr = defaultAttrs[selector];
 
-                _.each(attr, function(value, name) {
+                __.each(attr, function(value, name) {
 
                     // attr is mainly flat though it might have one more level (consider the `style` attribute).
                     // Check if the `value` is object and if yes, go one level deep.
-                    if (_.isObject(value) && !_.isArray(value)) {
+                    if (__.isObject(value) && !__.isArray(value)) {
 
-                        _.each(value, function(value2, name2) {
+                        __.each(value, function(value2, name2) {
 
-                            if (!defaultAttr || !defaultAttr[name] || !_.isEqual(defaultAttr[name][name2], value2)) {
+                            if (!defaultAttr || !defaultAttr[name] || !__.isEqual(defaultAttr[name][name2], value2)) {
 
                                 finalAttrs[selector] = finalAttrs[selector] || {};
                                 (finalAttrs[selector][name] || (finalAttrs[selector][name] = {}))[name2] = value2;
                             }
                         });
 
-                    } else if (!defaultAttr || !_.isEqual(defaultAttr[name], value)) {
+                    } else if (!defaultAttr || !__.isEqual(defaultAttr[name], value)) {
                         // `value` is not an object, default attribute for such a selector does not exist
                         // or it is different than the attribute value set on the model.
 
@@ -5388,8 +5395,8 @@
                 });
             });
 
-            var attributes = _.cloneDeep(_.omit(this.attributes, 'attrs'));
-            //var attributes = JSON.parse(JSON.stringify(_.omit(this.attributes, 'attrs')));
+            var attributes = __.cloneDeep(__.omit(this.attributes, 'attrs'));
+            //var attributes = JSON.parse(JSON.stringify(__.omit(this.attributes, 'attrs')));
             attributes.attrs = finalAttrs;
 
             return attributes;
@@ -5402,7 +5409,7 @@
                 this.set('id', joint.util.uuid(), { silent: true });
             }
 
-            this._transitionIds = {};
+            this.__transitionIds = {};
 
             // Collect ports defined in `attrs` and keep collecting whenever `attrs` object changes.
             this.processPorts();
@@ -5423,12 +5430,12 @@
 
             // Collect ports from the `attrs` object.
             var ports = {};
-            _.each(this.get('attrs'), function(attrs, selector) {
+            __.each(this.get('attrs'), function(attrs, selector) {
 
                 if (attrs && attrs.port) {
 
                     // `port` can either be directly an `id` or an object containing an `id` (and potentially other data).
-                    if (!_.isUndefined(attrs.port.id)) {
+                    if (!__.isUndefined(attrs.port.id)) {
                         ports[attrs.port.id] = attrs.port;
                     } else {
                         ports[attrs.port] = { id: attrs.port };
@@ -5439,22 +5446,22 @@
             // Collect ports that have been removed (compared to the previous ports) - if any.
             // Use hash table for quick lookup.
             var removedPorts = {};
-            _.each(previousPorts, function(port, id) {
+            __.each(previousPorts, function(port, id) {
 
                 if (!ports[id]) removedPorts[id] = true;
             });
 
             // Remove all the incoming/outgoing links that have source/target port set to any of the removed ports.
-            if (this.graph && !_.isEmpty(removedPorts)) {
+            if (this.graph && !__.isEmpty(removedPorts)) {
 
                 var inboundLinks = this.graph.getConnectedLinks(this, { inbound: true });
-                _.each(inboundLinks, function(link) {
+                __.each(inboundLinks, function(link) {
 
                     if (removedPorts[link.get('target').port]) link.remove();
                 });
 
                 var outboundLinks = this.graph.getConnectedLinks(this, { outbound: true });
-                _.each(outboundLinks, function(link) {
+                __.each(outboundLinks, function(link) {
 
                     if (removedPorts[link.get('source').port]) link.remove();
                 });
@@ -5482,7 +5489,7 @@
                 parentCell.unembed(this);
             }
 
-            _.invoke(this.getEmbeddedCells(), 'remove', opt);
+            __.invoke(this.getEmbeddedCells(), 'remove', opt);
 
             this.trigger('remove', this, this.collection, opt);
 
@@ -5506,7 +5513,7 @@
                 if (opt.deep) {
 
                     var cells = this.getEmbeddedCells({ deep: true, breadthFirst: true });
-                    _.each(cells, function(cell) { cell.set('z', ++z, opt); });
+                    __.each(cells, function(cell) { cell.set('z', ++z, opt); });
 
                 }
 
@@ -5529,7 +5536,7 @@
                 if (opt.deep) {
 
                     var cells = this.getEmbeddedCells({ deep: true, breadthFirst: true });
-                    _.eachRight(cells, function(cell) { cell.set('z', z--, opt); });
+                    __.eachRight(cells, function(cell) { cell.set('z', z--, opt); });
                 }
 
                 this.set('z', z, opt).stopBatch('to-back');
@@ -5548,13 +5555,13 @@
 
                 this.startBatch('embed');
 
-                var embeds = _.clone(this.get('embeds') || []);
+                var embeds = __.clone(this.get('embeds') || []);
 
                 // We keep all element ids after link ids.
                 embeds[cell.isLink() ? 'unshift' : 'push'](cell.id);
 
                 cell.set('parent', this.id, opt);
-                this.set('embeds', _.uniq(embeds), opt);
+                this.set('embeds', __.uniq(embeds), opt);
 
                 this.stopBatch('embed');
             }
@@ -5567,7 +5574,7 @@
             this.startBatch('unembed');
 
             cell.unset('parent', opt);
-            this.set('embeds', _.without(this.get('embeds'), cell.id), opt);
+            this.set('embeds', __.without(this.get('embeds'), cell.id), opt);
 
             this.stopBatch('unembed');
 
@@ -5630,14 +5637,14 @@
 
                         // depthFirst algorithm
                         cells = this.getEmbeddedCells();
-                        _.each(cells, function(cell) {
+                        __.each(cells, function(cell) {
                             cells.push.apply(cells, cell.getEmbeddedCells(opt));
                         });
                     }
 
                 } else {
 
-                    cells = _.map(this.get('embeds'), this.graph.getCell, this.graph);
+                    cells = __.map(this.get('embeds'), this.graph.getCell, this.graph);
                 }
 
                 return cells;
@@ -5647,10 +5654,10 @@
 
         isEmbeddedIn: function(cell, opt) {
 
-            var cellId = _.isString(cell) ? cell : cell.id;
+            var cellId = __.isString(cell) ? cell : cell.id;
             var parentId = this.get('parent');
 
-            opt = _.defaults({ deep: true }, opt);
+            opt = __.defaults({ deep: true }, opt);
 
             // See getEmbeddedCells().
             if (this.graph && opt.deep) {
@@ -5703,7 +5710,7 @@
                 // Deep cloning.
 
                 // For a deep clone, simply call `graph.cloneCells()` with the cell and all its embedded cells.
-                return _.values(joint.dia.Graph.prototype.cloneCells.call(null, [this].concat(this.getEmbeddedCells({ deep: true }))));
+                return __.values(joint.dia.Graph.prototype.cloneCells.call(null, [this].concat(this.getEmbeddedCells({ deep: true }))));
             }
         },
 
@@ -5722,7 +5729,7 @@
 
             var delim = '/';
 
-            if (_.isString(props)) {
+            if (__.isString(props)) {
                 // Get/set an attribute by a special path syntax that delimits
                 // nested objects by the colon character.
 
@@ -5751,20 +5758,20 @@
                     // Pure integer keys will cause issues and are therefore not allowed.
                     var initializer = update;
                     var prevProperty = property;
-                    _.each(pathArray, function(key) {
-                        initializer = initializer[prevProperty] = (_.isFinite(Number(key)) ? [] : {});
+                    __.each(pathArray, function(key) {
+                        initializer = initializer[prevProperty] = (__.isFinite(Number(key)) ? [] : {});
                         prevProperty = key;
                     });
                     // Fill update with the `value` on `path`.
                     update = joint.util.setByPath(update, path, value, '/');
 
-                    var baseAttributes = _.merge({}, this.attributes);
+                    var baseAttributes = __.merge({}, this.attributes);
                     // if rewrite mode enabled, we replace value referenced by path with
                     // the new one (we don't merge).
                     opt.rewrite && joint.util.unsetByPath(baseAttributes, path, '/');
 
                     // Merge update with the model attributes.
-                    var attributes = _.merge(baseAttributes, update);
+                    var attributes = __.merge(baseAttributes, update);
                     // Finally, set the property to the updated attributes.
                     return this.set(property, attributes[property], opt);
 
@@ -5774,7 +5781,7 @@
                 }
             }
 
-            return this.set(_.merge({}, this.attributes, props), value);
+            return this.set(__.merge({}, this.attributes, props), value);
         },
 
         // A convient way to unset nested properties
@@ -5796,7 +5803,7 @@
             // A nested property
             var property = pathArray[0];
             var nestedPath = pathArray.slice(1).join('/');
-            var propertyValue = _.merge({}, this.get(property));
+            var propertyValue = __.merge({}, this.get(property));
 
             joint.util.unsetByPath(propertyValue, nestedPath, '/');
 
@@ -5808,7 +5815,7 @@
 
             var args = Array.prototype.slice.call(arguments);
 
-            if (_.isString(attrs)) {
+            if (__.isString(attrs)) {
                 // Get/set an attribute by a special path syntax that delimits
                 // nested objects by the colon character.
                 args[0] = 'attrs/' + attrs;
@@ -5824,8 +5831,8 @@
         // A convenient way to unset nested attributes
         removeAttr: function(path, opt) {
 
-            if (_.isArray(path)) {
-                _.each(path, function(p) { this.removeAttr(p, opt); }, this);
+            if (__.isArray(path)) {
+                __.each(path, function(p) { this.removeAttr(p, opt); }, this);
                 return this;
             }
 
@@ -5843,12 +5850,12 @@
                 valueFunction: joint.util.interpolate.number
             };
 
-            opt = _.extend(defaults, opt);
+            opt = __.extend(defaults, opt);
 
             var firstFrameTime = 0;
             var interpolatingFunction;
 
-            var setter = _.bind(function(runtime) {
+            var setter = __.bind(function(runtime) {
 
                 var id, progress, propertyValue;
 
@@ -5857,10 +5864,10 @@
                 progress = runtime / opt.duration;
 
                 if (progress < 1) {
-                    this._transitionIds[path] = id = joint.util.nextFrame(setter);
+                    this.__transitionIds[path] = id = joint.util.nextFrame(setter);
                 } else {
                     progress = 1;
-                    delete this._transitionIds[path];
+                    delete this.__transitionIds[path];
                 }
 
                 propertyValue = interpolatingFunction(opt.timingFunction(progress));
@@ -5873,23 +5880,23 @@
 
             }, this);
 
-            var initiator = _.bind(function(callback) {
+            var initiator = __.bind(function(callback) {
 
                 this.stopTransitions(path);
 
                 interpolatingFunction = opt.valueFunction(joint.util.getByPath(this.attributes, path, delim), value);
 
-                this._transitionIds[path] = joint.util.nextFrame(callback);
+                this.__transitionIds[path] = joint.util.nextFrame(callback);
 
                 this.trigger('transition:start', this, path);
 
             }, this);
 
-            return _.delay(initiator, opt.delay, setter);
+            return __.delay(initiator, opt.delay, setter);
         },
 
         getTransitions: function() {
-            return _.keys(this._transitionIds);
+            return __.keys(this.__transitionIds);
         },
 
         stopTransitions: function(path, delim) {
@@ -5898,15 +5905,15 @@
 
             var pathArray = path && path.split(delim);
 
-            _(this._transitionIds).keys().filter(pathArray && function(key) {
+            __(this.__transitionIds).keys().filter(pathArray && function(key) {
 
-                    return _.isEqual(pathArray, key.split(delim).slice(0, pathArray.length));
+                    return __.isEqual(pathArray, key.split(delim).slice(0, pathArray.length));
 
                 }).each(function(key) {
 
-                joint.util.cancelFrame(this._transitionIds[key]);
+                joint.util.cancelFrame(this.__transitionIds[key]);
 
-                delete this._transitionIds[key];
+                delete this.__transitionIds[key];
 
                 this.trigger('transition:end', this, key);
 
@@ -5942,12 +5949,12 @@
         },
 
         startBatch: function(name, opt) {
-            if (this.graph) { this.graph.startBatch(name, _.extend({}, opt, { cell: this })); }
+            if (this.graph) { this.graph.startBatch(name, __.extend({}, opt, { cell: this })); }
             return this;
         },
 
         stopBatch: function(name, opt) {
-            if (this.graph) { this.graph.stopBatch(name, _.extend({}, opt, { cell: this })); }
+            if (this.graph) { this.graph.stopBatch(name, __.extend({}, opt, { cell: this })); }
             return this;
         }
     });
@@ -5968,7 +5975,7 @@
 
             if (type) {
 
-                _.each(type.toLowerCase().split('.'), function(value, index, list) {
+                __.each(type.toLowerCase().split('.'), function(value, index, list) {
                     classNames.push('type-' + list.slice(0, index + 1).join('-'));
                 });
             }
@@ -5994,7 +6001,7 @@
 
         init: function() {
 
-            _.bindAll(this, 'remove', 'update');
+            __.bindAll(this, 'remove', 'update');
 
             // Store reference to this to the <g> DOM element so that the view is accessible through the DOM tree.
             this.$el.data('view', this);
@@ -6021,15 +6028,15 @@
         // Example: `can('vertexMove')`, `can('labelMove')`.
         can: function(feature) {
 
-            var interactive = _.isFunction(this.options.interactive)
+            var interactive = __.isFunction(this.options.interactive)
                 ? this.options.interactive(this)
                 : this.options.interactive;
 
-            return (_.isObject(interactive) && interactive[feature] !== false) ||
-                (_.isBoolean(interactive) && interactive !== false);
+            return (__.isObject(interactive) && interactive[feature] !== false) ||
+                (__.isBoolean(interactive) && interactive !== false);
         },
 
-        // Override the Backbone `_ensureElement()` method in order to create a `<g>` node that wraps
+        // Override the Backbone `__ensureElement()` method in order to create a `<g>` node that wraps
         // all the nodes of the Cell view.
         _ensureElement: function() {
 
@@ -6037,13 +6044,13 @@
 
             if (!this.el) {
 
-                var attrs = _.extend({ id: this.id }, _.result(this, 'attributes'));
-                if (this.className) attrs['class'] = _.result(this, 'className');
-                el = V(_.result(this, 'tagName'), attrs).node;
+                var attrs = __.extend({ id: this.id }, __.result(this, 'attributes'));
+                if (this.className) attrs['class'] = __.result(this, 'className');
+                el = V(__.result(this, 'tagName'), attrs).node;
 
             } else {
 
-                el = _.result(this, 'el');
+                el = __.result(this, 'el');
             }
 
             this.setElement(el, false);
@@ -6051,7 +6058,7 @@
 
         // Utilize an alternative DOM manipulation API by
         // adding an element reference wrapped in Vectorizer.
-        _setElement: function(el) {
+        setElement: function(el) {
             this.$el = el instanceof Backbone.$ ? el : Backbone.$(el);
             this.el = this.$el[0];
             this.vel = V(this.el);
@@ -6168,7 +6175,7 @@
         // An example is: `{ filter: { name: 'blur', args: { radius: 5 } } }`.
         applyFilter: function(selector, filter) {
 
-            var $selected = _.isString(selector) ? this.findBySelector(selector) : $(selector);
+            var $selected = __.isString(selector) ? this.findBySelector(selector) : $(selector);
 
             // Generate a hash code from the stringified filter definition. This gives us
             // a unique filter ID for different definitions.
@@ -6207,7 +6214,7 @@
         // An example is: `{ fill: { type: 'linearGradient', stops: [ { offset: '10%', color: 'green' }, { offset: '50%', color: 'blue' } ] } }`.
         applyGradient: function(selector, attr, gradient) {
 
-            var $selected = _.isString(selector) ? this.findBySelector(selector) : $(selector);
+            var $selected = __.isString(selector) ? this.findBySelector(selector) : $(selector);
 
             // Generate a hash code from the stringified filter definition. This gives us
             // a unique filter ID for different definitions.
@@ -6220,8 +6227,8 @@
 
                 var gradientSVGString = [
                     '<' + gradient.type + '>',
-                    _.map(gradient.stops, function(stop) {
-                        return '<stop offset="' + stop.offset + '" stop-color="' + stop.color + '" stop-opacity="' + (_.isFinite(stop.opacity) ? stop.opacity : 1) + '" />';
+                    __.map(gradient.stops, function(stop) {
+                        return '<stop offset="' + stop.offset + '" stop-color="' + stop.color + '" stop-opacity="' + (__.isFinite(stop.opacity) ? stop.opacity : 1) + '" />';
                     }).join(''),
                     '</' + gradient.type + '>'
                 ].join('');
@@ -6288,7 +6295,7 @@
 
             if (this.model.graph) {
                 this.model.startBatch('pointer');
-                this._graph = this.model.graph;
+                this.__graph = this.model.graph;
             }
 
             this.notify('cell:pointerdown', evt, x, y);
@@ -6303,11 +6310,11 @@
 
             this.notify('cell:pointerup', evt, x, y);
 
-            if (this._graph) {
+            if (this.__graph) {
                 // we don't want to trigger event on model as model doesn't
                 // need to be member of collection anymore (remove)
-                this._graph.stopBatch('pointer', { cell: this.model });
-                delete this._graph;
+                this.__graph.stopBatch('pointer', { cell: this.model });
+                delete this.__graph;
             }
         },
 
@@ -6353,14 +6360,14 @@
 
         initialize: function() {
 
-            this._initializePorts();
+            this.__initializePorts();
             joint.dia.Cell.prototype.initialize.apply(this, arguments);
         },
 
         /**
          * @abstract
          */
-        _initializePorts: function() {
+        __initializePorts: function() {
             // implemented in ports.js
         },
 
@@ -6371,7 +6378,7 @@
 
         position: function(x, y, opt) {
 
-            var isSetter = _.isNumber(y);
+            var isSetter = __.isNumber(y);
 
             opt = (isSetter ? opt : x) || {};
 
@@ -6463,9 +6470,9 @@
 
             if (opt.transition) {
 
-                if (!_.isObject(opt.transition)) opt.transition = {};
+                if (!__.isObject(opt.transition)) opt.transition = {};
 
-                this.transition('position', translatedPosition, _.extend({}, opt.transition, {
+                this.transition('position', translatedPosition, __.extend({}, opt.transition, {
                     valueFunction: joint.util.interpolate.object
                 }));
 
@@ -6475,7 +6482,7 @@
             }
 
             // Recursively call `translate()` on all the embeds cells.
-            _.invoke(this.getEmbeddedCells(), 'translate', tx, ty, opt);
+            __.invoke(this.getEmbeddedCells(), 'translate', tx, ty, opt);
 
             return this;
         },
@@ -6617,7 +6624,7 @@
 
                 if (opt.deep) {
                     // Recursively apply fitEmbeds on all embeds first.
-                    _.invoke(embeddedCells, 'fitEmbeds', opt);
+                    __.invoke(embeddedCells, 'fitEmbeds', opt);
                 }
 
                 // Compute cell's size and position  based on the children bbox
@@ -6663,7 +6670,7 @@
                 // Cloning the options here so the flags added by the `translate` method
                 // won't propagate to the `rotate` method. This is important because of
                 // LinkView update optimalization.
-                this.translate(dx, dy, _.clone(opt));
+                this.translate(dx, dy, __.clone(opt));
                 this.rotate(angle, absolute, null, opt);
                 this.stopBatch('rotate');
 
@@ -6703,7 +6710,7 @@
 
     joint.dia.ElementView = joint.dia.CellView.extend({
 
-        SPECIAL_ATTRIBUTES: [
+        SPECIAL__ATTRIBUTES: [
             'style',
             'text',
             'html',
@@ -6722,7 +6729,7 @@
         /**
          * @abstract
          */
-        _removePorts: function() {
+        __removePorts: function() {
             // implemented in ports.js
         },
 
@@ -6730,7 +6737,7 @@
          *
          * @abstract
          */
-        _renderPorts: function() {
+        __renderPorts: function() {
             // implemented in ports.js
         },
 
@@ -6754,13 +6761,13 @@
             this.listenTo(model, 'change:angle', this.rotate);
             this.listenTo(model, 'change:markup', this.render);
 
-            this._initializePorts();
+            this.__initializePorts();
         },
 
         /**
          * @abstract
          */
-        _initializePorts: function() {
+        __initializePorts: function() {
 
         },
 
@@ -6771,11 +6778,11 @@
         updateAttr: function($selected, attrs) {
 
             // Special attributes are treated by JointJS, not by SVG.
-            var specialAttributes = this.SPECIAL_ATTRIBUTES.slice();
+            var specialAttributes = this.SPECIAL__ATTRIBUTES.slice();
 
             // If the `filter` attribute is an object, it is in the special JointJS filter format and so
             // it becomes a special attribute and is treated separately.
-            if (_.isObject(attrs.filter)) {
+            if (__.isObject(attrs.filter)) {
 
                 specialAttributes.push('filter');
                 this.applyFilter($selected, attrs.filter);
@@ -6783,12 +6790,12 @@
 
             // If the `fill` or `stroke` attribute is an object, it is in the special JointJS gradient format and so
             // it becomes a special attribute and is treated separately.
-            if (_.isObject(attrs.fill)) {
+            if (__.isObject(attrs.fill)) {
 
                 specialAttributes.push('fill');
                 this.applyGradient($selected, 'fill', attrs.fill);
             }
-            if (_.isObject(attrs.stroke)) {
+            if (__.isObject(attrs.stroke)) {
 
                 specialAttributes.push('stroke');
                 this.applyGradient($selected, 'stroke', attrs.stroke);
@@ -6799,16 +6806,16 @@
             // Note that it's important to set text before applying the rest of the final attributes.
             // Vectorizer `text()` method sets on the element its own attributes and it has to be possible
             // to rewrite them, if needed. (i.e display: 'none')
-            if (!_.isUndefined(attrs.text)) {
+            if (!__.isUndefined(attrs.text)) {
 
                 $selected.each(function() {
 
-                    if (!_.isUndefined(attrs.x)) {
+                    if (!__.isUndefined(attrs.x)) {
                         V(this).attr('x', attrs.x);
                         specialAttributes.push('x');
                     }
 
-                    if (!_.isUndefined(attrs.y)) {
+                    if (!__.isUndefined(attrs.y)) {
                         V(this).attr('y', attrs.y);
                         specialAttributes.push('y');
                     }
@@ -6824,7 +6831,7 @@
 
             // Set regular attributes on the `$selected` subelement. Note that we cannot use the jQuery attr()
             // method as some of the attributes might be namespaced (e.g. xlink:href) which fails with jQuery attr().
-            var finalAttributes = _.omit(attrs, specialAttributes);
+            var finalAttributes = __.omit(attrs, specialAttributes);
 
             $selected.each(function() {
 
@@ -6833,7 +6840,7 @@
 
             // `port` attribute contains the `id` of the port that the underlying magnet represents.
             if (attrs.port) {
-                $selected.attr('port', _.isUndefined(attrs.port.id) ? attrs.port : attrs.port.id);
+                $selected.attr('port', __.isUndefined(attrs.port.id) ? attrs.port : attrs.port.id);
             }
 
             // `style` attribute is special in the sense that it sets the CSS style of the subelement.
@@ -6842,7 +6849,7 @@
                 $selected.css(attrs.style);
             }
 
-            if (!_.isUndefined(attrs.html)) {
+            if (!__.isUndefined(attrs.html)) {
 
                 $selected.each(function() {
 
@@ -6855,7 +6862,7 @@
         // Default is to process the `attrs` object and set attributes on subelements based on the selectors.
         update: function(cell, renderingOnlyAttrs) {
 
-            this._removePorts();
+            this.__removePorts();
 
             var allAttrs = this.model.get('attrs');
 
@@ -6868,7 +6875,7 @@
             var relativelyPositioned = [];
             var nodesBySelector = {};
 
-            _.each(renderingOnlyAttrs || allAttrs, function(attrs, selector) {
+            __.each(renderingOnlyAttrs || allAttrs, function(attrs, selector) {
 
                 // Elements that should be updated.
                 var $selected = (selector === '.')
@@ -6884,17 +6891,17 @@
 
                 // Special `ref-x` and `ref-y` attributes make it possible to set both absolute or
                 // relative positioning of subelements.
-                if (!_.isUndefined(attrs['ref-x']) ||
-                    !_.isUndefined(attrs['ref-y']) ||
-                    !_.isUndefined(attrs['ref-dx']) ||
-                    !_.isUndefined(attrs['ref-dy']) ||
-                    !_.isUndefined(attrs['x-alignment']) ||
-                    !_.isUndefined(attrs['y-alignment']) ||
-                    !_.isUndefined(attrs['ref-width']) ||
-                    !_.isUndefined(attrs['ref-height'])
+                if (!__.isUndefined(attrs['ref-x']) ||
+                    !__.isUndefined(attrs['ref-y']) ||
+                    !__.isUndefined(attrs['ref-dx']) ||
+                    !__.isUndefined(attrs['ref-dy']) ||
+                    !__.isUndefined(attrs['x-alignment']) ||
+                    !__.isUndefined(attrs['y-alignment']) ||
+                    !__.isUndefined(attrs['ref-width']) ||
+                    !__.isUndefined(attrs['ref-height'])
                 ) {
 
-                    _.each($selected, function(el, index, list) {
+                    __.each($selected, function(el, index, list) {
                         var $el = $(el);
                         // copy original list selector to the element
                         $el.selector = list.selector;
@@ -6906,8 +6913,8 @@
 
             // We don't want the sub elements to affect the bounding box of the root element when
             // positioning the sub elements relatively to the bounding box.
-            //_.invoke(relativelyPositioned, 'hide');
-            //_.invoke(relativelyPositioned, 'show');
+            //__.invoke(relativelyPositioned, 'hide');
+            //__.invoke(relativelyPositioned, 'show');
 
             // Note that we're using the bounding box without transformation because we are already inside
             // a transformed coordinate system.
@@ -6916,14 +6923,14 @@
 
             renderingOnlyAttrs = renderingOnlyAttrs || {};
 
-            _.each(relativelyPositioned, function($el) {
+            __.each(relativelyPositioned, function($el) {
 
                 // if there was a special attribute affecting the position amongst renderingOnlyAttributes
                 // we have to merge it with rest of the element's attributes as they are necessary
                 // to update the position relatively (i.e `ref`)
                 var renderingOnlyElAttrs = renderingOnlyAttrs[$el.selector];
                 var elAttrs = renderingOnlyElAttrs
-                    ? _.merge({}, allAttrs[$el.selector], renderingOnlyElAttrs)
+                    ? __.merge({}, allAttrs[$el.selector], renderingOnlyElAttrs)
                     : allAttrs[$el.selector];
 
                 this.positionRelative(V($el[0]), bbox, elAttrs, nodesBySelector);
@@ -6935,7 +6942,7 @@
                 rotatable.attr('transform', rotation || '');
             }
 
-            this._renderPorts();
+            this.__renderPorts();
         },
 
         positionRelative: function(vel, bbox, attributes, nodesBySelector) {
@@ -6949,28 +6956,28 @@
             // 'ref-y', 'ref-x', 'ref-width', 'ref-height' can be defined
             // by value or by percentage e.g 4, 0.5, '200%'.
             var refY = attributes['ref-y'];
-            var refYPercentage = _.isString(refY) && refY.slice(-1) === '%';
+            var refYPercentage = __.isString(refY) && refY.slice(-1) === '%';
             refY = parseFloat(refY);
             if (refYPercentage) {
                 refY /= 100;
             }
 
             var refX = attributes['ref-x'];
-            var refXPercentage = _.isString(refX) && refX.slice(-1) === '%';
+            var refXPercentage = __.isString(refX) && refX.slice(-1) === '%';
             refX = parseFloat(refX);
             if (refXPercentage) {
                 refX /= 100;
             }
 
             var refWidth = attributes['ref-width'];
-            var refWidthPercentage = _.isString(refWidth) && refWidth.slice(-1) === '%';
+            var refWidthPercentage = __.isString(refWidth) && refWidth.slice(-1) === '%';
             refWidth = parseFloat(refWidth);
             if (refWidthPercentage) {
                 refWidth /= 100;
             }
 
             var refHeight = attributes['ref-height'];
-            var refHeightPercentage = _.isString(refHeight) && refHeight.slice(-1) === '%';
+            var refHeightPercentage = __.isString(refHeight) && refHeight.slice(-1) === '%';
             refHeight = parseFloat(refHeight);
             if (refHeightPercentage) {
                 refHeight /= 100;
@@ -7111,7 +7118,7 @@
                 }
             }
 
-            if (!_.isUndefined(yAlignment) || !_.isUndefined(xAlignment)) {
+            if (!__.isUndefined(yAlignment) || !__.isUndefined(xAlignment)) {
 
                 // Get the boundind box with the tranformations applied by the the
                 // element itself only.
@@ -7318,14 +7325,14 @@
             model.toFront({ deep: true, ui: true });
 
             // Note that at this point cells in the collection are not sorted by z index (it's running in the batch, see
-            // the dia.Graph._sortOnChangeZ), so we can't assume that the last cell in the collection has the highest z.
+            // the dia.Graph.__sortOnChangeZ), so we can't assume that the last cell in the collection has the highest z.
             var maxZ = graph.get('cells').max('z').get('z');
             var connectedLinks = graph.getConnectedLinks(model, { deep: true });
 
             // Move to front also all the inbound and outbound links that are connected
             // to any of the element descendant. If we bring to front only embedded elements,
             // links connected to them would stay in the background.
-            _.invoke(connectedLinks, 'set', 'z', maxZ + 1, { ui: true });
+            __.invoke(connectedLinks, 'set', 'z', maxZ + 1, { ui: true });
 
             model.stopBatch('to-front');
 
@@ -7350,7 +7357,7 @@
             }
 
             var newCandidateView = null;
-            var prevCandidateView = this._candidateEmbedView;
+            var prevCandidateView = this.__candidateEmbedView;
 
             // iterate over all candidates starting from the last one (has the highest z-index).
             for (var i = candidates.length - 1; i >= 0; i--) {
@@ -7378,7 +7385,7 @@
             if (newCandidateView && newCandidateView != prevCandidateView) {
                 // A new candidate view found. Highlight the new one.
                 this.clearEmbedding();
-                this._candidateEmbedView = newCandidateView.highlight(null, { embedding: true });
+                this.__candidateEmbedView = newCandidateView.highlight(null, { embedding: true });
             }
 
             if (!newCandidateView && prevCandidateView) {
@@ -7389,11 +7396,11 @@
 
         clearEmbedding: function() {
 
-            var candidateView = this._candidateEmbedView;
+            var candidateView = this.__candidateEmbedView;
             if (candidateView) {
                 // No candidate view found. Unhighlight the previous candidate.
                 candidateView.unhighlight(null, { embedding: true });
-                this._candidateEmbedView = null;
+                this.__candidateEmbedView = null;
             }
         },
 
@@ -7401,7 +7408,7 @@
 
             opt = opt || {};
 
-            var candidateView = this._candidateEmbedView;
+            var candidateView = this.__candidateEmbedView;
             var model = opt.model || this.model;
             var paper = opt.paper || this.paper;
 
@@ -7411,10 +7418,10 @@
                 candidateView.model.embed(model, { ui: true });
                 candidateView.unhighlight(null, { embedding: true });
 
-                delete this._candidateEmbedView;
+                delete this.__candidateEmbedView;
             }
 
-            _.invoke(paper.model.getConnectedLinks(model, { deep: true }), 'reparent', { ui: true });
+            __.invoke(paper.model.getConnectedLinks(model, { deep: true }), 'reparent', { ui: true });
         },
 
         // Interaction. The controller part.
@@ -7445,15 +7452,15 @@
 
                 paper.model.addCell(link);
 
-                var linkView = this._linkView = paper.findViewByModel(link);
+                var linkView = this.__linkView = paper.findViewByModel(link);
 
                 linkView.pointerdown(evt, x, y);
                 linkView.startArrowheadMove('target', { whenNotAllowed: 'remove' });
 
             } else {
 
-                this._dx = x;
-                this._dy = y;
+                this.__dx = x;
+                this.__dy = y;
 
                 this.restrictedArea = paper.getRestrictedArea(this);
 
@@ -7464,10 +7471,10 @@
 
         pointermove: function(evt, x, y) {
 
-            if (this._linkView) {
+            if (this.__linkView) {
 
                 // let the linkview deal with this event
-                this._linkView.pointermove(evt, x, y);
+                this.__linkView.pointermove(evt, x, y);
 
             } else {
 
@@ -7479,27 +7486,27 @@
 
                     // Make sure the new element's position always snaps to the current grid after
                     // translate as the previous one could be calculated with a different grid size.
-                    var tx = g.snapToGrid(position.x, grid) - position.x + g.snapToGrid(x - this._dx, grid);
-                    var ty = g.snapToGrid(position.y, grid) - position.y + g.snapToGrid(y - this._dy, grid);
+                    var tx = g.snapToGrid(position.x, grid) - position.x + g.snapToGrid(x - this.__dx, grid);
+                    var ty = g.snapToGrid(position.y, grid) - position.y + g.snapToGrid(y - this.__dy, grid);
 
                     this.model.translate(tx, ty, { restrictedArea: this.restrictedArea, ui: true });
 
                     if (this.paper.options.embeddingMode) {
 
-                        if (!this._inProcessOfEmbedding) {
+                        if (!this.__inProcessOfEmbedding) {
                             // Prepare the element for embedding only if the pointer moves.
                             // We don't want to do unnecessary action with the element
                             // if an user only clicks/dblclicks on it.
                             this.prepareEmbedding();
-                            this._inProcessOfEmbedding = true;
+                            this.__inProcessOfEmbedding = true;
                         }
 
                         this.processEmbedding();
                     }
                 }
 
-                this._dx = g.snapToGrid(x, grid);
-                this._dy = g.snapToGrid(y, grid);
+                this.__dx = g.snapToGrid(x, grid);
+                this.__dy = g.snapToGrid(y, grid);
 
                 joint.dia.CellView.prototype.pointermove.apply(this, arguments);
                 this.notify('element:pointermove', evt, x, y);
@@ -7508,18 +7515,18 @@
 
         pointerup: function(evt, x, y) {
 
-            if (this._linkView) {
+            if (this.__linkView) {
 
                 // Let the linkview deal with this event.
-                this._linkView.pointerup(evt, x, y);
-                this._linkView = null;
+                this.__linkView.pointerup(evt, x, y);
+                this.__linkView = null;
                 this.model.stopBatch('add-link');
 
             } else {
 
-                if (this._inProcessOfEmbedding) {
+                if (this.__inProcessOfEmbedding) {
                     this.finalizeEmbedding();
-                    this._inProcessOfEmbedding = false;
+                    this.__inProcessOfEmbedding = false;
                 }
 
                 this.notify('element:pointerup', evt, x, y);
@@ -7618,7 +7625,7 @@
                     return labels[idx];
                 }
 
-                var newValue = _.merge({}, labels[idx], value);
+                var newValue = __.merge({}, labels[idx], value);
 
                 var newLabels = labels.slice();
                 newLabels[idx] = newValue;
@@ -7648,7 +7655,7 @@
 
             applyToPoints: function(fn, opt) {
 
-                if (!_.isFunction(fn)) {
+                if (!__.isFunction(fn)) {
                     throw new TypeError('dia.Link: applyToPoints expects its first parameter to be a function.');
                 }
 
@@ -7666,7 +7673,7 @@
 
                 var vertices = this.get('vertices');
                 if (vertices && vertices.length > 0) {
-                    attrs.vertices = _.map(vertices, fn);
+                    attrs.vertices = __.map(vertices, fn);
                 }
 
                 return this.set(attrs, opt);
@@ -7750,7 +7757,7 @@
 
                 if (this.graph) {
 
-                    var cells = _.compact([
+                    var cells = __.compact([
                         this,
                         this.getSourceElement(), // null if source is a point
                         this.getTargetElement() // null if target is a point
@@ -7765,7 +7772,7 @@
             // Is source, target and the link itself embedded in a given element?
             isRelationshipEmbeddedIn: function(element) {
 
-                var elementId = _.isString(element) ? element : element.id;
+                var elementId = __.isString(element) ? element : element.id;
                 var ancestor = this.getRelationshipAncestor();
 
                 return !!ancestor && (ancestor.id === elementId || ancestor.isEmbeddedIn(elementId));
@@ -7804,7 +7811,7 @@
             sampleInterval: 50
         },
 
-        _z: null,
+        __z: null,
 
         initialize: function(options) {
 
@@ -7817,13 +7824,13 @@
                 this.constructor.prototype.watchTarget = this.createWatcher('target');
             }
 
-            // `_.labelCache` is a mapping of indexes of labels in the `this.get('labels')` array to
+            // `__.labelCache` is a mapping of indexes of labels in the `this.get('labels')` array to
             // `<g class="label">` nodes wrapped by Vectorizer. This allows for quick access to the
             // nodes in `updateLabelPosition()` in order to update the label positions.
-            this._labelCache = {};
+            this.__labelCache = {};
 
             // keeps markers bboxes and positions again for quicker access
-            this._markerCache = {};
+            this.__markerCache = {};
 
             // bind events
             this.startListening();
@@ -7911,24 +7918,24 @@
             var children = V(markup);
 
             // custom markup may contain only one children
-            if (!_.isArray(children)) children = [children];
+            if (!__.isArray(children)) children = [children];
 
             // Cache all children elements for quicker access.
-            this._V = {}; // vectorized markup;
-            _.each(children, function(child) {
+            this.__V = {}; // vectorized markup;
+            __.each(children, function(child) {
 
                 var className = child.attr('class');
 
                 if (className) {
                     // Strip the joint class name prefix, if there is one.
                     className = joint.util.removeClassNamePrefix(className);
-                    this._V[$.camelCase(className)] = child;
+                    this.__V[$.camelCase(className)] = child;
                 }
 
             }, this);
 
             // Only the connection path is mandatory
-            if (!this._V.connection) throw new Error('link: no connection path in the markup');
+            if (!this.__V.connection) throw new Error('link: no connection path in the markup');
 
             // partial rendering
             this.renderTools();
@@ -7951,10 +7958,10 @@
 
         renderLabels: function() {
 
-            if (!this._V.labels) return this;
+            if (!this.__V.labels) return this;
 
-            this._labelCache = {};
-            var $labels = $(this._V.labels.node).empty();
+            this.__labelCache = {};
+            var $labels = $(this.__V.labels.node).empty();
 
             var labels = this.model.get('labels') || [];
             if (!labels.length) return this;
@@ -7967,7 +7974,7 @@
 
             var canLabelMove = this.can('labelMove');
 
-            _.each(labels, function(label, idx) {
+            __.each(labels, function(label, idx) {
 
                 var labelNode = labelNodeInstance.clone().node;
                 V(labelNode).attr('label-idx', idx);
@@ -7976,17 +7983,17 @@
                 }
 
                 // Cache label nodes so that the `updateLabels()` can just update the label node positions.
-                this._labelCache[idx] = V(labelNode);
+                this.__labelCache[idx] = V(labelNode);
 
                 var $text = $(labelNode).find('text');
                 var $rect = $(labelNode).find('rect');
 
                 // Text attributes with the default `text-anchor` and font-size set.
-                var textAttributes = _.extend({ 'text-anchor': 'middle', 'font-size': 14 }, joint.util.getByPath(label, 'attrs/text', '/'));
+                var textAttributes = __.extend({ 'text-anchor': 'middle', 'font-size': 14 }, joint.util.getByPath(label, 'attrs/text', '/'));
 
-                $text.attr(_.omit(textAttributes, 'text'));
+                $text.attr(__.omit(textAttributes, 'text'));
 
-                if (!_.isUndefined(textAttributes.text)) {
+                if (!__.isUndefined(textAttributes.text)) {
 
                     V($text[0]).text(textAttributes.text + '', { annotations: textAttributes.annotations });
                 }
@@ -8000,7 +8007,7 @@
                 V($text[0]).translate(0, -textBbox.height / 2);
 
                 // Add default values.
-                var rectAttributes = _.extend({
+                var rectAttributes = __.extend({
 
                     fill: 'white',
                     rx: 3,
@@ -8008,7 +8015,7 @@
 
                 }, joint.util.getByPath(label, 'attrs/rect', '/'));
 
-                $rect.attr(_.extend(rectAttributes, {
+                $rect.attr(__.extend(rectAttributes, {
                     x: textBbox.x,
                     y: textBbox.y - textBbox.height / 2,  // Take into account the y-alignment translation.
                     width: textBbox.width,
@@ -8022,21 +8029,21 @@
 
         renderTools: function() {
 
-            if (!this._V.linkTools) return this;
+            if (!this.__V.linkTools) return this;
 
             // Tools are a group of clickable elements that manipulate the whole link.
             // A good example of this is the remove tool that removes the whole link.
             // Tools appear after hovering the link close to the `source` element/point of the link
             // but are offset a bit so that they don't cover the `marker-arrowhead`.
 
-            var $tools = $(this._V.linkTools.node).empty();
+            var $tools = $(this.__V.linkTools.node).empty();
             var toolTemplate = joint.util.template(this.model.get('toolMarkup') || this.model.toolMarkup);
             var tool = V(toolTemplate());
 
             $tools.append(tool.node);
 
             // Cache the tool node so that the `updateToolsPosition()` can update the tool position quickly.
-            this._toolCache = tool;
+            this.__toolCache = tool;
 
             // If `doubleLinkTools` is enabled, we render copy of the tools on the other side of the
             // link as well but only if the link is longer than `longLinkLength`.
@@ -8051,7 +8058,7 @@
                 }
 
                 $tools.append(tool2.node);
-                this._tool2Cache = tool2;
+                this.__tool2Cache = tool2;
             }
 
             return this;
@@ -8059,18 +8066,18 @@
 
         renderVertexMarkers: function() {
 
-            if (!this._V.markerVertices) return this;
+            if (!this.__V.markerVertices) return this;
 
-            var $markerVertices = $(this._V.markerVertices.node).empty();
+            var $markerVertices = $(this.__V.markerVertices.node).empty();
 
             // A special markup can be given in the `properties.vertexMarkup` property. This might be handy
             // if default styling (elements) are not desired. This makes it possible to use any
             // SVG elements for .marker-vertex and .marker-vertex-remove tools.
             var markupTemplate = joint.util.template(this.model.get('vertexMarkup') || this.model.vertexMarkup);
 
-            _.each(this.model.get('vertices'), function(vertex, idx) {
+            __.each(this.model.get('vertices'), function(vertex, idx) {
 
-                $markerVertices.append(V(markupTemplate(_.extend({ idx: idx }, vertex))).node);
+                $markerVertices.append(V(markupTemplate(__.extend({ idx: idx }, vertex))).node);
             });
 
             return this;
@@ -8079,9 +8086,9 @@
         renderArrowheadMarkers: function() {
 
             // Custom markups might not have arrowhead markers. Therefore, jump of this function immediately if that's the case.
-            if (!this._V.markerArrowheads) return this;
+            if (!this.__V.markerArrowheads) return this;
 
-            var $markerArrowheads = $(this._V.markerArrowheads.node);
+            var $markerArrowheads = $(this.__V.markerArrowheads.node);
 
             $markerArrowheads.empty();
 
@@ -8090,10 +8097,10 @@
             // SVG elements for .marker-vertex and .marker-vertex-remove tools.
             var markupTemplate = joint.util.template(this.model.get('arrowheadMarkup') || this.model.arrowheadMarkup);
 
-            this._V.sourceArrowhead = V(markupTemplate({ end: 'source' }));
-            this._V.targetArrowhead = V(markupTemplate({ end: 'target' }));
+            this.__V.sourceArrowhead = V(markupTemplate({ end: 'source' }));
+            this.__V.targetArrowhead = V(markupTemplate({ end: 'target' }));
 
-            $markerArrowheads.append(this._V.sourceArrowhead.node, this._V.targetArrowhead.node);
+            $markerArrowheads.append(this.__V.sourceArrowhead.node, this.__V.targetArrowhead.node);
 
             return this;
         },
@@ -8141,46 +8148,46 @@
                 var tx = opt.tx || 0;
                 var ty = opt.ty || 0;
 
-                route = this.route =  _.map(this.route, function(point) {
+                route = this.route =  __.map(this.route, function(point) {
                     // translate point by point by delta translation
                     return g.point(point).offset(tx, ty);
                 });
 
                 // translate source and target connection and marker points.
-                this._translateConnectionPoints(tx, ty);
+                this.__translateConnectionPoints(tx, ty);
 
             } else {
                 // Necessary path finding
                 route = this.route = this.findRoute(model.get('vertices') || [], opt);
                 // finds all the connection points taking new vertices into account
-                this._findConnectionPoints(route);
+                this.__findConnectionPoints(route);
             }
 
             var pathData = this.getPathData(route);
 
             // The markup needs to contain a `.connection`
-            this._V.connection.attr('d', pathData);
-            this._V.connectionWrap && this._V.connectionWrap.attr('d', pathData);
+            this.__V.connection.attr('d', pathData);
+            this.__V.connectionWrap && this.__V.connectionWrap.attr('d', pathData);
 
-            this._translateAndAutoOrientArrows(this._V.markerSource, this._V.markerTarget);
+            this.__translateAndAutoOrientArrows(this.__V.markerSource, this.__V.markerTarget);
         },
 
         updateAttributes: function() {
 
             // Update attributes.
-            _.each(this.model.get('attrs'), function(attrs, selector) {
+            __.each(this.model.get('attrs'), function(attrs, selector) {
 
                 var processedAttributes = [];
 
                 // If the `fill` or `stroke` attribute is an object, it is in the special JointJS gradient format and so
                 // it becomes a special attribute and is treated separately.
-                if (_.isObject(attrs.fill)) {
+                if (__.isObject(attrs.fill)) {
 
                     this.applyGradient(selector, 'fill', attrs.fill);
                     processedAttributes.push('fill');
                 }
 
-                if (_.isObject(attrs.stroke)) {
+                if (__.isObject(attrs.stroke)) {
 
                     this.applyGradient(selector, 'stroke', attrs.stroke);
                     processedAttributes.push('stroke');
@@ -8188,7 +8195,7 @@
 
                 // If the `filter` attribute is an object, it is in the special JointJS filter format and so
                 // it becomes a special attribute and is treated separately.
-                if (_.isObject(attrs.filter)) {
+                if (__.isObject(attrs.filter)) {
 
                     this.applyFilter(selector, attrs.filter);
                     processedAttributes.push('filter');
@@ -8198,7 +8205,7 @@
                 if (processedAttributes.length > 0) {
 
                     processedAttributes.unshift(attrs);
-                    attrs = _.omit.apply(_, processedAttributes);
+                    attrs = __.omit.apply(__, processedAttributes);
                 }
 
                 this.findBySelector(selector).attr(attrs);
@@ -8206,18 +8213,18 @@
             }, this);
         },
 
-        _findConnectionPoints: function(vertices) {
+        __findConnectionPoints: function(vertices) {
 
             // cache source and target points
             var sourcePoint, targetPoint, sourceMarkerPoint, targetMarkerPoint;
 
-            var firstVertex = _.first(vertices);
+            var firstVertex = __.first(vertices);
 
             sourcePoint = this.getConnectionPoint(
                 'source', this.model.get('source'), firstVertex || this.model.get('target')
             ).round();
 
-            var lastVertex = _.last(vertices);
+            var lastVertex = __.last(vertices);
 
             targetPoint = this.getConnectionPoint(
                 'target', this.model.get('target'), lastVertex || sourcePoint
@@ -8228,25 +8235,25 @@
             // makes sense to be set in `.marker-source` attributes object
             // as all other transforms (translate/rotate) will be replaced
             // by the `translateAndAutoOrient()` function.
-            var cache = this._markerCache;
+            var cache = this.__markerCache;
 
-            if (this._V.markerSource) {
+            if (this.__V.markerSource) {
 
-                cache.sourceBBox = cache.sourceBBox || this._V.markerSource.bbox(true);
+                cache.sourceBBox = cache.sourceBBox || this.__V.markerSource.bbox(true);
 
                 sourceMarkerPoint = g.point(sourcePoint).move(
                     firstVertex || targetPoint,
-                    cache.sourceBBox.width * this._V.markerSource.scale().sx * -1
+                    cache.sourceBBox.width * this.__V.markerSource.scale().sx * -1
                 ).round();
             }
 
-            if (this._V.markerTarget) {
+            if (this.__V.markerTarget) {
 
-                cache.targetBBox = cache.targetBBox || this._V.markerTarget.bbox(true);
+                cache.targetBBox = cache.targetBBox || this.__V.markerTarget.bbox(true);
 
                 targetMarkerPoint = g.point(targetPoint).move(
                     lastVertex || sourcePoint,
-                    cache.targetBBox.width * this._V.markerTarget.scale().sx * -1
+                    cache.targetBBox.width * this.__V.markerTarget.scale().sx * -1
                 ).round();
             }
 
@@ -8259,9 +8266,9 @@
             this.targetPoint = targetPoint;
         },
 
-        _translateConnectionPoints: function(tx, ty) {
+        __translateConnectionPoints: function(tx, ty) {
 
-            var cache = this._markerCache;
+            var cache = this.__markerCache;
 
             cache.sourcePoint.offset(tx, ty);
             cache.targetPoint.offset(tx, ty);
@@ -8271,30 +8278,30 @@
 
         updateLabelPositions: function() {
 
-            if (!this._V.labels) return this;
+            if (!this.__V.labels) return this;
 
-            // This method assumes all the label nodes are stored in the `this._labelCache` hash table
+            // This method assumes all the label nodes are stored in the `this.__labelCache` hash table
             // by their indexes in the `this.get('labels')` array. This is done in the `renderLabels()` method.
 
             var labels = this.model.get('labels') || [];
             if (!labels.length) return this;
 
-            var connectionElement = this._V.connection.node;
+            var connectionElement = this.__V.connection.node;
             var connectionLength = connectionElement.getTotalLength();
 
             // Firefox returns connectionLength=NaN in odd cases (for bezier curves).
             // In that case we won't update labels at all.
-            if (!_.isNaN(connectionLength)) {
+            if (!__.isNaN(connectionLength)) {
 
                 var samples;
 
-                _.each(labels, function(label, idx) {
+                __.each(labels, function(label, idx) {
 
                     var position = label.position;
-                    var distance = _.isObject(position) ? position.distance : position;
-                    var offset = _.isObject(position) ? position.offset : { x: 0, y: 0 };
+                    var distance = __.isObject(position) ? position.distance : position;
+                    var offset = __.isObject(position) ? position.offset : { x: 0, y: 0 };
 
-                    if (!_.isNaN(distance)) {
+                    if (!__.isNaN(distance)) {
                         distance = (distance > connectionLength) ? connectionLength : distance; // sanity check
                         distance = (distance < 0) ? connectionLength + distance : distance;
                         distance = (distance > 1) ? distance : connectionLength * distance;
@@ -8304,15 +8311,15 @@
 
                     var labelCoordinates = connectionElement.getPointAtLength(distance);
 
-                    if (_.isObject(offset)) {
+                    if (__.isObject(offset)) {
 
                         // Just offset the label by the x,y provided in the offset object.
                         labelCoordinates = g.point(labelCoordinates).offset(offset.x, offset.y);
 
-                    } else if (_.isNumber(offset)) {
+                    } else if (__.isNumber(offset)) {
 
                         if (!samples) {
-                            samples = this._samples || this._V.connection.sample(this.options.sampleInterval);
+                            samples = this.__samples || this.__V.connection.sample(this.options.sampleInterval);
                         }
 
                         // Offset the label by the amount provided in `offset` to an either
@@ -8344,7 +8351,7 @@
                         labelCoordinates = g.point(labelCoordinates).offset(offset).rotate(labelCoordinates, angle - 90);
                     }
 
-                    this._labelCache[idx].attr('transform', 'translate(' + labelCoordinates.x + ', ' + labelCoordinates.y + ')');
+                    this.__labelCache[idx].attr('transform', 'translate(' + labelCoordinates.x + ', ' + labelCoordinates.y + ')');
 
                 }, this);
             }
@@ -8355,7 +8362,7 @@
 
         updateToolsPosition: function() {
 
-            if (!this._V.linkTools) return this;
+            if (!this.__V.linkTools) return this;
 
             // Move the tools a bit to the target position but don't cover the `sourceArrowhead` marker.
             // Note that the offset is hardcoded here. The offset should be always
@@ -8368,7 +8375,7 @@
 
             // Firefox returns connectionLength=NaN in odd cases (for bezier curves).
             // In that case we won't update tools position at all.
-            if (!_.isNaN(connectionLength)) {
+            if (!__.isNaN(connectionLength)) {
 
                 // If the link is too short, make the tools half the size and the offset twice as low.
                 if (connectionLength < this.options.shortLinkLength) {
@@ -8378,19 +8385,19 @@
 
                 var toolPosition = this.getPointAtLength(offset);
 
-                this._toolCache.attr('transform', 'translate(' + toolPosition.x + ', ' + toolPosition.y + ') ' + scale);
+                this.__toolCache.attr('transform', 'translate(' + toolPosition.x + ', ' + toolPosition.y + ') ' + scale);
 
                 if (this.options.doubleLinkTools && connectionLength >= this.options.longLinkLength) {
 
                     var doubleLinkToolsOffset = this.options.doubleLinkToolsOffset || offset;
 
                     toolPosition = this.getPointAtLength(connectionLength - doubleLinkToolsOffset);
-                    this._tool2Cache.attr('transform', 'translate(' + toolPosition.x + ', ' + toolPosition.y + ') ' + scale);
-                    this._tool2Cache.attr('visibility', 'visible');
+                    this.__tool2Cache.attr('transform', 'translate(' + toolPosition.x + ', ' + toolPosition.y + ') ' + scale);
+                    this.__tool2Cache.attr('visibility', 'visible');
 
                 } else if (this.options.doubleLinkTools) {
 
-                    this._tool2Cache.attr('visibility', 'hidden');
+                    this.__tool2Cache.attr('visibility', 'hidden');
                 }
             }
 
@@ -8400,16 +8407,16 @@
 
         updateArrowheadMarkers: function() {
 
-            if (!this._V.markerArrowheads) return this;
+            if (!this.__V.markerArrowheads) return this;
 
             // getting bbox of an element with `display="none"` in IE9 ends up with access violation
-            if ($.css(this._V.markerArrowheads.node, 'display') === 'none') return this;
+            if ($.css(this.__V.markerArrowheads.node, 'display') === 'none') return this;
 
             var sx = this.getConnectionLength() < this.options.shortLinkLength ? .5 : 1;
-            this._V.sourceArrowhead.scale(sx);
-            this._V.targetArrowhead.scale(sx);
+            this.__V.sourceArrowhead.scale(sx);
+            this.__V.targetArrowhead.scale(sx);
 
-            this._translateAndAutoOrientArrows(this._V.sourceArrowhead, this._V.targetArrowhead);
+            this.__translateAndAutoOrientArrows(this.__V.sourceArrowhead, this.__V.targetArrowhead);
 
             return this;
         },
@@ -8419,7 +8426,7 @@
         createWatcher: function(endType) {
 
             // create handler for specific end type (source|target).
-            var onModelChange = _.partial(this.onEndModelChange, endType);
+            var onModelChange = __.partial(this.onEndModelChange, endType);
 
             function watchEndModel(link, end) {
 
@@ -8496,7 +8503,7 @@
 
                 if (opt.handleBy === this.cid && opt.translateBy &&
                     model.isEmbeddedIn(endModel) &&
-                    !_.isEmpty(model.get('vertices'))) {
+                    !__.isEmpty(model.get('vertices'))) {
                     // Loop link whose element was translated and that has vertices (that need to be translated with
                     // the parent in which my element is embedded).
                     // If the link is embedded, has a loop and vertices and the end model
@@ -8549,14 +8556,14 @@
             }
         },
 
-        _translateAndAutoOrientArrows: function(sourceArrow, targetArrow) {
+        __translateAndAutoOrientArrows: function(sourceArrow, targetArrow) {
 
             // Make the markers "point" to their sticky points being auto-oriented towards
             // `targetPosition`/`sourcePosition`. And do so only if there is a markup for them.
             if (sourceArrow) {
                 sourceArrow.translateAndAutoOrient(
                     this.sourcePoint,
-                    _.first(this.route) || this.targetPoint,
+                    __.first(this.route) || this.targetPoint,
                     this.paper.viewport
                 );
             }
@@ -8564,7 +8571,7 @@
             if (targetArrow) {
                 targetArrow.translateAndAutoOrient(
                     this.targetPoint,
-                    _.last(this.route) || this.sourcePoint,
+                    __.last(this.route) || this.sourcePoint,
                     this.paper.viewport
                 );
             }
@@ -8572,7 +8579,7 @@
 
         removeVertex: function(idx) {
 
-            var vertices = _.clone(this.model.get('vertices'));
+            var vertices = __.clone(this.model.get('vertices'));
 
             if (vertices && vertices.length) {
 
@@ -8600,7 +8607,7 @@
             var originalVertices = vertices.slice();
 
             // A `<path>` element used to compute the length of the path during heuristics.
-            var path = this._V.connection.node.cloneNode(false);
+            var path = this.__V.connection.node.cloneNode(false);
 
             // Length of the original path.
             var originalPathLength = path.getTotalLength();
@@ -8655,8 +8662,8 @@
             duration = duration || 1000;
 
             V(this.paper.viewport).append(token);
-            V(token).animateAlongPath({ dur: duration + 'ms', repeatCount: 1 }, this._V.connection.node);
-            _.delay(function() { V(token).remove(); callback && callback(); }, duration);
+            V(token).animateAlongPath({ dur: duration + 'ms', repeatCount: 1 }, this.__V.connection.node);
+            __.delay(function() { V(token).remove(); callback && callback(); }, duration);
         },
 
         findRoute: function(oldVertices) {
@@ -8678,9 +8685,9 @@
             }
 
             var args = router.args || {};
-            var routerFn = _.isFunction(router) ? router : namespace[router.name];
+            var routerFn = __.isFunction(router) ? router : namespace[router.name];
 
-            if (!_.isFunction(routerFn)) {
+            if (!__.isFunction(routerFn)) {
                 throw new Error('unknown router: "' + router.name + '"');
             }
 
@@ -8707,17 +8714,17 @@
                 }
             }
 
-            var connectorFn = _.isFunction(connector) ? connector : namespace[connector.name];
+            var connectorFn = __.isFunction(connector) ? connector : namespace[connector.name];
             var args = connector.args || {};
 
-            if (!_.isFunction(connectorFn)) {
+            if (!__.isFunction(connectorFn)) {
                 throw new Error('unknown connector: "' + connector.name + '"');
             }
 
             var pathData = connectorFn.call(
                 this,
-                this._markerCache.sourcePoint, // Note that the value is translated by the size
-                this._markerCache.targetPoint, // of the marker. (We'r not using this.sourcePoint)
+                this.__markerCache.sourcePoint, // Note that the value is translated by the size
+                this.__markerCache.targetPoint, // of the marker. (We'r not using this.sourcePoint)
                 vertices || (this.model.get('vertices') || {}),
                 args, // options
                 this
@@ -8737,8 +8744,8 @@
             // If the `selectorOrPoint` (or `referenceSelectorOrPoint`) is `undefined`, the `source`/`target` of the link model is `undefined`.
             // We want to allow this however so that one can create links such as `var link = new joint.dia.Link` and
             // set the `source`/`target` later.
-            _.isEmpty(selectorOrPoint) && (selectorOrPoint = { x: 0, y: 0 });
-            _.isEmpty(referenceSelectorOrPoint) && (referenceSelectorOrPoint = { x: 0, y: 0 });
+            __.isEmpty(selectorOrPoint) && (selectorOrPoint = { x: 0, y: 0 });
+            __.isEmpty(referenceSelectorOrPoint) && (referenceSelectorOrPoint = { x: 0, y: 0 });
 
             if (!selectorOrPoint.id) {
 
@@ -8751,7 +8758,7 @@
                 // to the reference point (or reference element).
                 // Get the bounding box of the spot relative to the paper viewport. This is necessary
                 // in order to follow paper viewport transformations (scale/rotate).
-                // `_sourceBbox` (`_targetBbox`) comes from `_sourceBboxUpdate` (`_sourceBboxUpdate`)
+                // `__sourceBbox` (`__targetBbox`) comes from `__sourceBboxUpdate` (`__sourceBboxUpdate`)
                 // method, it exists since first render and are automatically updated
                 var spotBBox = g.Rect(end === 'source' ? this.sourceBBox : this.targetBBox);
 
@@ -8845,20 +8852,20 @@
 
         getConnectionLength: function() {
 
-            return this._V.connection.node.getTotalLength();
+            return this.__V.connection.node.getTotalLength();
         },
 
         getPointAtLength: function(length) {
 
-            return this._V.connection.node.getPointAtLength(length);
+            return this.__V.connection.node.getPointAtLength(length);
         },
 
         // Interaction. The controller part.
         // ---------------------------------
 
-        _beforeArrowheadMove: function() {
+        __beforeArrowheadMove: function() {
 
-            this._z = this.model.get('z');
+            this.__z = this.model.get('z');
             this.model.toFront();
 
             // Let the pointer propagate throught the link view elements so that
@@ -8866,15 +8873,15 @@
             this.el.style.pointerEvents = 'none';
 
             if (this.paper.options.markAvailable) {
-                this._markAvailableMagnets();
+                this.__markAvailableMagnets();
             }
         },
 
-        _afterArrowheadMove: function() {
+        __afterArrowheadMove: function() {
 
-            if (!_.isNull(this._z)) {
-                this.model.set('z', this._z, { ui: true });
-                this._z = null;
+            if (!__.isNull(this.__z)) {
+                this.model.set('z', this.__z, { ui: true });
+                this.__z = null;
             }
 
             // Put `pointer-events` back to its original value. See `startArrowheadMove()` for explanation.
@@ -8883,11 +8890,11 @@
             this.el.style.pointerEvents = 'visiblePainted';
 
             if (this.paper.options.markAvailable) {
-                this._unmarkAvailableMagnets();
+                this.__unmarkAvailableMagnets();
             }
         },
 
-        _createValidateConnectionArgs: function(arrowhead) {
+        __createValidateConnectionArgs: function(arrowhead) {
             // It makes sure the arguments for validateConnection have the following form:
             // (source view, source magnet, target view, target magnet and link view)
             var args = [];
@@ -8923,19 +8930,19 @@
             return validateConnectionArgs;
         },
 
-        _markAvailableMagnets: function() {
+        __markAvailableMagnets: function() {
 
             function isMagnetAvailable(view, magnet) {
                 var paper = view.paper;
                 var validate = paper.options.validateConnection;
-                return validate.apply(paper, this._validateConnectionArgs(view, magnet));
+                return validate.apply(paper, this.__validateConnectionArgs(view, magnet));
             }
 
             var paper = this.paper;
             var elements = paper.model.getElements();
-            this._marked = {};
+            this.__marked = {};
 
-            _.chain(elements).map(paper.findViewByModel, paper).each(function(view) {
+            __.chain(elements).map(paper.findViewByModel, paper).each(function(view) {
 
                 var magnets = Array.prototype.slice.call(view.el.querySelectorAll('[magnet]'));
                 if (view.el.getAttribute('magnet') !== 'false') {
@@ -8943,44 +8950,44 @@
                     magnets.push(view.el);
                 }
 
-                var availableMagnets = _.filter(magnets, _.partial(isMagnetAvailable, view), this);
+                var availableMagnets = __.filter(magnets, __.partial(isMagnetAvailable, view), this);
                 if (availableMagnets.length > 0) {
                     // highlight all available magnets
-                    _.each(availableMagnets, _.partial(view.highlight, _, { magnetAvailability: true }), view);
+                    __.each(availableMagnets, __.partial(view.highlight, __, { magnetAvailability: true }), view);
                     // highlight the entire view
                     view.highlight(null, { elementAvailability: true });
 
-                    this._marked[view.model.id] = availableMagnets;
+                    this.__marked[view.model.id] = availableMagnets;
                 }
 
             }, this).value();
         },
 
-        _unmarkAvailableMagnets: function() {
+        __unmarkAvailableMagnets: function() {
 
-            _.each(this._marked, function(markedMagnets, id) {
+            __.each(this.__marked, function(markedMagnets, id) {
                 var view = this.paper.findViewByModel(id);
                 if (view) {
-                    _.each(markedMagnets, _.partial(view.unhighlight, _, { magnetAvailability: true }), view);
+                    __.each(markedMagnets, __.partial(view.unhighlight, __, { magnetAvailability: true }), view);
                     view.unhighlight(null, { elementAvailability: true });
                 }
             }, this);
 
-            this._marked = null;
+            this.__marked = null;
         },
 
         startArrowheadMove: function(end, opt) {
 
-            opt = _.defaults(opt || {}, { whenNotAllowed: 'revert' });
+            opt = __.defaults(opt || {}, { whenNotAllowed: 'revert' });
             // Allow to delegate events from an another view to this linkView in order to trigger arrowhead
             // move without need to click on the actual arrowhead dom element.
-            this._action = 'arrowhead-move';
-            this._whenNotAllowed = opt.whenNotAllowed;
-            this._arrowhead = end;
-            this._initialMagnet = this[end + 'Magnet'] || (this[end + 'View'] ? this[end + 'View'].el : null);
-            this._initialEnd = _.clone(this.model.get(end)) || { x: 0, y: 0 };
-            this._validateConnectionArgs = this._createValidateConnectionArgs(this._arrowhead);
-            this._beforeArrowheadMove();
+            this.__action = 'arrowhead-move';
+            this.__whenNotAllowed = opt.whenNotAllowed;
+            this.__arrowhead = end;
+            this.__initialMagnet = this[end + 'Magnet'] || (this[end + 'View'] ? this[end + 'View'].el : null);
+            this.__initialEnd = __.clone(this.model.get(end)) || { x: 0, y: 0 };
+            this.__validateConnectionArgs = this.__createValidateConnectionArgs(this.__arrowhead);
+            this.__beforeArrowheadMove();
         },
 
         pointerdown: function(evt, x, y) {
@@ -8988,8 +8995,8 @@
             joint.dia.CellView.prototype.pointerdown.apply(this, arguments);
             this.notify('link:pointerdown', evt, x, y);
 
-            this._dx = x;
-            this._dy = y;
+            this.__dx = x;
+            this.__dy = y;
 
             // if are simulating pointerdown on a link during a magnet click, skip link interactions
             if (evt.target.getAttribute('magnet') != null) return;
@@ -9008,8 +9015,8 @@
 
                 case 'marker-vertex':
                     if (this.can('vertexMove')) {
-                        this._action = 'vertex-move';
-                        this._vertexIdx = evt.target.getAttribute('idx');
+                        this.__action = 'vertex-move';
+                        this.__vertexIdx = evt.target.getAttribute('idx');
                     }
                     break;
 
@@ -9028,12 +9035,12 @@
 
                 case 'label':
                     if (this.can('labelMove')) {
-                        this._action = 'label-move';
-                        this._labelIdx = parseInt(V(labelNode).attr('label-idx'), 10);
+                        this.__action = 'label-move';
+                        this.__labelIdx = parseInt(V(labelNode).attr('label-idx'), 10);
                         // Precalculate samples so that we don't have to do that
                         // over and over again while dragging the label.
-                        this._samples = this._V.connection.sample(1);
-                        this._linkLength = this._V.connection.node.getTotalLength();
+                        this.__samples = this.__V.connection.sample(1);
+                        this.__linkLength = this.__V.connection.node.getTotalLength();
                     }
                     break;
 
@@ -9054,8 +9061,8 @@
 
                             // Store the index at which the new vertex has just been placed.
                             // We'll be update the very same vertex position in `pointermove()`.
-                            this._vertexIdx = this.addVertex({ x: x, y: y });
-                            this._action = 'vertex-move';
+                            this.__vertexIdx = this.addVertex({ x: x, y: y });
+                            this.__action = 'vertex-move';
                         }
                     }
             }
@@ -9063,19 +9070,19 @@
 
         pointermove: function(evt, x, y) {
 
-            switch (this._action) {
+            switch (this.__action) {
 
                 case 'vertex-move':
 
-                    var vertices = _.clone(this.model.get('vertices'));
-                    vertices[this._vertexIdx] = { x: x, y: y };
+                    var vertices = __.clone(this.model.get('vertices'));
+                    vertices[this.__vertexIdx] = { x: x, y: y };
                     this.model.set('vertices', vertices, { ui: true });
                     break;
 
                 case 'label-move':
 
                     var dragPoint = { x: x, y: y };
-                    var samples = this._samples;
+                    var samples = this.__samples;
                     var minSqDistance = Infinity;
                     var closestSample;
                     var closestSampleIndex;
@@ -9101,9 +9108,9 @@
                         offset = g.line(closestSample, nextSample).pointOffset(dragPoint);
                     }
 
-                    this.model.label(this._labelIdx, {
+                    this.model.label(this.__labelIdx, {
                         position: {
-                            distance: closestSample.distance / this._linkLength,
+                            distance: closestSample.distance / this.__linkLength,
                             offset: offset
                         }
                     });
@@ -9118,19 +9125,19 @@
                         var r = this.paper.options.snapLinks.radius || 50;
                         var viewsInArea = this.paper.findViewsInArea({ x: x - r, y: y - r, width: 2 * r, height: 2 * r });
 
-                        if (this._closestView) {
-                            this._closestView.unhighlight(this._closestEnd.selector, {
+                        if (this.__closestView) {
+                            this.__closestView.unhighlight(this.__closestEnd.selector, {
                                 connecting: true,
                                 snapping: true
                             });
                         }
-                        this._closestView = this._closestEnd = null;
+                        this.__closestView = this.__closestEnd = null;
 
                         var distance;
-                        var minDistance = Number.MAX_VALUE;
+                        var minDistance = Number.MAX__VALUE;
                         var pointer = g.point(x, y);
 
-                        _.each(viewsInArea, function(view) {
+                        __.each(viewsInArea, function(view) {
 
                             // skip connecting to the element in case '.': { magnet: false } attribute present
                             if (view.el.getAttribute('magnet') !== 'false') {
@@ -9142,16 +9149,16 @@
                                 if (distance < r && distance < minDistance) {
 
                                     if (this.paper.options.validateConnection.apply(
-                                            this.paper, this._validateConnectionArgs(view, null)
+                                            this.paper, this.__validateConnectionArgs(view, null)
                                         )) {
                                         minDistance = distance;
-                                        this._closestView = view;
-                                        this._closestEnd = { id: view.model.id };
+                                        this.__closestView = view;
+                                        this.__closestEnd = { id: view.model.id };
                                     }
                                 }
                             }
 
-                            view.$('[magnet]').each(_.bind(function(index, magnet) {
+                            view.$('[magnet]').each(__.bind(function(index, magnet) {
 
                                 var bbox = V(magnet).bbox(false, this.paper.viewport);
 
@@ -9163,11 +9170,11 @@
                                 if (distance < r && distance < minDistance) {
 
                                     if (this.paper.options.validateConnection.apply(
-                                            this.paper, this._validateConnectionArgs(view, magnet)
+                                            this.paper, this.__validateConnectionArgs(view, magnet)
                                         )) {
                                         minDistance = distance;
-                                        this._closestView = view;
-                                        this._closestEnd = {
+                                        this.__closestView = view;
+                                        this.__closestEnd = {
                                             id: view.model.id,
                                             selector: view.getSelector(magnet),
                                             port: magnet.getAttribute('port')
@@ -9179,14 +9186,14 @@
 
                         }, this);
 
-                        if (this._closestView) {
-                            this._closestView.highlight(this._closestEnd.selector, {
+                        if (this.__closestView) {
+                            this.__closestView.highlight(this.__closestEnd.selector, {
                                 connecting: true,
                                 snapping: true
                             });
                         }
 
-                        this.model.set(this._arrowhead, this._closestEnd || { x: x, y: y }, { ui: true });
+                        this.model.set(this.__arrowhead, this.__closestEnd || { x: x, y: y }, { ui: true });
 
                     } else {
 
@@ -9198,51 +9205,51 @@
                             ? evt.target
                             : document.elementFromPoint(evt.clientX, evt.clientY);
 
-                        if (this._targetEvent !== target) {
+                        if (this.__targetEvent !== target) {
                             // Unhighlight the previous view under pointer if there was one.
-                            if (this._magnetUnderPointer) {
-                                this._viewUnderPointer.unhighlight(this._magnetUnderPointer, {
+                            if (this.__magnetUnderPointer) {
+                                this.__viewUnderPointer.unhighlight(this.__magnetUnderPointer, {
                                     connecting: true
                                 });
                             }
 
-                            this._viewUnderPointer = this.paper.findView(target);
-                            if (this._viewUnderPointer) {
+                            this.__viewUnderPointer = this.paper.findView(target);
+                            if (this.__viewUnderPointer) {
                                 // If we found a view that is under the pointer, we need to find the closest
                                 // magnet based on the real target element of the event.
-                                this._magnetUnderPointer = this._viewUnderPointer.findMagnet(target);
+                                this.__magnetUnderPointer = this.__viewUnderPointer.findMagnet(target);
 
-                                if (this._magnetUnderPointer && this.paper.options.validateConnection.apply(
+                                if (this.__magnetUnderPointer && this.paper.options.validateConnection.apply(
                                         this.paper,
-                                        this._validateConnectionArgs(this._viewUnderPointer, this._magnetUnderPointer)
+                                        this.__validateConnectionArgs(this.__viewUnderPointer, this.__magnetUnderPointer)
                                     )) {
                                     // If there was no magnet found, do not highlight anything and assume there
                                     // is no view under pointer we're interested in reconnecting to.
                                     // This can only happen if the overall element has the attribute `'.': { magnet: false }`.
-                                    if (this._magnetUnderPointer) {
-                                        this._viewUnderPointer.highlight(this._magnetUnderPointer, {
+                                    if (this.__magnetUnderPointer) {
+                                        this.__viewUnderPointer.highlight(this.__magnetUnderPointer, {
                                             connecting: true
                                         });
                                     }
                                 } else {
                                     // This type of connection is not valid. Disregard this magnet.
-                                    this._magnetUnderPointer = null;
+                                    this.__magnetUnderPointer = null;
                                 }
                             } else {
                                 // Make sure we'll unset previous magnet.
-                                this._magnetUnderPointer = null;
+                                this.__magnetUnderPointer = null;
                             }
                         }
 
-                        this._targetEvent = target;
+                        this.__targetEvent = target;
 
-                        this.model.set(this._arrowhead, { x: x, y: y }, { ui: true });
+                        this.model.set(this.__arrowhead, { x: x, y: y }, { ui: true });
                     }
                     break;
             }
 
-            this._dx = x;
-            this._dy = y;
+            this.__dx = x;
+            this.__dy = y;
 
             joint.dia.CellView.prototype.pointermove.apply(this, arguments);
             this.notify('link:pointermove', evt, x, y);
@@ -9250,46 +9257,46 @@
 
         pointerup: function(evt, x, y) {
 
-            if (this._action === 'label-move') {
+            if (this.__action === 'label-move') {
 
-                this._samples = null;
+                this.__samples = null;
 
-            } else if (this._action === 'arrowhead-move') {
+            } else if (this.__action === 'arrowhead-move') {
 
                 var paper = this.paper;
                 var paperOptions = paper.options;
-                var arrowhead = this._arrowhead;
-                var initialEnd = this._initialEnd;
+                var arrowhead = this.__arrowhead;
+                var initialEnd = this.__initialEnd;
                 var magnetUnderPointer;
 
                 if (paperOptions.snapLinks) {
 
                     // Finish off link snapping.
                     // Everything except view unhighlighting was already done on pointermove.
-                    if (this._closestView) {
-                        this._closestView.unhighlight(this._closestEnd.selector, {
+                    if (this.__closestView) {
+                        this.__closestView.unhighlight(this.__closestEnd.selector, {
                             connecting: true,
                             snapping: true
                         });
 
-                        magnetUnderPointer = this._closestView.findMagnet(this._closestEnd.selector);
+                        magnetUnderPointer = this.__closestView.findMagnet(this.__closestEnd.selector);
                     }
 
-                    this._closestView = this._closestEnd = null;
+                    this.__closestView = this.__closestEnd = null;
 
                 } else {
 
-                    var viewUnderPointer = this._viewUnderPointer;
-                    magnetUnderPointer = this._magnetUnderPointer;
+                    var viewUnderPointer = this.__viewUnderPointer;
+                    magnetUnderPointer = this.__magnetUnderPointer;
 
-                    this._viewUnderPointer = null;
-                    this._magnetUnderPointer = null;
+                    this.__viewUnderPointer = null;
+                    this.__magnetUnderPointer = null;
 
                     if (magnetUnderPointer) {
 
                         viewUnderPointer.unhighlight(magnetUnderPointer, { connecting: true });
                         // Find a unique `selector` of the element under pointer that is a magnet. If the
-                        // `this._magnetUnderPointer` is the root element of the `this._viewUnderPointer` itself,
+                        // `this.__magnetUnderPointer` is the root element of the `this.__viewUnderPointer` itself,
                         // the returned `selector` will be `undefined`. That means we can directly pass it to the
                         // `source`/`target` attribute of the link model below.
                         var selector = viewUnderPointer.getSelector(magnetUnderPointer);
@@ -9304,7 +9311,7 @@
                 // If the changed link is not allowed, revert to its previous state.
                 if (!paper.linkAllowed(this)) {
 
-                    switch (this._whenNotAllowed) {
+                    switch (this.__whenNotAllowed) {
 
                         case 'remove':
                             this.model.remove();
@@ -9320,7 +9327,7 @@
                 // Reparent the link if embedding is enabled
                 if (paperOptions.embeddingMode && this.model.reparent()) {
                     // Make sure we don't reverse to the original 'z' index (see afterArrowheadMove()).
-                    this._z = null;
+                    this.__z = null;
                 }
 
                 var currentEnd = this.model.prop(arrowhead) || {};
@@ -9329,21 +9336,21 @@
                 if (endChanged) {
 
                     if (initialEnd.id) {
-                        this.notify('link:disconnect', evt, paper.findViewByModel(initialEnd.id), this._initialMagnet, arrowhead);
+                        this.notify('link:disconnect', evt, paper.findViewByModel(initialEnd.id), this.__initialMagnet, arrowhead);
                     }
                     if (currentEnd.id) {
                         this.notify('link:connect', evt, paper.findViewByModel(currentEnd.id), magnetUnderPointer, arrowhead);
                     }
                 }
 
-                this._afterArrowheadMove();
+                this.__afterArrowheadMove();
             }
 
-            this._action = null;
-            this._whenNotAllowed = null;
-            this._initialMagnet = null;
-            this._initialEnd = null;
-            this._validateConnectionArgs = null;
+            this.__action = null;
+            this.__whenNotAllowed = null;
+            this.__initialMagnet = null;
+            this.__initialEnd = null;
+            this.__validateConnectionArgs = null;
 
             this.notify('link:pointerup', evt, x, y);
             joint.dia.CellView.prototype.pointerup.apply(this, arguments);
@@ -9525,22 +9532,22 @@
             'DOMMouseScroll': 'mousewheel'
         },
 
-        _highlights: [],
+        __highlights: [],
 
         init: function() {
 
-            _.bindAll(this, 'pointerup');
+            __.bindAll(this, 'pointerup');
 
             this.model = this.options.model || new joint.dia.Graph;
 
             // This is a fix for the case where two papers share the same options.
             // Changing origin.x for one paper would change the value of origin.x for the other.
             // This prevents that behavior.
-            this.options.origin = _.clone(this.options.origin);
-            this.options.defaultConnector = _.clone(this.options.defaultConnector);
+            this.options.origin = __.clone(this.options.origin);
+            this.options.defaultConnector = __.clone(this.options.defaultConnector);
             // Return default highlighting options into the user specified options.
-            _.defaults(this.options.highlighting, this.constructor.prototype.options.highlighting);
-            this.options.highlighting = _.cloneDeep(this.options.highlighting);
+            __.defaults(this.options.highlighting, this.constructor.prototype.options.highlighting);
+            this.options.highlighting = __.cloneDeep(this.options.highlighting);
 
             this.svg = V('svg').node;
             this.viewport = V('g').addClass(joint.util.addClassNamePrefix('viewport')).node;
@@ -9554,8 +9561,8 @@
             this.listenTo(this.model, 'add', this.onCellAdded);
             this.listenTo(this.model, 'remove', this.removeView);
             this.listenTo(this.model, 'reset', this.resetViews);
-            this.listenTo(this.model, 'sort', this._onSort);
-            this.listenTo(this.model, 'batch:stop', this._onBatchStop);
+            this.listenTo(this.model, 'sort', this.__onSort);
+            this.listenTo(this.model, 'batch:stop', this.__onBatchStop);
 
             this.setOrigin();
             this.setDimensions();
@@ -9563,21 +9570,21 @@
             $(document).on('mouseup touchend', this.pointerup);
 
             // Hold the value when mouse has been moved: when mouse moved, no click event will be triggered.
-            this._mousemoved = 0;
+            this.__mousemoved = 0;
             // Hash of all cell views.
-            this._views = {};
+            this.__views = {};
 
             this.on('cell:highlight', this.onCellHighlight, this);
             this.on('cell:unhighlight', this.onCellUnhighlight, this);
         },
 
-        _onSort: function() {
+        __onSort: function() {
             if (!this.model.hasActiveBatch('add')) {
                 this.sortViews();
             }
         },
 
-        _onBatchStop: function(data) {
+        __onBatchStop: function(data) {
             var name = data && data.batchName;
             if (name === 'add' && !this.model.hasActiveBatch('add')) {
                 this.sortViews();
@@ -9622,7 +9629,7 @@
         // the content visible.
         fitToContent: function(gridWidth, gridHeight, padding, opt) { // alternatively function(opt)
 
-            if (_.isObject(gridWidth)) {
+            if (__.isObject(gridWidth)) {
                 // first parameter is an option object
                 opt = gridWidth;
                 gridWidth = opt.gridWidth || 1;
@@ -9675,8 +9682,8 @@
             calcHeight = Math.max(calcHeight, opt.minHeight || 0);
 
             // Make sure the resulting width and height are lesser than maximum.
-            calcWidth = Math.min(calcWidth, opt.maxWidth || Number.MAX_VALUE);
-            calcHeight = Math.min(calcHeight, opt.maxHeight || Number.MAX_VALUE);
+            calcWidth = Math.min(calcWidth, opt.maxWidth || Number.MAX__VALUE);
+            calcHeight = Math.min(calcHeight, opt.maxHeight || Number.MAX__VALUE);
 
             var dimensionChange = calcWidth != this.options.width || calcHeight != this.options.height;
             var originChange = tx != this.options.origin.x || ty != this.options.origin.y;
@@ -9698,12 +9705,12 @@
 
             opt = opt || {};
 
-            _.defaults(opt, {
+            __.defaults(opt, {
                 padding: 0,
                 preserveAspectRatio: true,
                 scaleGrid: null,
                 minScale: 0,
-                maxScale: Number.MAX_VALUE
+                maxScale: Number.MAX__VALUE
                 //minScaleX
                 //minScaleY
                 //maxScaleX
@@ -9798,7 +9805,7 @@
 
             var restrictedArea;
 
-            if (_.isFunction(this.options.restrictTranslate)) {
+            if (__.isFunction(this.options.restrictTranslate)) {
                 // A method returning a bounding box
                 restrictedArea = this.options.restrictTranslate.apply(this, arguments);
             } else if (this.options.restrictTranslate === true) {
@@ -9853,17 +9860,17 @@
 
         onCellAdded: function(cell, graph, opt) {
 
-            if (this.options.async && opt.async !== false && _.isNumber(opt.position)) {
+            if (this.options.async && opt.async !== false && __.isNumber(opt.position)) {
 
-                this._asyncCells = this._asyncCells || [];
-                this._asyncCells.push(cell);
+                this.__asyncCells = this.__asyncCells || [];
+                this.__asyncCells.push(cell);
 
                 if (opt.position == 0) {
 
-                    if (this._frameId) throw new Error('another asynchronous rendering in progress');
+                    if (this.__frameId) throw new Error('another asynchronous rendering in progress');
 
-                    this.asyncRenderViews(this._asyncCells, opt);
-                    delete this._asyncCells;
+                    this.asyncRenderViews(this.__asyncCells, opt);
+                    delete this.__asyncCells;
                 }
 
             } else {
@@ -9874,11 +9881,11 @@
 
         removeView: function(cell) {
 
-            var view = this._views[cell.id];
+            var view = this.__views[cell.id];
 
             if (view) {
                 view.remove();
-                delete this._views[cell.id];
+                delete this.__views[cell.id];
             }
 
             return view;
@@ -9886,7 +9893,7 @@
 
         renderView: function(cell) {
 
-            var view = this._views[cell.id] = this.createViewForModel(cell);
+            var view = this.__views[cell.id] = this.createViewForModel(cell);
 
             V(this.viewport).append(view.el);
             view.paper = this;
@@ -9923,10 +9930,10 @@
             // `beforeRenderViews()` can return changed cells array (e.g sorted).
             cells = this.beforeRenderViews(cells, opt) || cells;
 
-            if (this._frameId) {
+            if (this.__frameId) {
 
-                joint.util.cancelFrame(this._frameId);
-                delete this._frameId;
+                joint.util.cancelFrame(this.__frameId);
+                delete this.__frameId;
             }
 
             if (this.options.async) {
@@ -9936,7 +9943,7 @@
 
             } else {
 
-                _.each(cells, this.renderView, this);
+                __.each(cells, this.renderView, this);
 
                 // Sort the cells in the DOM manually as we might have changed the order they
                 // were added to the DOM (see above).
@@ -9946,22 +9953,22 @@
 
         removeViews: function() {
 
-            _.invoke(this._views, 'remove');
+            __.invoke(this.__views, 'remove');
 
-            this._views = {};
+            this.__views = {};
         },
 
-        asyncBatchAdded: _.noop,
+        asyncBatchAdded: __.noop,
 
         asyncRenderViews: function(cells, opt) {
 
-            if (this._frameId) {
+            if (this.__frameId) {
 
                 var batchSize = (this.options.async && this.options.async.batchSize) || 50;
                 var batchCells = cells.splice(0, batchSize);
                 var collection = this.model.get('cells');
 
-                _.each(batchCells, function(cell) {
+                __.each(batchCells, function(cell) {
 
                     // The cell has to be part of the graph collection.
                     // There is a chance in asynchronous rendering
@@ -9976,14 +9983,14 @@
             if (!cells.length) {
 
                 // No cells left to render.
-                delete this._frameId;
+                delete this.__frameId;
                 this.afterRenderViews(opt);
                 this.trigger('render:done', opt);
 
             } else {
 
                 // Schedule a next batch to render.
-                this._frameId = joint.util.nextFrame(function() {
+                this.__frameId = joint.util.nextFrame(function() {
                     this.asyncRenderViews(cells, opt);
                 }, this);
             }
@@ -10010,7 +10017,7 @@
 
             sy = sy || sx;
 
-            if (_.isUndefined(ox)) {
+            if (__.isUndefined(ox)) {
 
                 ox = 0;
                 oy = 0;
@@ -10047,7 +10054,7 @@
             // If the origin is not set explicitely, rotate around the center. Note that
             // we must use the plain bounding box (`this.el.getBBox()` instead of the one that gives us
             // the real bounding box (`bbox()`) including transformations).
-            if (_.isUndefined(ox)) {
+            if (__.isUndefined(ox)) {
 
                 var bbox = this.viewport.getBBox();
                 ox = bbox.width / 2;
@@ -10061,14 +10068,14 @@
         // be a selector or a jQuery object.
         findView: function($el) {
 
-            var el = _.isString($el)
+            var el = __.isString($el)
                 ? this.viewport.querySelector($el)
                 : $el instanceof $ ? $el[0] : $el;
 
             while (el && el !== this.el && el !== document) {
 
                 var id = el.getAttribute('model-id');
-                if (id) return this._views[id];
+                if (id) return this.__views[id];
 
                 el = el.parentNode;
             }
@@ -10079,9 +10086,9 @@
         // Find a view for a model `cell`. `cell` can also be a string representing a model `id`.
         findViewByModel: function(cell) {
 
-            var id = _.isString(cell) ? cell : cell.id;
+            var id = __.isString(cell) ? cell : cell.id;
 
-            return this._views[id];
+            return this.__views[id];
         },
 
         // Find all views at given point
@@ -10089,9 +10096,9 @@
 
             p = g.point(p);
 
-            var views = _.map(this.model.getElements(), this.findViewByModel, this);
+            var views = __.map(this.model.getElements(), this.findViewByModel, this);
 
-            return _.filter(views, function(view) {
+            return __.filter(views, function(view) {
                 return view && g.rect(view.vel.bbox(false, this.viewport)).containsPoint(p);
             }, this);
         },
@@ -10099,13 +10106,13 @@
         // Find all views in given area
         findViewsInArea: function(rect, opt) {
 
-            opt = _.defaults(opt || {}, { strict: false });
+            opt = __.defaults(opt || {}, { strict: false });
             rect = g.rect(rect);
 
-            var views = _.map(this.model.getElements(), this.findViewByModel, this);
+            var views = __.map(this.model.getElements(), this.findViewByModel, this);
             var method = opt.strict ? 'containsRect' : 'intersect';
 
-            return _.filter(views, function(view) {
+            return __.filter(views, function(view) {
                 return view && rect[method](g.rect(view.vel.bbox(false, this.viewport)));
             }, this);
         },
@@ -10184,15 +10191,15 @@
                             inbound: false
                         });
 
-                        var numSameLinks = _.filter(connectedLinks, function(_link) {
+                        var numSameLinks = __.filter(connectedLinks, function(__link) {
 
-                            var _source = _link.get('source');
-                            var _target = _link.get('target');
+                            var __source = __link.get('source');
+                            var __target = __link.get('target');
 
-                            return _source && _source.id === source.id &&
-                                (!_source.port || (_source.port === source.port)) &&
-                                _target && _target.id === target.id &&
-                                (!_target.port || (_target.port === target.port));
+                            return __source && __source.id === source.id &&
+                                (!__source.port || (__source.port === source.port)) &&
+                                __target && __target.id === target.id &&
+                                (!__target.port || (__target.port === target.port));
 
                         }).length;
 
@@ -10206,8 +10213,8 @@
             if (
                 !this.options.linkPinning &&
                 (
-                    !_.has(link.get('source'), 'id') ||
-                    !_.has(link.get('target'), 'id')
+                    !__.has(link.get('source'), 'id') ||
+                    !__.has(link.get('target'), 'id')
                 )
             ) {
                 // Link pinning is not allowed and the link is not connected to the target.
@@ -10219,7 +10226,7 @@
 
         getDefaultLink: function(cellView, magnet) {
 
-            return _.isFunction(this.options.defaultLink)
+            return __.isFunction(this.options.defaultLink)
                 // default link is a function producing link model
                 ? this.options.defaultLink.call(this, cellView, magnet)
                 // default link is the Backbone model
@@ -10243,10 +10250,10 @@
              }
              }
              */
-            if (_.isUndefined(highlighterDef)) {
+            if (__.isUndefined(highlighterDef)) {
 
                 // check for built-in types
-                var type = _.chain(opt)
+                var type = __.chain(opt)
                     .pick('embedding', 'connecting', 'magnetAvailability', 'elementAvailability')
                     .keys().first().value();
 
@@ -10259,7 +10266,7 @@
             if (!highlighterDef) return false;
 
             // Allow specifying a highlighter by name.
-            if (_.isString(highlighterDef)) {
+            if (__.isString(highlighterDef)) {
                 highlighterDef = {
                     name: highlighterDef
                 };
@@ -10292,12 +10299,12 @@
             if (!opt) return;
 
             var key = opt.name + magnetEl.id + JSON.stringify(opt.options);
-            if (!this._highlights[key]) {
+            if (!this.__highlights[key]) {
 
                 var highlighter = opt.highlighter;
-                highlighter.highlight(cellView, magnetEl, _.clone(opt.options));
+                highlighter.highlight(cellView, magnetEl, __.clone(opt.options));
 
-                this._highlights[key] = {
+                this.__highlights[key] = {
                     cellView: cellView,
                     magnetEl: magnetEl,
                     opt: opt.options,
@@ -10312,13 +10319,13 @@
             if (!opt) return;
 
             var key = opt.name + magnetEl.id + JSON.stringify(opt.options);
-            var highlight = this._highlights[key];
+            var highlight = this.__highlights[key];
             if (highlight) {
 
                 // Use the cellView and magnetEl that were used by the highlighter.highlight() method.
                 highlight.highlighter.unhighlight(highlight.cellView, highlight.magnetEl, highlight.opt);
 
-                this._highlights[key] = null;
+                this.__highlights[key] = null;
             }
         },
 
@@ -10348,7 +10355,7 @@
         mouseclick: function(evt) {
 
             // Trigger event when mouse not moved.
-            if (this._mousemoved <= this.options.clickThreshold) {
+            if (this.__mousemoved <= this.options.clickThreshold) {
 
                 evt = joint.util.normalizeEvent(evt);
 
@@ -10376,7 +10383,7 @@
                 return true;
             }
 
-            if (evt.data && !_.isUndefined(evt.data.guarded)) {
+            if (evt.data && !__.isUndefined(evt.data.guarded)) {
                 return evt.data.guarded;
             }
 
@@ -10423,7 +10430,7 @@
 
             evt.preventDefault();
 
-            this._mousemoved = 0;
+            this.__mousemoved = 0;
 
             var localPoint = this.snapToGrid({ x: evt.clientX, y: evt.clientY });
 
@@ -10447,7 +10454,7 @@
                 evt = joint.util.normalizeEvent(evt);
 
                 // Mouse moved counter.
-                this._mousemoved++;
+                this.__mousemoved++;
 
                 var localPoint = this.snapToGrid({ x: evt.clientX, y: evt.clientY });
 
@@ -10533,7 +10540,7 @@
 
         drawGrid: function(opt) {
 
-            opt = _.defaults(opt || {}, this.options.drawGrid, {
+            opt = __.defaults(opt || {}, this.options.drawGrid, {
                 color: '#aaa',
                 thickness: 1
             });
@@ -10576,19 +10583,19 @@
 
             this.options.interactive = value;
 
-            _.invoke(this._views, 'setInteractivity', value);
+            __.invoke(this.__views, 'setInteractivity', value);
         }
     });
 
-    (function(joint, _) {
+    (function(joint, __) {
 
         var PortData = function(data) {
 
-            var clonedData = _.cloneDeep(data);
+            var clonedData = __.cloneDeep(data);
             this.ports = [];
-            this.groups = this._getNormalizedGroups(clonedData);
+            this.groups = this.__getNormalizedGroups(clonedData);
 
-            this._init(clonedData);
+            this.__init(clonedData);
         };
 
         PortData.prototype = {
@@ -10598,60 +10605,60 @@
             },
 
             getPort: function(id) {
-                return _.find(this.ports, function(p) {
+                return __.find(this.ports, function(p) {
                     return p.id === id;
                 });
             },
 
             getGroup: function(name) {
-                return this.groups[name] || this._createGroupNode();
+                return this.groups[name] || this.__createGroupNode();
             },
 
             addPort: function(port) {
 
-                port = this._evaluatePort(port);
+                port = this.__evaluatePort(port);
                 this.ports.push(port);
             },
 
-            _init: function(data) {
+            __init: function(data) {
 
                 data = data || {};
 
                 var ports = data.items || [];
 
-                _.each(ports, function(port) {
+                __.each(ports, function(port) {
 
                     this.addPort(port);
                 }, this);
             },
 
-            _evaluatePort: function(port) {
+            __evaluatePort: function(port) {
 
-                var evaluated = _.clone(port);
+                var evaluated = __.clone(port);
 
-                var group = _.extend(this._createGroupNode(), port.group ? this.groups[port.group] : null);
+                var group = __.extend(this.__createGroupNode(), port.group ? this.groups[port.group] : null);
 
                 evaluated.markup = evaluated.markup || group.markup;
-                evaluated.attrs = _.merge({}, group.attrs, evaluated.attrs);
-                evaluated.position = _.merge(this._createPositionNode(), group.position, { args: evaluated.args });
-                evaluated.label = _.merge({}, group.label, this._getLabel(evaluated));
-                evaluated.z = this._getZIndex(evaluated.z, group.z);
+                evaluated.attrs = __.merge({}, group.attrs, evaluated.attrs);
+                evaluated.position = __.merge(this.__createPositionNode(), group.position, { args: evaluated.args });
+                evaluated.label = __.merge({}, group.label, this.__getLabel(evaluated));
+                evaluated.z = this.__getZIndex(evaluated.z, group.z);
 
                 return evaluated;
             },
 
-            _getZIndex: function(data, group) {
+            __getZIndex: function(data, group) {
 
-                if (_.isNumber(data)) {
+                if (__.isNumber(data)) {
                     return data;
                 }
-                if (_.isNumber(group) || group === 'auto') {
+                if (__.isNumber(group) || group === 'auto') {
                     return group;
                 }
                 return 'auto';
             },
 
-            _createPositionNode: function() {
+            __createPositionNode: function() {
 
                 return {
                     name: 'left',
@@ -10659,7 +10666,7 @@
                 };
             },
 
-            _createGroupNode: function() {
+            __createGroupNode: function() {
 
                 return {
                     position: {},
@@ -10667,38 +10674,38 @@
                 };
             },
 
-            _getNormalizedGroups: function(data) {
+            __getNormalizedGroups: function(data) {
 
                 data = data || {};
                 data.groups = data.groups || {};
 
-                _.each(data.groups, function(group) {
-                    group.position = this._getPosition(group.position, true);
-                    group.label = this._getLabel(group, true);
+                __.each(data.groups, function(group) {
+                    group.position = this.__getPosition(group.position, true);
+                    group.label = this.__getLabel(group, true);
                 }, this);
 
                 return data.groups;
             },
 
-            _getPosition: function(position, setDefault) {
+            __getPosition: function(position, setDefault) {
 
                 var args = {};
                 var positionName;
 
-                if (_.isFunction(position)) {
+                if (__.isFunction(position)) {
                     positionName = 'fn';
                     args.fn = position;
-                } else if (_.isString(position)) {
+                } else if (__.isString(position)) {
                     positionName = position;
-                } else if (_.isUndefined(position)) {
+                } else if (__.isUndefined(position)) {
                     positionName = setDefault ? 'left' : null;
-                } else if (_.isArray(position)) {
+                } else if (__.isArray(position)) {
                     positionName = 'absolute';
                     args.x = position[0];
                     args.y = position[1];
-                } else if (_.isObject(position)) {
+                } else if (__.isObject(position)) {
                     positionName = position.name;
-                    _.extend(args, position.args);
+                    __.extend(args, position.args);
                 }
 
                 var result = { args: args };
@@ -10709,26 +10716,26 @@
                 return result;
             },
 
-            _getLabel: function(item, setDefaults) {
+            __getLabel: function(item, setDefaults) {
 
                 var label = item.label || {};
 
                 var ret = label;
-                ret.position = this._getPosition(label.position, setDefaults);
+                ret.position = this.__getPosition(label.position, setDefaults);
 
                 return ret;
             }
         };
 
-        _.extend(joint.dia.Element.prototype, {
+        __.extend(joint.dia.Element.prototype, {
 
-            _initializePorts: function() {
+            __initializePorts: function() {
 
-                this._createPortData();
+                this.__createPortData();
                 this.on('change:ports', function() {
 
-                    this._processRemovedPort();
-                    this._createPortData();
+                    this.__processRemovedPort();
+                    this.__createPortData();
                 }, this);
             },
 
@@ -10736,35 +10743,35 @@
              * remove links tied wiht just removed element
              * @private
              */
-            _processRemovedPort: function() {
+            __processRemovedPort: function() {
 
                 var current = this.get('ports') || {};
                 var currentItemsMap = {};
 
-                _.each(current.items, function(item) {
+                __.each(current.items, function(item) {
                     currentItemsMap[item.id] = true;
                 });
 
                 var previous = this.previous('ports') || {};
                 var removed = {};
 
-                _.each(previous.items, function(item) {
+                __.each(previous.items, function(item) {
                     if (!currentItemsMap[item.id]) {
                         removed[item.id] = true;
                     }
                 });
 
                 var graph = this.graph;
-                if (graph && !_.isEmpty(removed)) {
+                if (graph && !__.isEmpty(removed)) {
 
                     var inboundLinks = graph.getConnectedLinks(this, { inbound: true });
-                    _.each(inboundLinks, function(link) {
+                    __.each(inboundLinks, function(link) {
 
                         if (removed[link.get('target').port]) link.remove();
                     });
 
                     var outboundLinks = graph.getConnectedLinks(this, { outbound: true });
-                    _.each(outboundLinks, function(link) {
+                    __.each(outboundLinks, function(link) {
 
                         if (removed[link.get('source').port]) link.remove();
                     });
@@ -10793,7 +10800,7 @@
              */
             getPorts: function() {
 
-                return _.cloneDeep(this.prop('ports/items')) || [];
+                return __.cloneDeep(this.prop('ports/items')) || [];
             },
 
             /**
@@ -10802,7 +10809,7 @@
              */
             getPort: function(id) {
 
-                return _.cloneDeep(_.find(this.prop('ports/items'), function(port) {
+                return __.cloneDeep(__.find(this.prop('ports/items'), function(port) {
                     return port.id && port.id === id;
                 }));
             },
@@ -10813,13 +10820,13 @@
              */
             getPortIndex: function(port) {
 
-                var id = _.isObject(port) ? port.id : port;
+                var id = __.isObject(port) ? port.id : port;
 
-                if (!this._isValidPortId(id)) {
+                if (!this.__isValidPortId(id)) {
                     return -1;
                 }
 
-                return _.findIndex(this.prop('ports/items'), { id: id });
+                return __.findIndex(this.prop('ports/items'), { id: id });
             },
 
             /**
@@ -10829,11 +10836,11 @@
              */
             addPort: function(port, opt) {
 
-                if (!_.isObject(port) || _.isArray(port)) {
+                if (!__.isObject(port) || __.isArray(port)) {
                     throw new Error('Element: addPort requires an object.');
                 }
 
-                var ports = _.clone(this.prop('ports/items')) || [];
+                var ports = __.clone(this.prop('ports/items')) || [];
                 ports.push(port);
                 this.prop('ports/items', ports, opt);
 
@@ -10856,7 +10863,7 @@
                 }
 
                 var args;
-                if (_.isString(path)) {
+                if (__.isString(path)) {
 
                     args = Array.prototype.slice.call(arguments, 1);
                     // Get/set an attribute by a special path syntax that delimits
@@ -10872,7 +10879,7 @@
             },
 
 
-            _validatePorts: function() {
+            __validatePorts: function() {
 
                 var portsAttr = this.get('ports') || {};
 
@@ -10880,13 +10887,13 @@
                 portsAttr = portsAttr || {};
                 var ports = portsAttr.items || [];
 
-                _.each(ports, function(p) {
-                    if (!this._isValidPortId(p.id)) {
+                __.each(ports, function(p) {
+                    if (!this.__isValidPortId(p.id)) {
                         p.id = joint.util.uuid();
                     }
                 }, this);
 
-                if (_.uniq(ports, 'id').length !== ports.length) {
+                if (__.uniq(ports, 'id').length !== ports.length) {
                     errorMessages.push('Element: found id duplicities in ports.');
                 }
 
@@ -10898,15 +10905,15 @@
              * @returns {boolean}
              * @private
              */
-            _isValidPortId: function(id) {
+            __isValidPortId: function(id) {
 
-                return !_.isNull(id) && !_.isUndefined(id) && !_.isObject(id);
+                return !__.isNull(id) && !__.isUndefined(id) && !__.isObject(id);
             },
 
             addPorts: function(ports, opt) {
 
                 if (ports.length) {
-                    this.prop('ports/items', (_.clone(this.prop('ports/items')) || []).concat(ports), opt);
+                    this.prop('ports/items', (__.clone(this.prop('ports/items')) || []).concat(ports), opt);
                 }
 
                 return this;
@@ -10915,7 +10922,7 @@
             removePort: function(port, opt) {
 
                 var options = opt || {};
-                var ports = _.clone(this.prop('ports/items'));
+                var ports = __.clone(this.prop('ports/items'));
 
                 var index = this.getPortIndex(port);
 
@@ -10931,9 +10938,9 @@
             /**
              * @private
              */
-            _createPortData: function() {
+            __createPortData: function() {
 
-                var err = this._validatePorts();
+                var err = this.__validatePorts();
 
                 if (err.length > 0) {
                     this.set('ports', this.previous('ports'));
@@ -10944,24 +10951,24 @@
             }
         });
 
-        _.extend(joint.dia.ElementView.prototype, {
+        __.extend(joint.dia.ElementView.prototype, {
 
             portContainerMarkup: '<g class="joint-port"/>',
             portMarkup: '<circle class="joint-port-body" r="10" fill="#FFFFFF" stroke="#000000"/>',
             portLabelMarkup: '<text class="joint-port-label" fill="#000000"/>',
             /** @type {Object<string, {portElement: Vectorizer, portLabelElement: Vectorizer}>} */
-            _portElementsCache: null,
+            __portElementsCache: null,
 
             /**
              * @private
              */
-            _initializePorts: function() {
+            __initializePorts: function() {
 
-                this._portElementsCache = {};
+                this.__portElementsCache = {};
 
                 this.listenTo(this.model, 'change:ports', function() {
 
-                    this._refreshPorts();
+                    this.__refreshPorts();
                 });
             },
 
@@ -10979,51 +10986,51 @@
             /**
              * @private
              */
-            _refreshPorts: function() {
+            __refreshPorts: function() {
 
-                this._removePorts();
-                this._portElementsCache = {};
+                this.__removePorts();
+                this.__portElementsCache = {};
 
-                this._renderPorts();
+                this.__renderPorts();
             },
 
             /**
              * @private
              */
-            _renderPorts: function() {
+            __renderPorts: function() {
 
                 // references to rendered elements without z-index
                 var elementReferences = [];
-                var elem = this._getContainerElement();
-                _.each(elem.node.childNodes, function(n) {
+                var elem = this.__getContainerElement();
+                __.each(elem.node.childNodes, function(n) {
                     elementReferences.push(n);
                 });
 
-                var ports = _.groupBy(this.model.portData.getPorts(), 'z');
+                var ports = __.groupBy(this.model.portData.getPorts(), 'z');
                 var withoutZKey = 'auto';
 
                 // render non-z first
-                _.each(ports[withoutZKey], function(port) {
-                    var portElement = this._getPortElement(port);
+                __.each(ports[withoutZKey], function(port) {
+                    var portElement = this.__getPortElement(port);
                     elem.append(portElement);
                     elementReferences.push(portElement);
                 }, this);
 
-                _.each(ports, function(groupPorts, groupName) {
+                __.each(ports, function(groupPorts, groupName) {
                     if (groupName !== withoutZKey) {
                         var z = parseInt(groupName, 10);
-                        this._appendPorts(ports[groupName], z, elementReferences);
+                        this.__appendPorts(ports[groupName], z, elementReferences);
                     }
                 }, this);
 
-                this._updatePorts();
+                this.__updatePorts();
             },
 
             /**
              * @returns {V}
              * @private
              */
-            _getContainerElement: function() {
+            __getContainerElement: function() {
 
                 return this.rotatableNode || this.vel;
             },
@@ -11034,10 +11041,10 @@
              * @param refs
              * @private
              */
-            _appendPorts: function(ports, z, refs) {
+            __appendPorts: function(ports, z, refs) {
 
-                var containerElement = this._getContainerElement();
-                var portElements = _.map(ports, this._getPortElement, this);
+                var containerElement = this.__getContainerElement();
+                var portElements = __.map(ports, this.__getPortElement, this);
 
                 if (refs[z] || z < 0) {
                     V(refs[Math.max(z, 0)]).before(portElements);
@@ -11052,35 +11059,35 @@
              * @returns {*}
              * @private
              */
-            _getPortElement: function(port) {
+            __getPortElement: function(port) {
 
-                if (this._portElementsCache[port.id]) {
-                    return this._portElementsCache[port.id].portElement;
+                if (this.__portElementsCache[port.id]) {
+                    return this.__portElementsCache[port.id].portElement;
                 }
-                return this._createPortElement(port);
+                return this.__createPortElement(port);
             },
 
             /**
              * @private
              */
-            _updatePorts: function() {
+            __updatePorts: function() {
 
                 var elBBox = g.rect(this.model.get('size'));
                 var ports = this.model.portData.getPorts();
 
-                _.each(_.groupBy(ports, 'group'), function(ports, groupName) {
+                __.each(__.groupBy(ports, 'group'), function(ports, groupName) {
 
                     var group = this.model.portData.getGroup(groupName);
-                    _.each(ports, this._updatePortAttrs, this);
-                    this._layoutPorts(ports, group, elBBox.clone());
+                    __.each(ports, this.__updatePortAttrs, this);
+                    this.__layoutPorts(ports, group, elBBox.clone());
                 }, this);
             },
 
             /**
              * @private
              */
-            _removePorts: function() {
-                _.invoke(this._portElementsCache, 'portElement.remove');
+            __removePorts: function() {
+                __.invoke(this.__portElementsCache, 'portElement.remove');
             },
 
             /**
@@ -11088,10 +11095,10 @@
              * @returns {V}
              * @private
              */
-            _createPortElement: function(port) {
+            __createPortElement: function(port) {
 
-                var portContentElement = V(this._getPortMarkup(port));
-                var portLabelContentElement = V(this._getPortLabelMarkup(port.label));
+                var portContentElement = V(this.__getPortMarkup(port));
+                var portLabelContentElement = V(this.__getPortLabelMarkup(port.label));
 
                 if (portContentElement && portContentElement.length > 1) {
                     throw new Error('ElementView: Invalid port markup - multiple roots.');
@@ -11106,7 +11113,7 @@
                     .append(portContentElement)
                     .append(portLabelContentElement);
 
-                this._portElementsCache[port.id] = {
+                this.__portElementsCache[port.id] = {
                     portElement: portElement,
                     portLabelElement: portLabelContentElement
                 };
@@ -11118,16 +11125,16 @@
              * @param {Port} port
              * @private
              */
-            _updatePortAttrs: function(port) {
+            __updatePortAttrs: function(port) {
 
                 var allAttrs = port.attrs || {};
-                var element = this._portElementsCache[port.id];
+                var element = this.__portElementsCache[port.id];
 
                 if (!element) {
                     return;
                 }
 
-                this._updateAllAttrs(element.portElement.node, allAttrs);
+                this.__updateAllAttrs(element.portElement.node, allAttrs);
             },
 
             /**
@@ -11135,9 +11142,9 @@
              * @param {Object} allAttrs
              * @private
              */
-            _updateAllAttrs: function(element, allAttrs) {
+            __updateAllAttrs: function(element, allAttrs) {
 
-                _.each(allAttrs, function(attrs, selector) {
+                __.each(allAttrs, function(attrs, selector) {
 
                     var $selected = selector === '.' ? $(element) : $(element).find(selector);
                     this.updateAttr($selected, attrs);
@@ -11151,7 +11158,7 @@
              * @param {g.rect} elBBox
              * @private
              */
-            _layoutPorts: function(ports, group, elBBox) {
+            __layoutPorts: function(ports, group, elBBox) {
 
                 var position = group.position.name;
                 var namespace = joint.layout.Port;
@@ -11159,12 +11166,12 @@
                     position = 'left';
                 }
 
-                var portTrans = namespace[position](_.pluck(ports, 'position.args'), elBBox, group.position.args || {});
+                var portTrans = namespace[position](__.pluck(ports, 'position.args'), elBBox, group.position.args || {});
 
-                _.each(portTrans, function(offset, index) {
+                __.each(portTrans, function(offset, index) {
 
                     var port = this.model.portData.getPort(ports[index].id);
-                    var cached = this._portElementsCache[port.id] || {};
+                    var cached = this.__portElementsCache[port.id] || {};
 
                     this.applyPortTransform(cached.portElement, offset);
 
@@ -11191,7 +11198,7 @@
                     .rotate(transformData.angle || 0);
 
                 element.transform(matrix, { absolute: true });
-                this._updateAllAttrs(element.node, transformData.attrs || {});
+                this.__updateAllAttrs(element.node, transformData.attrs || {});
             },
 
             /**
@@ -11199,7 +11206,7 @@
              * @returns {string}
              * @private
              */
-            _getPortMarkup: function(port) {
+            __getPortMarkup: function(port) {
 
                 return port.markup || this.model.get('portMarkup') || this.model.portMarkup || this.portMarkup;
             },
@@ -11209,13 +11216,13 @@
              * @returns {string}
              * @private
              */
-            _getPortLabelMarkup: function(label) {
+            __getPortLabelMarkup: function(label) {
 
                 return label.markup || this.model.get('portLabelMarkup') || this.model.portLabelMarkup || this.portLabelMarkup;
             }
 
         });
-    }(joint, _));
+    }(joint, __));
 
 //      JointJS library.
 //      (c) 2011-2013 client IO
@@ -11224,7 +11231,7 @@
 
     joint.shapes.basic.Generic = joint.dia.Element.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Generic',
             attrs: {
@@ -11238,7 +11245,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><rect/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Rect',
             attrs: {
@@ -11277,7 +11284,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><text/></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Text',
             attrs: {
@@ -11294,7 +11301,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><circle/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Circle',
             size: { width: 60, height: 60 },
@@ -11324,7 +11331,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><ellipse/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Ellipse',
             size: { width: 60, height: 40 },
@@ -11355,7 +11362,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><polygon/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Polygon',
             size: { width: 60, height: 40 },
@@ -11382,7 +11389,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><polyline/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Polyline',
             size: { width: 60, height: 40 },
@@ -11409,7 +11416,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><image/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Image',
             attrs: {
@@ -11427,7 +11434,7 @@
         }, joint.shapes.basic.Generic.prototype.defaults)
     });
 
-    joint.shapes.basic.ImageWithPorts = joint.shapes.basic.Generic.extend(_.extend({}, joint.shapes.basic.PortsModelInterface, {
+    joint.shapes.basic.ImageWithPorts = joint.shapes.basic.Generic.extend(__.extend({}, joint.shapes.basic.PortsModelInterface, {
         markup: '<g class="rotatable"><g class="scalable"><rect class ="outer"/><image/></g><text/><g class="inPorts"/><g class="outPorts"/></g>',
         portMarkup: '<g class="port<%= id %>"><circle/><text/></g>',
 
@@ -11479,7 +11486,7 @@
             var portCircleSelector = portSelector + '>circle';
 
             attrs[portTextSelector] = { text: portName };
-            attrs[portCircleSelector] = { port: { id: portName || _.uniqueId(type), type: type } };
+            attrs[portCircleSelector] = { port: { id: portName || __.uniqueId(type), type: type } };
             attrs[portSelector] = { ref: 'rect', 'ref-x': (index + 0.5) * (1 / total) };
 
             return attrs;
@@ -11490,7 +11497,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><path/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Path',
             size: { width: 60, height: 60 },
@@ -11515,7 +11522,7 @@
 
     joint.shapes.basic.Rhombus = joint.shapes.basic.Path.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.Rhombus',
             attrs: {
@@ -11539,7 +11546,7 @@
 // `attrs` object.
 
 // Usage:
-// joint.shapes.custom.MyElementWithPorts = joint.shapes.basic.Path.extend(_.extend({}, joint.shapes.basic.PortsModelInterface, {
+// joint.shapes.custom.MyElementWithPorts = joint.shapes.basic.Path.extend(__.extend({}, joint.shapes.basic.PortsModelInterface, {
 //     getPortAttrs: function(portName, index, total, selector, type) {
 //         var attrs = {};
 //         var portClass = 'port' + index;
@@ -11548,7 +11555,7 @@
 //         var portBodySelector = portSelector + '>.port-body';
 //
 //         attrs[portTextSelector] = { text: portName };
-//         attrs[portBodySelector] = { port: { id: portName || _.uniqueId(type) , type: type } };
+//         attrs[portBodySelector] = { port: { id: portName || __.uniqueId(type) , type: type } };
 //         attrs[portSelector] = { ref: 'rect', 'ref-y': (index + 0.5) * (1 / total) };
 //
 //         if (selector === '.outPorts') { attrs[portSelector]['ref-dx'] = 0; }
@@ -11564,34 +11571,34 @@
             this.on('change:inPorts change:outPorts', this.updatePortsAttrs, this);
 
             // Call the `initialize()` of the parent.
-            this.constructor.__super__.constructor.__super__.initialize.apply(this, arguments);
+            this.constructor.____super____.constructor.____super____.initialize.apply(this, arguments);
         },
 
         updatePortsAttrs: function(eventName) {
 
-            if (this._portSelectors) {
+            if (this.__portSelectors) {
 
-                var newAttrs = _.omit(this.get('attrs'), this._portSelectors);
+                var newAttrs = __.omit(this.get('attrs'), this.__portSelectors);
                 this.set('attrs', newAttrs, { silent: true });
             }
 
             // This holds keys to the `attrs` object for all the port specific attribute that
             // we set in this method. This is necessary in order to remove previously set
             // attributes for previous ports.
-            this._portSelectors = [];
+            this.__portSelectors = [];
 
             var attrs = {};
 
-            _.each(this.get('inPorts'), function(portName, index, ports) {
+            __.each(this.get('inPorts'), function(portName, index, ports) {
                 var portAttributes = this.getPortAttrs(portName, index, ports.length, '.inPorts', 'in');
-                this._portSelectors = this._portSelectors.concat(_.keys(portAttributes));
-                _.extend(attrs, portAttributes);
+                this.__portSelectors = this.__portSelectors.concat(__.keys(portAttributes));
+                __.extend(attrs, portAttributes);
             }, this);
 
-            _.each(this.get('outPorts'), function(portName, index, ports) {
+            __.each(this.get('outPorts'), function(portName, index, ports) {
                 var portAttributes = this.getPortAttrs(portName, index, ports.length, '.outPorts', 'out');
-                this._portSelectors = this._portSelectors.concat(_.keys(portAttributes));
-                _.extend(attrs, portAttributes);
+                this.__portSelectors = this.__portSelectors.concat(__.keys(portAttributes));
+                __.extend(attrs, portAttributes);
             }, this);
 
             // Silently set `attrs` on the cell so that noone knows the attrs have changed. This makes sure
@@ -11645,12 +11652,12 @@
 
             var portTemplate = joint.util.template(this.model.portMarkup);
 
-            _.each(_.filter(this.model.ports, function(p) { return p.type === 'in'; }), function(port, index) {
+            __.each(__.filter(this.model.ports, function(p) { return p.type === 'in'; }), function(port, index) {
 
                 $inPorts.append(V(portTemplate({ id: index, port: port })).node);
             });
 
-            _.each(_.filter(this.model.ports, function(p) { return p.type === 'out'; }), function(port, index) {
+            __.each(__.filter(this.model.ports, function(p) { return p.type === 'out'; }), function(port, index) {
 
                 $outPorts.append(V(portTemplate({ id: index, port: port })).node);
             });
@@ -11666,7 +11673,7 @@
             '</g>'
         ].join(''),
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'basic.TextBlock',
 
@@ -11711,9 +11718,9 @@
             // Selector `foreignObject' doesn't work accross all browsers, we'r using class selector instead.
             // We have to clone size as we don't want attributes.div.style to be same object as attributes.size.
             this.attr({
-                '.fobj': _.clone(size),
+                '.fobj': __.clone(size),
                 div: {
-                    style: _.clone(size)
+                    style: __.clone(size)
                 }
             });
         },
@@ -11782,10 +11789,10 @@
                 var model = this.model;
 
                 // Update everything but the content first.
-                var noTextAttrs = _.omit(renderingOnlyAttrs || model.get('attrs'), '.content');
+                var noTextAttrs = __.omit(renderingOnlyAttrs || model.get('attrs'), '.content');
                 joint.dia.ElementView.prototype.update.call(this, model, noTextAttrs);
 
-                if (!renderingOnlyAttrs || _.has(renderingOnlyAttrs, '.content')) {
+                if (!renderingOnlyAttrs || __.has(renderingOnlyAttrs, '.content')) {
                     // Update the content itself.
                     this.updateContent(model, renderingOnlyAttrs);
                 }
@@ -11799,9 +11806,9 @@
         updateContent: function(cell, renderingOnlyAttrs) {
 
             // Create copy of the text attributes
-            var textAttrs = _.merge({}, (renderingOnlyAttrs || cell.get('attrs'))['.content']);
+            var textAttrs = __.merge({}, (renderingOnlyAttrs || cell.get('attrs'))['.content']);
 
-            textAttrs = _.omit(textAttrs, 'text');
+            textAttrs = __.omit(textAttrs, 'text');
 
             // Break the content to fit the element size taking into account the attributes
             // set on the model.
@@ -11821,7 +11828,7 @@
         }
     });
 
-    joint.routers.manhattan = (function(g, _, joint) {
+    joint.routers.manhattan = (function(g, __, joint) {
 
         'use strict';
 
@@ -11908,7 +11915,7 @@
              return [point, to];
              },
              */
-            fallbackRoute: _.constant(null),
+            fallbackRoute: __.constant(null),
 
             // if a function is provided, it's used to route the link while dragging an end
             // i.e. function(from, to, opts) { return []; }
@@ -11930,7 +11937,7 @@
             var opt = this.options;
 
             // source or target element could be excluded from set of obstacles
-            var excludedEnds = _.chain(opt.excludeEnds)
+            var excludedEnds = __.chain(opt.excludeEnds)
                 .map(link.get, link)
                 .pluck('id')
                 .map(graph.getCell, graph).value();
@@ -11940,12 +11947,12 @@
 
             var source = graph.getCell(link.get('source').id);
             if (source) {
-                excludedAncestors = _.union(excludedAncestors, _.map(source.getAncestors(), 'id'));
+                excludedAncestors = __.union(excludedAncestors, __.map(source.getAncestors(), 'id'));
             }
 
             var target = graph.getCell(link.get('target').id);
             if (target) {
-                excludedAncestors = _.union(excludedAncestors, _.map(target.getAncestors(), 'id'));
+                excludedAncestors = __.union(excludedAncestors, __.map(target.getAncestors(), 'id'));
             }
 
             // builds a map of all elements for quicker obstacle queries (i.e. is a point contained
@@ -11955,13 +11962,13 @@
             // to go through all obstacles, we check only those in a particular cell.
             var mapGridSize = this.mapGridSize;
 
-            _.chain(graph.getElements())
+            __.chain(graph.getElements())
             // remove source and target element if required
                 .difference(excludedEnds)
                 // remove all elements whose type is listed in excludedTypes array
                 .reject(function(element) {
                     // reject any element which is an ancestor of either source or target
-                    return _.contains(opt.excludeTypes, element.get('type')) || _.contains(excludedAncestors, element.id);
+                    return __.contains(opt.excludeTypes, element.get('type')) || __.contains(excludedAncestors, element.id);
                 })
                 // change elements (models) to their bounding boxes
                 .invoke('getBBox')
@@ -11994,7 +12001,7 @@
 
             var mapKey = point.clone().snapToGrid(this.mapGridSize).toString();
 
-            return _.every(this.map[mapKey], function(obstacle) {
+            return __.every(this.map[mapKey], function(obstacle) {
                 return !obstacle.containsPoint(point);
             });
         };
@@ -12020,7 +12027,7 @@
 
             this.values[item] = value;
 
-            var index = _.sortedIndex(this.items, item, function(i) {
+            var index = __.sortedIndex(this.items, item, function(i) {
                 return this.values[i];
             }, this);
 
@@ -12090,7 +12097,7 @@
 
             var step = opt.step;
             var center = bbox.center();
-            var startPoints = _.chain(opt.directionMap).pick(directionList).map(function(direction) {
+            var startPoints = __.chain(opt.directionMap).pick(directionList).map(function(direction) {
 
                 var x = direction.x * bbox.width / 2;
                 var y = direction.y * bbox.height / 2;
@@ -12161,8 +12168,8 @@
             }
 
             // take into account only accessible end points
-            startPoints = _.filter(startPoints, map.isPointAccessible, map);
-            endPoints = _.filter(endPoints, map.isPointAccessible, map);
+            startPoints = __.filter(startPoints, map.isPointAccessible, map);
+            endPoints = __.filter(endPoints, map.isPointAccessible, map);
 
             // Check if there is a accessible end point.
             // We would have to use a fallback route otherwise.
@@ -12175,7 +12182,7 @@
                 // Cost from start to a point along best known path.
                 var costs = {};
 
-                _.each(startPoints, function(point) {
+                __.each(startPoints, function(point) {
                     var key = point.toString();
                     openSet.add(key, estimateCost(point, endPoints));
                     costs[key] = 0;
@@ -12186,7 +12193,7 @@
                 var dirs = opt.directions;
                 var dirLen = dirs.length;
                 var loopsRemain = opt.maximumLoops;
-                var endPointsKeys = _.invoke(endPoints, 'toString');
+                var endPointsKeys = __.invoke(endPoints, 'toString');
 
                 // main route finding loop
                 while (!openSet.isEmpty() && loopsRemain > 0) {
@@ -12253,11 +12260,11 @@
         // resolve some of the options
         function resolveOptions(opt) {
 
-            opt.directions = _.result(opt, 'directions');
-            opt.penalties = _.result(opt, 'penalties');
-            opt.paddingBox = _.result(opt, 'paddingBox');
+            opt.directions = __.result(opt, 'directions');
+            opt.penalties = __.result(opt, 'penalties');
+            opt.paddingBox = __.result(opt, 'paddingBox');
 
-            _.each(opt.directions, function(direction) {
+            __.each(opt.directions, function(direction) {
 
                 var point1 = g.point(0, 0);
                 var point2 = g.point(direction.offsetX, direction.offsetY);
@@ -12280,7 +12287,7 @@
 
             // pathfinding
             var map = (new ObstacleMap(opt)).build(this.paper.model, this.model);
-            var oldVertices = _.map(vertices, g.point);
+            var oldVertices = __.map(vertices, g.point);
             var newVertices = [];
             var tailPoint = sourceBBox.center().snapToGrid(opt.step);
 
@@ -12301,7 +12308,7 @@
                     // might use dragging route instead of main routing method if that is enabled.
                     var endingAtPoint = !this.model.get('source').id || !this.model.get('target').id;
 
-                    if (endingAtPoint && _.isFunction(opt.draggingRoute)) {
+                    if (endingAtPoint && __.isFunction(opt.draggingRoute)) {
                         // Make sure we passing points only (not rects).
                         var dragFrom = from instanceof g.rect ? from.center() : from;
                         partialRoute = opt.draggingRoute(dragFrom, to.origin(), opt);
@@ -12314,20 +12321,20 @@
                 if (partialRoute === null) {
                     // The partial route could not be found.
                     // use orthogonal (do not avoid elements) route instead.
-                    if (!_.isFunction(joint.routers.orthogonal)) {
+                    if (!__.isFunction(joint.routers.orthogonal)) {
                         throw new Error('Manhattan requires the orthogonal router.');
                     }
                     return joint.routers.orthogonal(vertices, opt, this);
                 }
 
-                var leadPoint = _.first(partialRoute);
+                var leadPoint = __.first(partialRoute);
 
                 if (leadPoint && leadPoint.equals(tailPoint)) {
                     // remove the first point if the previous partial route had the same point as last
                     partialRoute.shift();
                 }
 
-                tailPoint = _.last(partialRoute) || tailPoint;
+                tailPoint = __.last(partialRoute) || tailPoint;
 
                 Array.prototype.push.apply(newVertices, partialRoute);
             }
@@ -12338,14 +12345,14 @@
         // public function
         return function(vertices, opt, linkView) {
 
-            return router.call(linkView, vertices, _.extend({}, config, opt));
+            return router.call(linkView, vertices, __.extend({}, config, opt));
         };
 
-    })(g, _, joint);
+    })(g, __, joint);
 
     joint.routers.metro = (function() {
 
-        if (!_.isFunction(joint.routers.manhattan)) {
+        if (!__.isFunction(joint.routers.manhattan)) {
 
             throw new Error('Metro requires the manhattan router.');
         }
@@ -12409,7 +12416,7 @@
         // public function
         return function(vertices, opts, linkView) {
 
-            return joint.routers.manhattan(vertices, _.extend({}, config, opts), linkView);
+            return joint.routers.manhattan(vertices, __.extend({}, config, opts), linkView);
         };
 
     })();
@@ -12571,15 +12578,15 @@
             var route = {};
 
             var pts = [g.point(from.x, to.y), g.point(to.x, from.y)];
-            var freePts = _.filter(pts, function(pt) { return !toBBox.containsPoint(pt); });
-            var freeBrngPts = _.filter(freePts, function(pt) { return bearing(pt, from) != brng; });
+            var freePts = __.filter(pts, function(pt) { return !toBBox.containsPoint(pt); });
+            var freeBrngPts = __.filter(freePts, function(pt) { return bearing(pt, from) != brng; });
 
             var p;
 
             if (freeBrngPts.length > 0) {
 
                 // try to pick a point which bears the same direction as the previous segment
-                p = _.filter(freeBrngPts, function(pt) { return bearing(from, pt) == brng; }).pop();
+                p = __.filter(freeBrngPts, function(pt) { return bearing(from, pt) == brng; }).pop();
                 p = p || freeBrngPts[0];
 
                 route.points = [p];
@@ -12592,7 +12599,7 @@
                 // We take the point inside element and move it outside the element in the direction the
                 // route is going. Now we can join this point with the current end (using freeJoin).
 
-                p = _.difference(pts, freePts)[0];
+                p = __.difference(pts, freePts)[0];
 
                 var p2 = g.point(to).move(p, -boxSize(toBBox, brng) / 2);
                 var p1 = freeJoin(p2, from, toBBox);
@@ -12683,7 +12690,7 @@
             var sourceBBox = expand(linkView.sourceBBox, padding);
             var targetBBox = expand(linkView.targetBBox, padding);
 
-            vertices = _.map(vertices, g.point);
+            vertices = __.map(vertices, g.point);
             vertices.unshift(sourceBBox.center());
             vertices.push(targetBBox.center());
 
@@ -12756,7 +12763,7 @@
         // Construct the `d` attribute of the `<path>` element.
         var d = ['M', sourcePoint.x, sourcePoint.y];
 
-        _.each(vertices, function(vertex) {
+        __.each(vertices, function(vertex) {
 
             d.push(vertex.x, vertex.y);
         });
@@ -12777,7 +12784,7 @@
         // Construct the `d` attribute of the `<path>` element.
         var d = ['M', sourcePoint.x, sourcePoint.y];
 
-        _.each(vertices, function(vertex, index) {
+        __.each(vertices, function(vertex, index) {
 
             // the closest vertices
             prev = vertices[index - 1] || sourcePoint;
@@ -12824,19 +12831,19 @@
         return d.join(' ');
     };
 
-    joint.connectors.jumpover = (function(_, g) {
+    joint.connectors.jumpover = (function(__, g) {
 
         // default size of jump if not specified in options
-        var JUMP_SIZE = 5;
+        var JUMP__SIZE = 5;
 
         // available jump types
-        var JUMP_TYPES = ['arc', 'gap', 'cubic'];
+        var JUMP__TYPES = ['arc', 'gap', 'cubic'];
 
         // takes care of math. error for case when jump is too close to end of line
-        var CLOSE_PROXIMITY_PADDING = 1;
+        var CLOSE__PROXIMITY__PADDING = 1;
 
         // list of connector types not to jump over.
-        var IGNORED_CONNECTORS = ['smooth'];
+        var IGNORED__CONNECTORS = ['smooth'];
 
         /**
          * Transform start/end and vertices into series of lines
@@ -12859,11 +12866,11 @@
         }
 
         function setupUpdating(jumpOverLinkView) {
-            var updateList = jumpOverLinkView.paper._jumpOverUpdateList;
+            var updateList = jumpOverLinkView.paper.__jumpOverUpdateList;
 
             // first time setup for this paper
             if (updateList == null) {
-                updateList = jumpOverLinkView.paper._jumpOverUpdateList = [];
+                updateList = jumpOverLinkView.paper.__jumpOverUpdateList = [];
                 jumpOverLinkView.paper.on('cell:pointerup', updateJumpOver);
                 jumpOverLinkView.paper.model.on('reset', function() {
                     updateList = [];
@@ -12888,7 +12895,7 @@
          * @param {object} batchEvent optional object with info about batch
          */
         function updateJumpOver() {
-            var updateList = this._jumpOverUpdateList;
+            var updateList = this.__jumpOverUpdateList;
             for (var i = 0; i < updateList.length; i++) {
                 updateList[i].update();
             }
@@ -12902,7 +12909,7 @@
          * @return {g.point[]} list of intersection points
          */
         function findLineIntersections(line, crossCheckLines) {
-            return _(crossCheckLines).map(function(crossCheckLine) {
+            return __(crossCheckLines).map(function(crossCheckLine) {
                 return line.intersection(crossCheckLine);
             }).compact().value();
         }
@@ -12954,14 +12961,14 @@
                     // not calculated when we know there are no other intersection points
                     var endDistance = jumpStart.distance(lastLine.end);
                     // if the end is too close to possible jump, draw remaining line instead of a jump
-                    if (endDistance < jumpSize * 2 + CLOSE_PROXIMITY_PADDING) {
+                    if (endDistance < jumpSize * 2 + CLOSE__PROXIMITY__PADDING) {
                         resultLines.push(lastLine);
                         return resultLines;
                     }
                 }
 
                 var startDistance = jumpEnd.distance(lastLine.start);
-                if (startDistance < jumpSize * 2 + CLOSE_PROXIMITY_PADDING) {
+                if (startDistance < jumpSize * 2 + CLOSE__PROXIMITY__PADDING) {
                     // if the start of line is too close to jump, draw that line instead of a jump
                     resultLines.push(lastLine);
                     return resultLines;
@@ -12992,7 +12999,7 @@
             var start = ['M', lines[0].start.x, lines[0].start.y];
 
             // make a paths from lines
-            var paths = _(lines).map(function(line) {
+            var paths = __(lines).map(function(line) {
                 if (line.isJump) {
                     var diff;
                     if (jumpType === 'arc') {
@@ -13037,13 +13044,13 @@
 
             setupUpdating(this);
 
-            var jumpSize = opts.size || JUMP_SIZE;
+            var jumpSize = opts.size || JUMP__SIZE;
             var jumpType = opts.jump && ('' + opts.jump).toLowerCase();
-            var ignoreConnectors = opts.ignoreConnectors || IGNORED_CONNECTORS;
+            var ignoreConnectors = opts.ignoreConnectors || IGNORED__CONNECTORS;
 
             // grab the first jump type as a default if specified one is invalid
-            if (JUMP_TYPES.indexOf(jumpType) === -1) {
-                jumpType = JUMP_TYPES[0];
+            if (JUMP__TYPES.indexOf(jumpType) === -1) {
+                jumpType = JUMP__TYPES[0];
             }
 
             var paper = this.paper;
@@ -13068,7 +13075,7 @@
                 var connector = link.get('connector') || defaultConnector;
 
                 // avoid jumping over links with connector type listed in `ignored connectors`.
-                if (_.contains(ignoreConnectors, connector.name)) {
+                if (__.contains(ignoreConnectors, connector.name)) {
                     return false;
                 }
                 // filter out links that are above this one and  have the same connector type
@@ -13111,13 +13118,13 @@
             var jumpingLines = thisLines.reduce(function(resultLines, thisLine) {
                 // iterate all links and grab the intersections with this line
                 // these are then sorted by distance so the line can be split more easily
-                var intersections = _(links).map(function(link, i) {
+                var intersections = __(links).map(function(link, i) {
                     // don't intersection with itself
                     if (link === thisModel) {
                         return null;
                     }
                     return findLineIntersections(thisLine, linkLines[i]);
-                }).flatten().compact().sortBy(_.partial(sortPoints, thisLine.start)).value();
+                }).flatten().compact().sortBy(__.partial(sortPoints, thisLine.start)).value();
 
                 if (intersections.length > 0) {
                     // split the line based on found intersection points
@@ -13131,9 +13138,9 @@
 
             return buildPath(jumpingLines, jumpSize, jumpType);
         };
-    }(_, g));
+    }(__, g));
 
-    (function(_, g, joint) {
+    (function(__, g, joint) {
 
         function portTransformAttrs(point, angle, opt) {
 
@@ -13141,11 +13148,11 @@
 
             trans.angle = angle || 0;
 
-            return _.defaults({}, opt, trans);
+            return __.defaults({}, opt, trans);
         }
 
         function lineLayout(ports, p1, p2) {
-            return _.map(ports, function(port, index, ports) {
+            return __.map(ports, function(port, index, ports) {
                 var p = this.pointAt(((index + 0.5) / ports.length));
                 // `dx`,`dy` per port offset option
                 if (port.dx || port.dy) {
@@ -13164,7 +13171,7 @@
 
             var ellipse = g.Ellipse.fromRect(elBBox);
 
-            return _.map(ports, function(port, index, ports) {
+            return __.map(ports, function(port, index, ports) {
 
                 var angle = startAngle + stepFn(index, ports.length);
                 var p2 = p1.clone()
@@ -13191,12 +13198,12 @@
         function argPoint(bbox, args) {
 
             var x = args.x;
-            if (_.isString(x)) {
+            if (__.isString(x)) {
                 x = parseFloat(x) / 100 * bbox.width;
             }
 
             var y = args.y;
-            if (_.isString(y)) {
+            if (__.isString(y)) {
                 y = parseFloat(y) / 100 * bbox.height;
             }
 
@@ -13213,7 +13220,7 @@
              */
             absolute: function(ports, elBBox, opt) {
                 //TODO v.talas angle
-                return _.map(ports, _.partial(argPoint, elBBox));
+                return __.map(ports, __.partial(argPoint, elBBox));
             },
 
             /**
@@ -13313,13 +13320,13 @@
             }
         };
 
-    })(_, g, joint);
+    })(__, g, joint);
 
-    (function(_, g, joint) {
+    (function(__, g, joint) {
 
         function labelAttributes(opt1, opt2) {
 
-            return _.defaultsDeep({}, opt1, opt2, {
+            return __.defaultsDeep({}, opt1, opt2, {
                 x: 0,
                 y: 0,
                 angle: 0,
@@ -13335,7 +13342,7 @@
 
         function outsideLayout(portPosition, elBBox, autoOrient, opt) {
 
-            opt = _.defaults({}, opt, { offset: 15 });
+            opt = __.defaults({}, opt, { offset: 15 });
             var angle = elBBox.center().theta(portPosition);
             var x = getBBoxAngles(elBBox);
 
@@ -13404,7 +13411,7 @@
         function insideLayout(portPosition, elBBox, autoOrient, opt) {
 
             var angle = elBBox.center().theta(portPosition);
-            opt = _.defaults({}, opt, { offset: 15 });
+            opt = __.defaults({}, opt, { offset: 15 });
 
             var tx, ty, y, textAnchor;
             var offset = opt.offset;
@@ -13460,7 +13467,7 @@
 
         function radialLayout(portCenterOffset, autoOrient, opt) {
 
-            opt = _.defaults({}, opt, { offset: 20 });
+            opt = __.defaults({}, opt, { offset: 20 });
 
             var origin = g.point(0, 0);
             var angle = -portCenterOffset.theta(origin);
@@ -13501,7 +13508,7 @@
 
         joint.layout.PortLabel = {
 
-            manual: _.rearg(labelAttributes, 2),
+            manual: __.rearg(labelAttributes, 2),
 
             left: function(portPosition, elBBox, opt) {
                 return labelAttributes(opt, { x: -15, attrs: { '.': { y: '.3em', 'text-anchor': 'end' } } });
@@ -13544,7 +13551,7 @@
             }
         };
 
-    })(_, g, joint);
+    })(__, g, joint);
 
     joint.highlighters.addClass = {
 
@@ -13608,7 +13615,7 @@
             }
         },
 
-        _views: {},
+        __views: {},
 
         /**
          * @param {joint.dia.CellView} cellView
@@ -13618,9 +13625,9 @@
         highlight: function(cellView, magnetEl, opt) {
 
             // Only highlight once.
-            if (this._views[magnetEl.id]) return;
+            if (this.__views[magnetEl.id]) return;
 
-            var options = _.defaults(opt || {}, this.defaultOptions);
+            var options = __.defaults(opt || {}, this.defaultOptions);
 
             var magnetVel = V(magnetEl);
             var magnetBBox = magnetVel.bbox(true/* without transforms */);
@@ -13633,7 +13640,7 @@
 
                 // Failed to get path data from magnet element.
                 // Draw a rectangle around the entire cell view instead.
-                pathData = V.rectToPath(_.extend({}, options, magnetBBox));
+                pathData = V.rectToPath(__.extend({}, options, magnetBBox));
             }
 
             var highlightVel = V('path').attr({
@@ -13665,7 +13672,7 @@
             }
 
             // joint.mvc.View will handle the theme class name and joint class name prefix.
-            var highlightView = this._views[magnetEl.id] = new joint.mvc.View({
+            var highlightView = this.__views[magnetEl.id] = new joint.mvc.View({
                 className: 'highlight-stroke',
                 // This is necessary because we're passing in a vectorizer element (not jQuery).
                 el: highlightVel.node,
@@ -13685,9 +13692,9 @@
          */
         unhighlight: function(cellView, magnetEl, opt) {
 
-            if (this._views[magnetEl.id]) {
-                this._views[magnetEl.id].remove();
-                this._views[magnetEl.id] = null;
+            if (this.__views[magnetEl.id]) {
+                this.__views[magnetEl.id].remove();
+                this.__views[magnetEl.id] = null;
             }
         }
     };
@@ -13698,7 +13705,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><polygon class="outer"/><polygon class="inner"/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.Entity',
             size: { width: 150, height: 60 },
@@ -13725,7 +13732,7 @@
 
     joint.shapes.erd.WeakEntity = joint.shapes.erd.Entity.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.WeakEntity',
 
@@ -13741,7 +13748,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><polygon class="outer"/><polygon class="inner"/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.Relationship',
             size: { width: 80, height: 80 },
@@ -13768,7 +13775,7 @@
 
     joint.shapes.erd.IdentifyingRelationship = joint.shapes.erd.Relationship.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.IdentifyingRelationship',
 
@@ -13784,7 +13791,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><ellipse class="outer"/><ellipse class="inner"/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.Attribute',
             size: { width: 100, height: 50 },
@@ -13815,7 +13822,7 @@
 
     joint.shapes.erd.Multivalued = joint.shapes.erd.Attribute.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.Multivalued',
 
@@ -13829,7 +13836,7 @@
 
     joint.shapes.erd.Derived = joint.shapes.erd.Attribute.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.Derived',
 
@@ -13843,7 +13850,7 @@
 
     joint.shapes.erd.Key = joint.shapes.erd.Attribute.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.Key',
 
@@ -13857,7 +13864,7 @@
 
     joint.shapes.erd.Normal = joint.shapes.erd.Attribute.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.Normal',
 
@@ -13870,7 +13877,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><polygon/></g><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'erd.ISA',
             size: { width: 100, height: 50 },
@@ -13902,7 +13909,7 @@
     joint.shapes.fsa = {};
 
     joint.shapes.fsa.State = joint.shapes.basic.Circle.extend({
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
             type: 'fsa.State',
             attrs: {
                 circle: { 'stroke-width': 3 },
@@ -13915,7 +13922,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><circle/></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'fsa.StartState',
             size: { width: 20, height: 20 },
@@ -13934,7 +13941,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><circle class="outer"/><circle class="inner"/></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'fsa.EndState',
             size: { width: 20, height: 20 },
@@ -13958,7 +13965,7 @@
 
     joint.shapes.fsa.Arrow = joint.dia.Link.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
             type: 'fsa.Arrow',
             attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' }},
             smooth: true
@@ -13974,7 +13981,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><rect class="card"/><image/></g><text class="rank"/><text class="name"/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'org.Member',
             size: { width: 180, height: 70 },
@@ -14028,7 +14035,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="fill:none; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;"><path      d="M 22.5,11.63 L 22.5,6"      style="fill:none; stroke:#000000; stroke-linejoin:miter;" />    <path      d="M 20,8 L 25,8"      style="fill:none; stroke:#000000; stroke-linejoin:miter;" />    <path      d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25"      style="fill:#ffffff; stroke:#000000; stroke-linecap:butt; stroke-linejoin:miter;" />    <path      d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z "      style="fill:#ffffff; stroke:#000000;" />    <path      d="M 11.5,30 C 17,27 27,27 32.5,30"      style="fill:none; stroke:#000000;" />    <path      d="M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5"      style="fill:none; stroke:#000000;" />    <path      d="M 11.5,37 C 17,34 27,34 32.5,37"      style="fill:none; stroke:#000000;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.KingWhite',
             size: { width: 42, height: 38 }
@@ -14040,7 +14047,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="fill:none; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">    <path       d="M 22.5,11.63 L 22.5,6"       style="fill:none; stroke:#000000; stroke-linejoin:miter;"       id="path6570" />    <path       d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25"       style="fill:#000000;fill-opacity:1; stroke-linecap:butt; stroke-linejoin:miter;" />    <path       d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,30 C 32.5,30 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,23.5 L 22.5,27 L 22.5,23.5 C 19,16 9.5,13 6.5,19.5 C 3.5,25.5 11.5,29.5 11.5,29.5 L 11.5,37 z "       style="fill:#000000; stroke:#000000;" />    <path       d="M 20,8 L 25,8"       style="fill:none; stroke:#000000; stroke-linejoin:miter;" />    <path       d="M 32,29.5 C 32,29.5 40.5,25.5 38.03,19.85 C 34.15,14 25,18 22.5,24.5 L 22.51,26.6 L 22.5,24.5 C 20,18 9.906,14 6.997,19.85 C 4.5,25.5 11.85,28.85 11.85,28.85"       style="fill:none; stroke:#ffffff;" />    <path       d="M 11.5,30 C 17,27 27,27 32.5,30 M 11.5,33.5 C 17,30.5 27,30.5 32.5,33.5 M 11.5,37 C 17,34 27,34 32.5,37"       style="fill:none; stroke:#ffffff;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.KingBlack',
             size: { width: 42, height: 38 }
@@ -14052,7 +14059,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="opacity:1; fill:#ffffff; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">    <path      d="M 9 13 A 2 2 0 1 1  5,13 A 2 2 0 1 1  9 13 z"      transform="translate(-1,-1)" />    <path      d="M 9 13 A 2 2 0 1 1  5,13 A 2 2 0 1 1  9 13 z"      transform="translate(15.5,-5.5)" />    <path      d="M 9 13 A 2 2 0 1 1  5,13 A 2 2 0 1 1  9 13 z"      transform="translate(32,-1)" />    <path      d="M 9 13 A 2 2 0 1 1  5,13 A 2 2 0 1 1  9 13 z"      transform="translate(7,-4.5)" />    <path      d="M 9 13 A 2 2 0 1 1  5,13 A 2 2 0 1 1  9 13 z"      transform="translate(24,-4)" />    <path      d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38,14 L 31,25 L 31,11 L 25.5,24.5 L 22.5,9.5 L 19.5,24.5 L 14,10.5 L 14,25 L 7,14 L 9,26 z "      style="stroke-linecap:butt;" />    <path      d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10.5,36 C 9,37.5 11,38.5 11,38.5 C 17.5,39.5 27.5,39.5 34,38.5 C 34,38.5 35.5,37.5 34,36 C 34,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 C 27.5,24.5 17.5,24.5 9,26 z "      style="stroke-linecap:butt;" />    <path      d="M 11.5,30 C 15,29 30,29 33.5,30"      style="fill:none;" />    <path      d="M 12,33.5 C 18,32.5 27,32.5 33,33.5"      style="fill:none;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.QueenWhite',
             size: { width: 42, height: 38 }
@@ -14064,7 +14071,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="opacity:1; fill:#000000; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">    <g style="fill:#000000; stroke:none;">      <circle cx="6"    cy="12" r="2.75" />      <circle cx="14"   cy="9"  r="2.75" />      <circle cx="22.5" cy="8"  r="2.75" />      <circle cx="31"   cy="9"  r="2.75" />      <circle cx="39"   cy="12" r="2.75" />    </g>    <path       d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38.5,13.5 L 31,25 L 30.7,10.9 L 25.5,24.5 L 22.5,10 L 19.5,24.5 L 14.3,10.9 L 14,25 L 6.5,13.5 L 9,26 z"       style="stroke-linecap:butt; stroke:#000000;" />    <path       d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10.5,36 C 9,37.5 11,38.5 11,38.5 C 17.5,39.5 27.5,39.5 34,38.5 C 34,38.5 35.5,37.5 34,36 C 34,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 C 27.5,24.5 17.5,24.5 9,26 z"       style="stroke-linecap:butt;" />    <path       d="M 11,38.5 A 35,35 1 0 0 34,38.5"       style="fill:none; stroke:#000000; stroke-linecap:butt;" />    <path       d="M 11,29 A 35,35 1 0 1 34,29"       style="fill:none; stroke:#ffffff;" />    <path       d="M 12.5,31.5 L 32.5,31.5"       style="fill:none; stroke:#ffffff;" />    <path       d="M 11.5,34.5 A 35,35 1 0 0 33.5,34.5"       style="fill:none; stroke:#ffffff;" />    <path       d="M 10.5,37.5 A 35,35 1 0 0 34.5,37.5"       style="fill:none; stroke:#ffffff;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.QueenBlack',
             size: { width: 42, height: 38 }
@@ -14076,7 +14083,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="opacity:1; fill:#ffffff; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">    <path      d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z "      style="stroke-linecap:butt;" />    <path      d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z "      style="stroke-linecap:butt;" />    <path      d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"      style="stroke-linecap:butt;" />    <path      d="M 34,14 L 31,17 L 14,17 L 11,14" />    <path      d="M 31,17 L 31,29.5 L 14,29.5 L 14,17"      style="stroke-linecap:butt; stroke-linejoin:miter;" />    <path      d="M 31,29.5 L 32.5,32 L 12.5,32 L 14,29.5" />    <path      d="M 11,14 L 34,14"      style="fill:none; stroke:#000000; stroke-linejoin:miter;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.RookWhite',
             size: { width: 32, height: 34 }
@@ -14088,7 +14095,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="opacity:1; fill:#000000; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">    <path      d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z "      style="stroke-linecap:butt;" />    <path      d="M 12.5,32 L 14,29.5 L 31,29.5 L 32.5,32 L 12.5,32 z "      style="stroke-linecap:butt;" />    <path      d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z "      style="stroke-linecap:butt;" />    <path      d="M 14,29.5 L 14,16.5 L 31,16.5 L 31,29.5 L 14,29.5 z "      style="stroke-linecap:butt;stroke-linejoin:miter;" />    <path      d="M 14,16.5 L 11,14 L 34,14 L 31,16.5 L 14,16.5 z "      style="stroke-linecap:butt;" />    <path      d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14 L 11,14 z "      style="stroke-linecap:butt;" />    <path      d="M 12,35.5 L 33,35.5 L 33,35.5"      style="fill:none; stroke:#ffffff; stroke-width:1; stroke-linejoin:miter;" />    <path      d="M 13,31.5 L 32,31.5"      style="fill:none; stroke:#ffffff; stroke-width:1; stroke-linejoin:miter;" />    <path      d="M 14,29.5 L 31,29.5"      style="fill:none; stroke:#ffffff; stroke-width:1; stroke-linejoin:miter;" />    <path      d="M 14,16.5 L 31,16.5"      style="fill:none; stroke:#ffffff; stroke-width:1; stroke-linejoin:miter;" />    <path      d="M 11,14 L 34,14"      style="fill:none; stroke:#ffffff; stroke-width:1; stroke-linejoin:miter;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.RookBlack',
             size: { width: 32, height: 34 }
@@ -14100,7 +14107,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="opacity:1; fill:none; fill-rule:evenodd; fill-opacity:1; stroke:#000000; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">    <g style="fill:#ffffff; stroke:#000000; stroke-linecap:butt;">       <path        d="M 9,36 C 12.39,35.03 19.11,36.43 22.5,34 C 25.89,36.43 32.61,35.03 36,36 C 36,36 37.65,36.54 39,38 C 38.32,38.97 37.35,38.99 36,38.5 C 32.61,37.53 25.89,38.96 22.5,37.5 C 19.11,38.96 12.39,37.53 9,38.5 C 7.646,38.99 6.677,38.97 6,38 C 7.354,36.06 9,36 9,36 z" />      <path        d="M 15,32 C 17.5,34.5 27.5,34.5 30,32 C 30.5,30.5 30,30 30,30 C 30,27.5 27.5,26 27.5,26 C 33,24.5 33.5,14.5 22.5,10.5 C 11.5,14.5 12,24.5 17.5,26 C 17.5,26 15,27.5 15,30 C 15,30 14.5,30.5 15,32 z" />      <path        d="M 25 8 A 2.5 2.5 0 1 1  20,8 A 2.5 2.5 0 1 1  25 8 z" />    </g>    <path      d="M 17.5,26 L 27.5,26 M 15,30 L 30,30 M 22.5,15.5 L 22.5,20.5 M 20,18 L 25,18"      style="fill:none; stroke:#000000; stroke-linejoin:miter;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.BishopWhite',
             size: { width: 38, height: 38 }
@@ -14112,7 +14119,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="opacity:1; fill:none; fill-rule:evenodd; fill-opacity:1; stroke:#000000; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">    <g style="fill:#000000; stroke:#000000; stroke-linecap:butt;">       <path        d="M 9,36 C 12.39,35.03 19.11,36.43 22.5,34 C 25.89,36.43 32.61,35.03 36,36 C 36,36 37.65,36.54 39,38 C 38.32,38.97 37.35,38.99 36,38.5 C 32.61,37.53 25.89,38.96 22.5,37.5 C 19.11,38.96 12.39,37.53 9,38.5 C 7.646,38.99 6.677,38.97 6,38 C 7.354,36.06 9,36 9,36 z" />      <path        d="M 15,32 C 17.5,34.5 27.5,34.5 30,32 C 30.5,30.5 30,30 30,30 C 30,27.5 27.5,26 27.5,26 C 33,24.5 33.5,14.5 22.5,10.5 C 11.5,14.5 12,24.5 17.5,26 C 17.5,26 15,27.5 15,30 C 15,30 14.5,30.5 15,32 z" />      <path        d="M 25 8 A 2.5 2.5 0 1 1  20,8 A 2.5 2.5 0 1 1  25 8 z" />    </g>    <path       d="M 17.5,26 L 27.5,26 M 15,30 L 30,30 M 22.5,15.5 L 22.5,20.5 M 20,18 L 25,18"       style="fill:none; stroke:#ffffff; stroke-linejoin:miter;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.BishopBlack',
             size: { width: 38, height: 38 }
@@ -14124,7 +14131,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="opacity:1; fill:none; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">    <path      d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"      style="fill:#ffffff; stroke:#000000;" />    <path      d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10"      style="fill:#ffffff; stroke:#000000;" />    <path      d="M 9.5 25.5 A 0.5 0.5 0 1 1 8.5,25.5 A 0.5 0.5 0 1 1 9.5 25.5 z"      style="fill:#000000; stroke:#000000;" />    <path      d="M 15 15.5 A 0.5 1.5 0 1 1  14,15.5 A 0.5 1.5 0 1 1  15 15.5 z"      transform="matrix(0.866,0.5,-0.5,0.866,9.693,-5.173)"      style="fill:#000000; stroke:#000000;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.KnightWhite',
             size: { width: 38, height: 37 }
@@ -14136,7 +14143,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><g style="opacity:1; fill:none; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">    <path      d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18"      style="fill:#000000; stroke:#000000;" />    <path      d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10"      style="fill:#000000; stroke:#000000;" />    <path      d="M 9.5 25.5 A 0.5 0.5 0 1 1 8.5,25.5 A 0.5 0.5 0 1 1 9.5 25.5 z"      style="fill:#ffffff; stroke:#ffffff;" />    <path      d="M 15 15.5 A 0.5 1.5 0 1 1  14,15.5 A 0.5 1.5 0 1 1  15 15.5 z"      transform="matrix(0.866,0.5,-0.5,0.866,9.693,-5.173)"      style="fill:#ffffff; stroke:#ffffff;" />    <path      d="M 24.55,10.4 L 24.1,11.85 L 24.6,12 C 27.75,13 30.25,14.49 32.5,18.75 C 34.75,23.01 35.75,29.06 35.25,39 L 35.2,39.5 L 37.45,39.5 L 37.5,39 C 38,28.94 36.62,22.15 34.25,17.66 C 31.88,13.17 28.46,11.02 25.06,10.5 L 24.55,10.4 z "      style="fill:#ffffff; stroke:none;" />  </g></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.KnightBlack',
             size: { width: 38, height: 37 }
@@ -14148,7 +14155,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><path d="M 22,9 C 19.79,9 18,10.79 18,13 C 18,13.89 18.29,14.71 18.78,15.38 C 16.83,16.5 15.5,18.59 15.5,21 C 15.5,23.03 16.44,24.84 17.91,26.03 C 14.91,27.09 10.5,31.58 10.5,39.5 L 33.5,39.5 C 33.5,31.58 29.09,27.09 26.09,26.03 C 27.56,24.84 28.5,23.03 28.5,21 C 28.5,18.59 27.17,16.5 25.22,15.38 C 25.71,14.71 26,13.89 26,13 C 26,10.79 24.21,9 22,9 z "  style="opacity:1; fill:#ffffff; fill-opacity:1; fill-rule:nonzero; stroke:#000000; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:miter; stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;" /></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.PawnWhite',
             size: { width: 28, height: 33 }
@@ -14160,7 +14167,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><path d="M 22,9 C 19.79,9 18,10.79 18,13 C 18,13.89 18.29,14.71 18.78,15.38 C 16.83,16.5 15.5,18.59 15.5,21 C 15.5,23.03 16.44,24.84 17.91,26.03 C 14.91,27.09 10.5,31.58 10.5,39.5 L 33.5,39.5 C 33.5,31.58 29.09,27.09 26.09,26.03 C 27.56,24.84 28.5,23.03 28.5,21 C 28.5,18.59 27.17,16.5 25.22,15.38 C 25.71,14.71 26,13.89 26,13 C 26,10.79 24.21,9 22,9 z "  style="opacity:1; fill:#000000; fill-opacity:1; fill-rule:nonzero; stroke:#000000; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:miter; stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;" /></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'chess.PawnBlack',
             size: { width: 28, height: 33 }
@@ -14177,7 +14184,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><circle class="root"/><g class="tokens" /></g><text class="label"/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'pn.Place',
             size: { width: 50, height: 50 },
@@ -14280,7 +14287,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><rect class="root"/></g></g><text class="label"/>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'pn.Transition',
             size: { width: 12, height: 50 },
@@ -14306,7 +14313,7 @@
 
     joint.shapes.pn.Link = joint.dia.Link.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'pn.Link',
             attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' }}
@@ -14321,7 +14328,7 @@
         markup: '<g class="rotatable"><rect class="body"/><text class="label"/></g>',
         portMarkup: '<circle class="port-body"/>',
         portLabelMarkup: '<text class="port-label"/>',
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'devs.Model',
             inPorts: [],
@@ -14413,13 +14420,13 @@
         updatePortItems: function(model, changed, opt) {
 
             // Make sure all ports are unique.
-            var inPorts = _.uniq(this.get('inPorts'));
-            var outPorts = _.difference(_.uniq(this.get('outPorts')), inPorts);
+            var inPorts = __.uniq(this.get('inPorts'));
+            var outPorts = __.difference(__.uniq(this.get('outPorts')), inPorts);
 
             var inPortItems = this.createPortItems('in', inPorts);
             var outPortItems = this.createPortItems('out', outPorts);
 
-            this.prop('ports/items', inPortItems.concat(outPortItems), _.extend({ rewrite: true }, opt));
+            this.prop('ports/items', inPortItems.concat(outPortItems), __.extend({ rewrite: true }, opt));
         },
 
         createPortItem: function(group, port) {
@@ -14437,59 +14444,59 @@
 
         createPortItems: function(group, ports) {
 
-            return _.map(ports, _.bind(this.createPortItem, this, group));
+            return __.map(ports, __.bind(this.createPortItem, this, group));
         },
 
-        _addGroupPort: function(port, group, opt) {
+        __addGroupPort: function(port, group, opt) {
 
             var ports = this.get(group);
-            return this.set(group, _.isArray(ports) ? ports.concat(port) : [port], opt);
+            return this.set(group, __.isArray(ports) ? ports.concat(port) : [port], opt);
         },
 
         addOutPort: function(port, opt) {
 
-            return this._addGroupPort(port, 'outPorts', opt);
+            return this.__addGroupPort(port, 'outPorts', opt);
         },
 
         addInPort: function(port, opt) {
 
-            return this._addGroupPort(port, 'inPorts', opt);
+            return this.__addGroupPort(port, 'inPorts', opt);
         },
 
-        _removeGroupPort: function(port, group, opt) {
+        __removeGroupPort: function(port, group, opt) {
 
-            return this.set(group, _.without(this.get(group), port), opt);
+            return this.set(group, __.without(this.get(group), port), opt);
         },
 
         removeOutPort: function(port, opt) {
 
-            return this._removeGroupPort(port, 'outPorts', opt);
+            return this.__removeGroupPort(port, 'outPorts', opt);
         },
 
         removeInPort: function(port, opt) {
 
-            return this._removeGroupPort(port, 'inPorts', opt);
+            return this.__removeGroupPort(port, 'inPorts', opt);
         },
 
-        _changeGroup: function(group, properties, opt) {
+        __changeGroup: function(group, properties, opt) {
 
-            return this.prop('ports/groups/' + group, _.isObject(properties) ? properties : {}, opt);
+            return this.prop('ports/groups/' + group, __.isObject(properties) ? properties : {}, opt);
         },
 
         changeInGroup: function(properties, opt) {
 
-            return this._changeGroup('in', properties, opt);
+            return this.__changeGroup('in', properties, opt);
         },
 
         changeOutGroup: function(properties, opt) {
 
-            return this._changeGroup('out', properties, opt);
+            return this.__changeGroup('out', properties, opt);
         }
     });
 
     joint.shapes.devs.Atomic = joint.shapes.devs.Model.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'devs.Atomic',
             size: {
@@ -14506,7 +14513,7 @@
 
     joint.shapes.devs.Coupled = joint.shapes.devs.Model.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'devs.Coupled',
             size: {
@@ -14546,7 +14553,7 @@
             '</g>'
         ].join(''),
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'uml.Class',
 
@@ -14605,9 +14612,9 @@
 
             var offsetY = 0;
 
-            _.each(rects, function(rect) {
+            __.each(rects, function(rect) {
 
-                var lines = _.isArray(rect.text) ? rect.text : [rect.text];
+                var lines = __.isArray(rect.text) ? rect.text : [rect.text];
                 var rectHeight = lines.length * 20 + 20;
 
                 attrs['.uml-class-' + rect.type + '-text'].text = lines.join('\n');
@@ -14635,7 +14642,7 @@
 
     joint.shapes.uml.Abstract = joint.shapes.uml.Class.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
             type: 'uml.Abstract',
             attrs: {
                 '.uml-class-name-rect': { fill : '#e74c3c' },
@@ -14653,7 +14660,7 @@
 
     joint.shapes.uml.Interface = joint.shapes.uml.Class.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
             type: 'uml.Interface',
             attrs: {
                 '.uml-class-name-rect': { fill : '#f1c40f' },
@@ -14719,7 +14726,7 @@
             '</g>'
         ].join(''),
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'uml.State',
 
@@ -14785,7 +14792,7 @@
 
     joint.shapes.uml.StartState = joint.shapes.basic.Circle.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'uml.StartState',
             attrs: { circle: { 'fill': '#34495e', 'stroke': '#2c3e50', 'stroke-width': 2, 'rx': 1 }}
@@ -14798,7 +14805,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><circle class="outer"/><circle class="inner"/></g></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'uml.EndState',
             size: { width: 20, height: 20 },
@@ -14838,7 +14845,7 @@
 
     joint.shapes.logic.Gate = joint.shapes.basic.Generic.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Gate',
             size: { width: 80, height: 40 },
@@ -14857,7 +14864,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><rect class="body"/></g><path class="wire"/><circle/><text/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.IO',
             size: { width: 60, height: 30 },
@@ -14881,7 +14888,7 @@
 
     joint.shapes.logic.Input = joint.shapes.logic.IO.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Input',
             attrs: {
@@ -14895,7 +14902,7 @@
 
     joint.shapes.logic.Output = joint.shapes.logic.IO.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Output',
             attrs: {
@@ -14913,7 +14920,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><image class="body"/></g><circle class="input"/><circle class="output"/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Gate11',
             attrs: {
@@ -14928,7 +14935,7 @@
 
         markup: '<g class="rotatable"><g class="scalable"><image class="body"/></g><circle class="input input1"/><circle  class="input input2"/><circle class="output"/></g>',
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Gate21',
             attrs: {
@@ -14943,7 +14950,7 @@
 
     joint.shapes.logic.Repeater = joint.shapes.logic.Gate11.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Repeater',
             attrs: { image: { 'xlink:href': 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgo8c3ZnCiAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHdpZHRoPSIxMDAiCiAgIGhlaWdodD0iNTAiCiAgIGlkPSJzdmcyIgogICBzb2RpcG9kaTp2ZXJzaW9uPSIwLjMyIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ2IgogICB2ZXJzaW9uPSIxLjAiCiAgIHNvZGlwb2RpOmRvY25hbWU9Ik5PVCBBTlNJLnN2ZyIKICAgaW5rc2NhcGU6b3V0cHV0X2V4dGVuc2lvbj0ib3JnLmlua3NjYXBlLm91dHB1dC5zdmcuaW5rc2NhcGUiPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM0Ij4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiAxNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF96PSI1MCA6IDE1IDogMSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIyNSA6IDEwIDogMSIKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI3MTQiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMC41IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEgOiAwLjUgOiAxIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjAuNSA6IDAuMzMzMzMzMzMgOiAxIgogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgwNiIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgxOSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIzNzIuMDQ3MjQgOiAzNTAuNzg3MzkgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNzQ0LjA5NDQ4IDogNTI2LjE4MTA5IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MjYuMTgxMDkgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjc3NyIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSI3NSA6IDQwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjE1MCA6IDYwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA2MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmUzMjc1IgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjUwIDogMzMuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEwMCA6IDUwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmU1NTMzIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjMyIDogMjEuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjY0IDogMzIgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDMyIDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI1NTciCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMjUgOiAxNi42NjY2NjcgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNTAgOiAyNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMjUgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICA8L2RlZnM+CiAgPHNvZGlwb2RpOm5hbWVkdmlldwogICAgIGlkPSJiYXNlIgogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzY2NjY2NiIKICAgICBib3JkZXJvcGFjaXR5PSIxLjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAuMCIKICAgICBpbmtzY2FwZTpwYWdlc2hhZG93PSIyIgogICAgIGlua3NjYXBlOnpvb209IjgiCiAgICAgaW5rc2NhcGU6Y3g9Ijg0LjY4NTM1MiIKICAgICBpbmtzY2FwZTpjeT0iMTUuMjg4NjI4IgogICAgIGlua3NjYXBlOmRvY3VtZW50LXVuaXRzPSJweCIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJsYXllcjEiCiAgICAgc2hvd2dyaWQ9InRydWUiCiAgICAgaW5rc2NhcGU6Z3JpZC1iYm94PSJ0cnVlIgogICAgIGlua3NjYXBlOmdyaWQtcG9pbnRzPSJ0cnVlIgogICAgIGdyaWR0b2xlcmFuY2U9IjEwMDAwIgogICAgIGlua3NjYXBlOndpbmRvdy13aWR0aD0iMTM5OSIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSI4NzQiCiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjMzIgogICAgIGlua3NjYXBlOndpbmRvdy15PSIwIgogICAgIGlua3NjYXBlOnNuYXAtYmJveD0idHJ1ZSI+CiAgICA8aW5rc2NhcGU6Z3JpZAogICAgICAgaWQ9IkdyaWRGcm9tUHJlMDQ2U2V0dGluZ3MiCiAgICAgICB0eXBlPSJ4eWdyaWQiCiAgICAgICBvcmlnaW54PSIwcHgiCiAgICAgICBvcmlnaW55PSIwcHgiCiAgICAgICBzcGFjaW5neD0iMXB4IgogICAgICAgc3BhY2luZ3k9IjFweCIKICAgICAgIGNvbG9yPSIjMDAwMGZmIgogICAgICAgZW1wY29sb3I9IiMwMDAwZmYiCiAgICAgICBvcGFjaXR5PSIwLjIiCiAgICAgICBlbXBvcGFjaXR5PSIwLjQiCiAgICAgICBlbXBzcGFjaW5nPSI1IgogICAgICAgdmlzaWJsZT0idHJ1ZSIKICAgICAgIGVuYWJsZWQ9InRydWUiIC8+CiAgPC9zb2RpcG9kaTpuYW1lZHZpZXc+CiAgPG1ldGFkYXRhCiAgICAgaWQ9Im1ldGFkYXRhNyI+CiAgICA8cmRmOlJERj4KICAgICAgPGNjOldvcmsKICAgICAgICAgcmRmOmFib3V0PSIiPgogICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PgogICAgICAgIDxkYzp0eXBlCiAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4KICAgICAgPC9jYzpXb3JrPgogICAgPC9yZGY6UkRGPgogIDwvbWV0YWRhdGE+CiAgPGcKICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlkPSJsYXllcjEiPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTk5OTk5ODg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Ik0gNzIuMTU2OTEsMjUgTCA5NSwyNSIKICAgICAgIGlkPSJwYXRoMzA1OSIKICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2MiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MjtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgZD0iTSAyOS4wNDM0NzgsMjUgTCA1LjA0MzQ3ODEsMjUiCiAgICAgICBpZD0icGF0aDMwNjEiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MztzdHJva2UtbGluZWpvaW46bWl0ZXI7bWFya2VyOm5vbmU7c3Ryb2tlLW9wYWNpdHk6MTt2aXNpYmlsaXR5OnZpc2libGU7ZGlzcGxheTppbmxpbmU7b3ZlcmZsb3c6dmlzaWJsZTtlbmFibGUtYmFja2dyb3VuZDphY2N1bXVsYXRlIgogICAgICAgZD0iTSAyOC45Njg3NSwyLjU5Mzc1IEwgMjguOTY4NzUsNSBMIDI4Ljk2ODc1LDQ1IEwgMjguOTY4NzUsNDcuNDA2MjUgTCAzMS4xMjUsNDYuMzQzNzUgTCA3Mi4xNTYyNSwyNi4zNDM3NSBMIDcyLjE1NjI1LDIzLjY1NjI1IEwgMzEuMTI1LDMuNjU2MjUgTCAyOC45Njg3NSwyLjU5Mzc1IHogTSAzMS45Njg3NSw3LjQwNjI1IEwgNjguMDkzNzUsMjUgTCAzMS45Njg3NSw0Mi41OTM3NSBMIDMxLjk2ODc1LDcuNDA2MjUgeiIKICAgICAgIGlkPSJwYXRoMjYzOCIKICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2NjY2NjY2NjY2NjYyIgLz4KICA8L2c+Cjwvc3ZnPgo=' }}
@@ -14958,7 +14965,7 @@
 
     joint.shapes.logic.Not = joint.shapes.logic.Gate11.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Not',
             attrs: { image: { 'xlink:href': 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgo8c3ZnCiAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHdpZHRoPSIxMDAiCiAgIGhlaWdodD0iNTAiCiAgIGlkPSJzdmcyIgogICBzb2RpcG9kaTp2ZXJzaW9uPSIwLjMyIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ2IgogICB2ZXJzaW9uPSIxLjAiCiAgIHNvZGlwb2RpOmRvY25hbWU9Ik5PVCBBTlNJLnN2ZyIKICAgaW5rc2NhcGU6b3V0cHV0X2V4dGVuc2lvbj0ib3JnLmlua3NjYXBlLm91dHB1dC5zdmcuaW5rc2NhcGUiPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM0Ij4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiAxNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF96PSI1MCA6IDE1IDogMSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIyNSA6IDEwIDogMSIKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI3MTQiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMC41IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEgOiAwLjUgOiAxIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjAuNSA6IDAuMzMzMzMzMzMgOiAxIgogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgwNiIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgxOSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIzNzIuMDQ3MjQgOiAzNTAuNzg3MzkgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNzQ0LjA5NDQ4IDogNTI2LjE4MTA5IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MjYuMTgxMDkgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjc3NyIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSI3NSA6IDQwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjE1MCA6IDYwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA2MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmUzMjc1IgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjUwIDogMzMuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEwMCA6IDUwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmU1NTMzIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjMyIDogMjEuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjY0IDogMzIgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDMyIDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI1NTciCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMjUgOiAxNi42NjY2NjcgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNTAgOiAyNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMjUgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICA8L2RlZnM+CiAgPHNvZGlwb2RpOm5hbWVkdmlldwogICAgIGlkPSJiYXNlIgogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzY2NjY2NiIKICAgICBib3JkZXJvcGFjaXR5PSIxLjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAuMCIKICAgICBpbmtzY2FwZTpwYWdlc2hhZG93PSIyIgogICAgIGlua3NjYXBlOnpvb209IjgiCiAgICAgaW5rc2NhcGU6Y3g9Ijg0LjY4NTM1MiIKICAgICBpbmtzY2FwZTpjeT0iMTUuMjg4NjI4IgogICAgIGlua3NjYXBlOmRvY3VtZW50LXVuaXRzPSJweCIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJsYXllcjEiCiAgICAgc2hvd2dyaWQ9InRydWUiCiAgICAgaW5rc2NhcGU6Z3JpZC1iYm94PSJ0cnVlIgogICAgIGlua3NjYXBlOmdyaWQtcG9pbnRzPSJ0cnVlIgogICAgIGdyaWR0b2xlcmFuY2U9IjEwMDAwIgogICAgIGlua3NjYXBlOndpbmRvdy13aWR0aD0iMTM5OSIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSI4NzQiCiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjMzIgogICAgIGlua3NjYXBlOndpbmRvdy15PSIwIgogICAgIGlua3NjYXBlOnNuYXAtYmJveD0idHJ1ZSI+CiAgICA8aW5rc2NhcGU6Z3JpZAogICAgICAgaWQ9IkdyaWRGcm9tUHJlMDQ2U2V0dGluZ3MiCiAgICAgICB0eXBlPSJ4eWdyaWQiCiAgICAgICBvcmlnaW54PSIwcHgiCiAgICAgICBvcmlnaW55PSIwcHgiCiAgICAgICBzcGFjaW5neD0iMXB4IgogICAgICAgc3BhY2luZ3k9IjFweCIKICAgICAgIGNvbG9yPSIjMDAwMGZmIgogICAgICAgZW1wY29sb3I9IiMwMDAwZmYiCiAgICAgICBvcGFjaXR5PSIwLjIiCiAgICAgICBlbXBvcGFjaXR5PSIwLjQiCiAgICAgICBlbXBzcGFjaW5nPSI1IgogICAgICAgdmlzaWJsZT0idHJ1ZSIKICAgICAgIGVuYWJsZWQ9InRydWUiIC8+CiAgPC9zb2RpcG9kaTpuYW1lZHZpZXc+CiAgPG1ldGFkYXRhCiAgICAgaWQ9Im1ldGFkYXRhNyI+CiAgICA8cmRmOlJERj4KICAgICAgPGNjOldvcmsKICAgICAgICAgcmRmOmFib3V0PSIiPgogICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PgogICAgICAgIDxkYzp0eXBlCiAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4KICAgICAgPC9jYzpXb3JrPgogICAgPC9yZGY6UkRGPgogIDwvbWV0YWRhdGE+CiAgPGcKICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlkPSJsYXllcjEiPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTk5OTk5ODg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Ik0gNzkuMTU2OTEsMjUgTCA5NSwyNSIKICAgICAgIGlkPSJwYXRoMzA1OSIKICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2MiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MjtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgZD0iTSAyOS4wNDM0NzgsMjUgTCA1LjA0MzQ3ODEsMjUiCiAgICAgICBpZD0icGF0aDMwNjEiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MztzdHJva2UtbGluZWpvaW46bWl0ZXI7bWFya2VyOm5vbmU7c3Ryb2tlLW9wYWNpdHk6MTt2aXNpYmlsaXR5OnZpc2libGU7ZGlzcGxheTppbmxpbmU7b3ZlcmZsb3c6dmlzaWJsZTtlbmFibGUtYmFja2dyb3VuZDphY2N1bXVsYXRlIgogICAgICAgZD0iTSAyOC45Njg3NSwyLjU5Mzc1IEwgMjguOTY4NzUsNSBMIDI4Ljk2ODc1LDQ1IEwgMjguOTY4NzUsNDcuNDA2MjUgTCAzMS4xMjUsNDYuMzQzNzUgTCA3Mi4xNTYyNSwyNi4zNDM3NSBMIDcyLjE1NjI1LDIzLjY1NjI1IEwgMzEuMTI1LDMuNjU2MjUgTCAyOC45Njg3NSwyLjU5Mzc1IHogTSAzMS45Njg3NSw3LjQwNjI1IEwgNjguMDkzNzUsMjUgTCAzMS45Njg3NSw0Mi41OTM3NSBMIDMxLjk2ODc1LDcuNDA2MjUgeiIKICAgICAgIGlkPSJwYXRoMjYzOCIKICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2NjY2NjY2NjY2NjYyIgLz4KICAgIDxwYXRoCiAgICAgICBzb2RpcG9kaTp0eXBlPSJhcmMiCiAgICAgICBzdHlsZT0iZmlsbDpub25lO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDozO3N0cm9rZS1saW5lam9pbjptaXRlcjttYXJrZXI6bm9uZTtzdHJva2Utb3BhY2l0eToxO3Zpc2liaWxpdHk6dmlzaWJsZTtkaXNwbGF5OmlubGluZTtvdmVyZmxvdzp2aXNpYmxlO2VuYWJsZS1iYWNrZ3JvdW5kOmFjY3VtdWxhdGUiCiAgICAgICBpZD0icGF0aDI2NzEiCiAgICAgICBzb2RpcG9kaTpjeD0iNzYiCiAgICAgICBzb2RpcG9kaTpjeT0iMjUiCiAgICAgICBzb2RpcG9kaTpyeD0iNCIKICAgICAgIHNvZGlwb2RpOnJ5PSI0IgogICAgICAgZD0iTSA4MCwyNSBBIDQsNCAwIDEgMSA3MiwyNSBBIDQsNCAwIDEgMSA4MCwyNSB6IgogICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTEsMCkiIC8+CiAgPC9nPgo8L3N2Zz4K' }}
@@ -14973,7 +14980,7 @@
 
     joint.shapes.logic.Or = joint.shapes.logic.Gate21.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Or',
             attrs: { image: { 'xlink:href': 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgo8c3ZnCiAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHdpZHRoPSIxMDAiCiAgIGhlaWdodD0iNTAiCiAgIGlkPSJzdmcyIgogICBzb2RpcG9kaTp2ZXJzaW9uPSIwLjMyIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ2IgogICB2ZXJzaW9uPSIxLjAiCiAgIHNvZGlwb2RpOmRvY25hbWU9Ik9SIEFOU0kuc3ZnIgogICBpbmtzY2FwZTpvdXRwdXRfZXh0ZW5zaW9uPSJvcmcuaW5rc2NhcGUub3V0cHV0LnN2Zy5pbmtzY2FwZSI+CiAgPGRlZnMKICAgICBpZD0iZGVmczQiPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDE1IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3o9IjUwIDogMTUgOiAxIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjI1IDogMTAgOiAxIgogICAgICAgaWQ9InBlcnNwZWN0aXZlMjcxNCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiAwLjUgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfej0iMSA6IDAuNSA6IDEiCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMC41IDogMC4zMzMzMzMzMyA6IDEiCiAgICAgICBpZD0icGVyc3BlY3RpdmUyODA2IiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmUyODE5IgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjM3Mi4wNDcyNCA6IDM1MC43ODczOSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF96PSI3NDQuMDk0NDggOiA1MjYuMTgxMDkgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDUyNi4xODEwOSA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmUyNzc3IgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49Ijc1IDogNDAgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iMTUwIDogNjAgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDYwIDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTMyNzUiCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iNTAgOiAzMy4zMzMzMzMgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iMTAwIDogNTAgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDUwIDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTU1MzMiCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMzIgOiAyMS4zMzMzMzMgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNjQgOiAzMiA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMzIgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjU1NyIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIyNSA6IDE2LjY2NjY2NyA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF96PSI1MCA6IDI1IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiAyNSA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogIDwvZGVmcz4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9ImJhc2UiCiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcmNvbG9yPSIjNjY2NjY2IgogICAgIGJvcmRlcm9wYWNpdHk9IjEuMCIKICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMC4wIgogICAgIGlua3NjYXBlOnBhZ2VzaGFkb3c9IjIiCiAgICAgaW5rc2NhcGU6em9vbT0iNCIKICAgICBpbmtzY2FwZTpjeD0iMTEzLjAwMDM5IgogICAgIGlua3NjYXBlOmN5PSIxMi44OTM3MzEiCiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9InB4IgogICAgIGlua3NjYXBlOmN1cnJlbnQtbGF5ZXI9ImcyNTYwIgogICAgIHNob3dncmlkPSJmYWxzZSIKICAgICBpbmtzY2FwZTpncmlkLWJib3g9InRydWUiCiAgICAgaW5rc2NhcGU6Z3JpZC1wb2ludHM9InRydWUiCiAgICAgZ3JpZHRvbGVyYW5jZT0iMTAwMDAiCiAgICAgaW5rc2NhcGU6d2luZG93LXdpZHRoPSIxMzk5IgogICAgIGlua3NjYXBlOndpbmRvdy1oZWlnaHQ9Ijg3NCIKICAgICBpbmtzY2FwZTp3aW5kb3cteD0iMzciCiAgICAgaW5rc2NhcGU6d2luZG93LXk9Ii00IgogICAgIGlua3NjYXBlOnNuYXAtYmJveD0idHJ1ZSI+CiAgICA8aW5rc2NhcGU6Z3JpZAogICAgICAgaWQ9IkdyaWRGcm9tUHJlMDQ2U2V0dGluZ3MiCiAgICAgICB0eXBlPSJ4eWdyaWQiCiAgICAgICBvcmlnaW54PSIwcHgiCiAgICAgICBvcmlnaW55PSIwcHgiCiAgICAgICBzcGFjaW5neD0iMXB4IgogICAgICAgc3BhY2luZ3k9IjFweCIKICAgICAgIGNvbG9yPSIjMDAwMGZmIgogICAgICAgZW1wY29sb3I9IiMwMDAwZmYiCiAgICAgICBvcGFjaXR5PSIwLjIiCiAgICAgICBlbXBvcGFjaXR5PSIwLjQiCiAgICAgICBlbXBzcGFjaW5nPSI1IgogICAgICAgdmlzaWJsZT0idHJ1ZSIKICAgICAgIGVuYWJsZWQ9InRydWUiIC8+CiAgPC9zb2RpcG9kaTpuYW1lZHZpZXc+CiAgPG1ldGFkYXRhCiAgICAgaWQ9Im1ldGFkYXRhNyI+CiAgICA8cmRmOlJERj4KICAgICAgPGNjOldvcmsKICAgICAgICAgcmRmOmFib3V0PSIiPgogICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PgogICAgICAgIDxkYzp0eXBlCiAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4KICAgICAgPC9jYzpXb3JrPgogICAgPC9yZGY6UkRGPgogIDwvbWV0YWRhdGE+CiAgPGcKICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlkPSJsYXllcjEiPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Im0gNzAsMjUgYyAyMCwwIDI1LDAgMjUsMCIKICAgICAgIGlkPSJwYXRoMzA1OSIKICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2MiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MjtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgZD0iTSAzMSwxNSA1LDE1IgogICAgICAgaWQ9InBhdGgzMDYxIiAvPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTk5OTk5ODg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Ik0gMzIsMzUgNSwzNSIKICAgICAgIGlkPSJwYXRoMzk0NCIgLz4KICAgIDxnCiAgICAgICBpZD0iZzI1NjAiCiAgICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI2LjUsLTM5LjUpIj4KICAgICAgPHBhdGgKICAgICAgICAgc3R5bGU9ImZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6ZXZlbm9kZDtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MztzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgICBkPSJNIC0yLjQwNjI1LDQ0LjUgTCAtMC40MDYyNSw0Ni45Mzc1IEMgLTAuNDA2MjUsNDYuOTM3NSA1LjI1LDUzLjkzNzU0OSA1LjI1LDY0LjUgQyA1LjI1LDc1LjA2MjQ1MSAtMC40MDYyNSw4Mi4wNjI1IC0wLjQwNjI1LDgyLjA2MjUgTCAtMi40MDYyNSw4NC41IEwgMC43NSw4NC41IEwgMTQuNzUsODQuNSBDIDE3LjE1ODA3Niw4NC41MDAwMDEgMjIuNDM5Njk5LDg0LjUyNDUxNCAyOC4zNzUsODIuMDkzNzUgQyAzNC4zMTAzMDEsNzkuNjYyOTg2IDQwLjkxMTUzNiw3NC43NTA0ODQgNDYuMDYyNSw2NS4yMTg3NSBMIDQ0Ljc1LDY0LjUgTCA0Ni4wNjI1LDYzLjc4MTI1IEMgMzUuNzU5Mzg3LDQ0LjcxNTU5IDE5LjUwNjU3NCw0NC41IDE0Ljc1LDQ0LjUgTCAwLjc1LDQ0LjUgTCAtMi40MDYyNSw0NC41IHogTSAzLjQ2ODc1LDQ3LjUgTCAxNC43NSw0Ny41IEMgMTkuNDM0MTczLDQ3LjUgMzMuMDM2ODUsNDcuMzY5NzkzIDQyLjcxODc1LDY0LjUgQyAzNy45NTE5NjQsNzIuOTI5MDc1IDMyLjE5NzQ2OSw3Ny4xODM5MSAyNyw3OS4zMTI1IEMgMjEuNjM5MzM5LDgxLjUwNzkyNCAxNy4xNTgwNzUsODEuNTAwMDAxIDE0Ljc1LDgxLjUgTCAzLjUsODEuNSBDIDUuMzczNTg4NCw3OC4zOTE1NjYgOC4yNSw3Mi40NTA2NSA4LjI1LDY0LjUgQyA4LjI1LDU2LjUyNjY0NiA1LjM0MTQ2ODYsNTAuNTk5ODE1IDMuNDY4NzUsNDcuNSB6IgogICAgICAgICBpZD0icGF0aDQ5NzMiCiAgICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2NzY2NjY3NjY2NjY2NjY2NzY2NzYyIgLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPgo=' }}
@@ -14988,7 +14995,7 @@
 
     joint.shapes.logic.And = joint.shapes.logic.Gate21.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.And',
             attrs: { image: { 'xlink:href': 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgo8c3ZnCiAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHdpZHRoPSIxMDAiCiAgIGhlaWdodD0iNTAiCiAgIGlkPSJzdmcyIgogICBzb2RpcG9kaTp2ZXJzaW9uPSIwLjMyIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ2IgogICB2ZXJzaW9uPSIxLjAiCiAgIHNvZGlwb2RpOmRvY25hbWU9IkFORCBBTlNJLnN2ZyIKICAgaW5rc2NhcGU6b3V0cHV0X2V4dGVuc2lvbj0ib3JnLmlua3NjYXBlLm91dHB1dC5zdmcuaW5rc2NhcGUiPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM0Ij4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiAxNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF96PSI1MCA6IDE1IDogMSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIyNSA6IDEwIDogMSIKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI3MTQiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMC41IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEgOiAwLjUgOiAxIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjAuNSA6IDAuMzMzMzMzMzMgOiAxIgogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgwNiIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgxOSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIzNzIuMDQ3MjQgOiAzNTAuNzg3MzkgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNzQ0LjA5NDQ4IDogNTI2LjE4MTA5IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MjYuMTgxMDkgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjc3NyIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSI3NSA6IDQwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjE1MCA6IDYwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA2MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmUzMjc1IgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjUwIDogMzMuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEwMCA6IDUwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmU1NTMzIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjMyIDogMjEuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjY0IDogMzIgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDMyIDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgPC9kZWZzPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0iYmFzZSIKICAgICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiCiAgICAgYm9yZGVyb3BhY2l0eT0iMS4wIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwLjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp6b29tPSI4IgogICAgIGlua3NjYXBlOmN4PSI1Ni42OTgzNDgiCiAgICAgaW5rc2NhcGU6Y3k9IjI1LjMyNjg5OSIKICAgICBpbmtzY2FwZTpkb2N1bWVudC11bml0cz0icHgiCiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ibGF5ZXIxIgogICAgIHNob3dncmlkPSJ0cnVlIgogICAgIGlua3NjYXBlOmdyaWQtYmJveD0idHJ1ZSIKICAgICBpbmtzY2FwZTpncmlkLXBvaW50cz0idHJ1ZSIKICAgICBncmlkdG9sZXJhbmNlPSIxMDAwMCIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjEzOTkiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iODc0IgogICAgIGlua3NjYXBlOndpbmRvdy14PSIzMyIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMCIKICAgICBpbmtzY2FwZTpzbmFwLWJib3g9InRydWUiPgogICAgPGlua3NjYXBlOmdyaWQKICAgICAgIGlkPSJHcmlkRnJvbVByZTA0NlNldHRpbmdzIgogICAgICAgdHlwZT0ieHlncmlkIgogICAgICAgb3JpZ2lueD0iMHB4IgogICAgICAgb3JpZ2lueT0iMHB4IgogICAgICAgc3BhY2luZ3g9IjFweCIKICAgICAgIHNwYWNpbmd5PSIxcHgiCiAgICAgICBjb2xvcj0iIzAwMDBmZiIKICAgICAgIGVtcGNvbG9yPSIjMDAwMGZmIgogICAgICAgb3BhY2l0eT0iMC4yIgogICAgICAgZW1wb3BhY2l0eT0iMC40IgogICAgICAgZW1wc3BhY2luZz0iNSIKICAgICAgIHZpc2libGU9InRydWUiCiAgICAgICBlbmFibGVkPSJ0cnVlIiAvPgogIDwvc29kaXBvZGk6bmFtZWR2aWV3PgogIDxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTciPgogICAgPHJkZjpSREY+CiAgICAgIDxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj4KICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICA8ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+CiAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KICA8L21ldGFkYXRhPgogIDxnCiAgICAgaW5rc2NhcGU6bGFiZWw9IkxheWVyIDEiCiAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICBpZD0ibGF5ZXIxIj4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJtIDcwLDI1IGMgMjAsMCAyNSwwIDI1LDAiCiAgICAgICBpZD0icGF0aDMwNTkiCiAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9ImNjIiAvPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Ik0gMzEsMTUgNSwxNSIKICAgICAgIGlkPSJwYXRoMzA2MSIgLz4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk5OTk5OTg4O3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJNIDMyLDM1IDUsMzUiCiAgICAgICBpZD0icGF0aDM5NDQiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZvbnQtc2l6ZTptZWRpdW07Zm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDt0ZXh0LWluZGVudDowO3RleHQtYWxpZ246c3RhcnQ7dGV4dC1kZWNvcmF0aW9uOm5vbmU7bGluZS1oZWlnaHQ6bm9ybWFsO2xldHRlci1zcGFjaW5nOm5vcm1hbDt3b3JkLXNwYWNpbmc6bm9ybWFsO3RleHQtdHJhbnNmb3JtOm5vbmU7ZGlyZWN0aW9uOmx0cjtibG9jay1wcm9ncmVzc2lvbjp0Yjt3cml0aW5nLW1vZGU6bHItdGI7dGV4dC1hbmNob3I6c3RhcnQ7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDozO21hcmtlcjpub25lO3Zpc2liaWxpdHk6dmlzaWJsZTtkaXNwbGF5OmlubGluZTtvdmVyZmxvdzp2aXNpYmxlO2VuYWJsZS1iYWNrZ3JvdW5kOmFjY3VtdWxhdGU7Zm9udC1mYW1pbHk6Qml0c3RyZWFtIFZlcmEgU2FuczstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOkJpdHN0cmVhbSBWZXJhIFNhbnMiCiAgICAgICBkPSJNIDMwLDUgTCAzMCw2LjQyODU3MTQgTCAzMCw0My41NzE0MjkgTCAzMCw0NSBMIDMxLjQyODU3MSw0NSBMIDUwLjQ3NjE5LDQ1IEMgNjEuNzQ0MDk4LDQ1IDcwLjQ3NjE5LDM1Ljk5OTk1NSA3MC40NzYxOSwyNSBDIDcwLjQ3NjE5LDE0LjAwMDA0NSA2MS43NDQwOTksNS4wMDAwMDAyIDUwLjQ3NjE5LDUgQyA1MC40NzYxOSw1IDUwLjQ3NjE5LDUgMzEuNDI4NTcxLDUgTCAzMCw1IHogTSAzMi44NTcxNDMsNy44NTcxNDI5IEMgNDAuODM0MjY0LDcuODU3MTQyOSA0NS45MTgzNjgsNy44NTcxNDI5IDQ4LjA5NTIzOCw3Ljg1NzE0MjkgQyA0OS4yODU3MTQsNy44NTcxNDI5IDQ5Ljg4MDk1Miw3Ljg1NzE0MjkgNTAuMTc4NTcxLDcuODU3MTQyOSBDIDUwLjMyNzM4MSw3Ljg1NzE0MjkgNTAuNDA5MjI3LDcuODU3MTQyOSA1MC40NDY0MjksNy44NTcxNDI5IEMgNTAuNDY1MDI5LDcuODU3MTQyOSA1MC40NzE1NDMsNy44NTcxNDI5IDUwLjQ3NjE5LDcuODU3MTQyOSBDIDYwLjIzNjg1Myw3Ljg1NzE0MyA2Ny4xNDI4NTcsMTUuNDk3MDk4IDY3LjE0Mjg1NywyNSBDIDY3LjE0Mjg1NywzNC41MDI5MDIgNTkuNzYwNjYyLDQyLjE0Mjg1NyA1MCw0Mi4xNDI4NTcgTCAzMi44NTcxNDMsNDIuMTQyODU3IEwgMzIuODU3MTQzLDcuODU3MTQyOSB6IgogICAgICAgaWQ9InBhdGgyODg0IgogICAgICAgc29kaXBvZGk6bm9kZXR5cGVzPSJjY2NjY2NzY2NjY3Nzc3NzY2NjIiAvPgogIDwvZz4KPC9zdmc+Cg==' }}
@@ -15003,7 +15010,7 @@
 
     joint.shapes.logic.Nor = joint.shapes.logic.Gate21.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Nor',
             attrs: { image: { 'xlink:href': 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgo8c3ZnCiAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHdpZHRoPSIxMDAiCiAgIGhlaWdodD0iNTAiCiAgIGlkPSJzdmcyIgogICBzb2RpcG9kaTp2ZXJzaW9uPSIwLjMyIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ2IgogICB2ZXJzaW9uPSIxLjAiCiAgIHNvZGlwb2RpOmRvY25hbWU9Ik5PUiBBTlNJLnN2ZyIKICAgaW5rc2NhcGU6b3V0cHV0X2V4dGVuc2lvbj0ib3JnLmlua3NjYXBlLm91dHB1dC5zdmcuaW5rc2NhcGUiPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM0Ij4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiAxNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF96PSI1MCA6IDE1IDogMSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIyNSA6IDEwIDogMSIKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI3MTQiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMC41IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEgOiAwLjUgOiAxIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjAuNSA6IDAuMzMzMzMzMzMgOiAxIgogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgwNiIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgxOSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIzNzIuMDQ3MjQgOiAzNTAuNzg3MzkgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNzQ0LjA5NDQ4IDogNTI2LjE4MTA5IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MjYuMTgxMDkgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjc3NyIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSI3NSA6IDQwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjE1MCA6IDYwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA2MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmUzMjc1IgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjUwIDogMzMuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEwMCA6IDUwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmU1NTMzIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjMyIDogMjEuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjY0IDogMzIgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDMyIDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI1NTciCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMjUgOiAxNi42NjY2NjcgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNTAgOiAyNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMjUgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICA8L2RlZnM+CiAgPHNvZGlwb2RpOm5hbWVkdmlldwogICAgIGlkPSJiYXNlIgogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzY2NjY2NiIKICAgICBib3JkZXJvcGFjaXR5PSIxLjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAuMCIKICAgICBpbmtzY2FwZTpwYWdlc2hhZG93PSIyIgogICAgIGlua3NjYXBlOnpvb209IjEiCiAgICAgaW5rc2NhcGU6Y3g9Ijc4LjY3NzY0NCIKICAgICBpbmtzY2FwZTpjeT0iMjIuMTAyMzQ0IgogICAgIGlua3NjYXBlOmRvY3VtZW50LXVuaXRzPSJweCIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJsYXllcjEiCiAgICAgc2hvd2dyaWQ9InRydWUiCiAgICAgaW5rc2NhcGU6Z3JpZC1iYm94PSJ0cnVlIgogICAgIGlua3NjYXBlOmdyaWQtcG9pbnRzPSJ0cnVlIgogICAgIGdyaWR0b2xlcmFuY2U9IjEwMDAwIgogICAgIGlua3NjYXBlOndpbmRvdy13aWR0aD0iMTM5OSIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSI4NzQiCiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjM3IgogICAgIGlua3NjYXBlOndpbmRvdy15PSItNCIKICAgICBpbmtzY2FwZTpzbmFwLWJib3g9InRydWUiPgogICAgPGlua3NjYXBlOmdyaWQKICAgICAgIGlkPSJHcmlkRnJvbVByZTA0NlNldHRpbmdzIgogICAgICAgdHlwZT0ieHlncmlkIgogICAgICAgb3JpZ2lueD0iMHB4IgogICAgICAgb3JpZ2lueT0iMHB4IgogICAgICAgc3BhY2luZ3g9IjFweCIKICAgICAgIHNwYWNpbmd5PSIxcHgiCiAgICAgICBjb2xvcj0iIzAwMDBmZiIKICAgICAgIGVtcGNvbG9yPSIjMDAwMGZmIgogICAgICAgb3BhY2l0eT0iMC4yIgogICAgICAgZW1wb3BhY2l0eT0iMC40IgogICAgICAgZW1wc3BhY2luZz0iNSIKICAgICAgIHZpc2libGU9InRydWUiCiAgICAgICBlbmFibGVkPSJ0cnVlIiAvPgogIDwvc29kaXBvZGk6bmFtZWR2aWV3PgogIDxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTciPgogICAgPHJkZjpSREY+CiAgICAgIDxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj4KICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICA8ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+CiAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KICA8L21ldGFkYXRhPgogIDxnCiAgICAgaW5rc2NhcGU6bGFiZWw9IkxheWVyIDEiCiAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICBpZD0ibGF5ZXIxIj4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJNIDc5LDI1IEMgOTksMjUgOTUsMjUgOTUsMjUiCiAgICAgICBpZD0icGF0aDMwNTkiCiAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9ImNjIiAvPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Ik0gMzEsMTUgNSwxNSIKICAgICAgIGlkPSJwYXRoMzA2MSIgLz4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk5OTk5OTg4O3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJNIDMyLDM1IDUsMzUiCiAgICAgICBpZD0icGF0aDM5NDQiIC8+CiAgICA8ZwogICAgICAgaWQ9ImcyNTYwIgogICAgICAgaW5rc2NhcGU6bGFiZWw9IkxheWVyIDEiCiAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNi41LC0zOS41KSI+CiAgICAgIDxwYXRoCiAgICAgICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjM7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgICAgZD0iTSAtMi40MDYyNSw0NC41IEwgLTAuNDA2MjUsNDYuOTM3NSBDIC0wLjQwNjI1LDQ2LjkzNzUgNS4yNSw1My45Mzc1NDkgNS4yNSw2NC41IEMgNS4yNSw3NS4wNjI0NTEgLTAuNDA2MjUsODIuMDYyNSAtMC40MDYyNSw4Mi4wNjI1IEwgLTIuNDA2MjUsODQuNSBMIDAuNzUsODQuNSBMIDE0Ljc1LDg0LjUgQyAxNy4xNTgwNzYsODQuNTAwMDAxIDIyLjQzOTY5OSw4NC41MjQ1MTQgMjguMzc1LDgyLjA5Mzc1IEMgMzQuMzEwMzAxLDc5LjY2Mjk4NiA0MC45MTE1MzYsNzQuNzUwNDg0IDQ2LjA2MjUsNjUuMjE4NzUgTCA0NC43NSw2NC41IEwgNDYuMDYyNSw2My43ODEyNSBDIDM1Ljc1OTM4Nyw0NC43MTU1OSAxOS41MDY1NzQsNDQuNSAxNC43NSw0NC41IEwgMC43NSw0NC41IEwgLTIuNDA2MjUsNDQuNSB6IE0gMy40Njg3NSw0Ny41IEwgMTQuNzUsNDcuNSBDIDE5LjQzNDE3Myw0Ny41IDMzLjAzNjg1LDQ3LjM2OTc5MyA0Mi43MTg3NSw2NC41IEMgMzcuOTUxOTY0LDcyLjkyOTA3NSAzMi4xOTc0NjksNzcuMTgzOTEgMjcsNzkuMzEyNSBDIDIxLjYzOTMzOSw4MS41MDc5MjQgMTcuMTU4MDc1LDgxLjUwMDAwMSAxNC43NSw4MS41IEwgMy41LDgxLjUgQyA1LjM3MzU4ODQsNzguMzkxNTY2IDguMjUsNzIuNDUwNjUgOC4yNSw2NC41IEMgOC4yNSw1Ni41MjY2NDYgNS4zNDE0Njg2LDUwLjU5OTgxNSAzLjQ2ODc1LDQ3LjUgeiIKICAgICAgICAgaWQ9InBhdGg0OTczIgogICAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9ImNjc2NjY2NzY2NjY2NjY2Njc2Njc2MiIC8+CiAgICAgIDxwYXRoCiAgICAgICAgIHNvZGlwb2RpOnR5cGU9ImFyYyIKICAgICAgICAgc3R5bGU9ImZpbGw6bm9uZTtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MztzdHJva2UtbGluZWpvaW46bWl0ZXI7bWFya2VyOm5vbmU7c3Ryb2tlLW9wYWNpdHk6MTt2aXNpYmlsaXR5OnZpc2libGU7ZGlzcGxheTppbmxpbmU7b3ZlcmZsb3c6dmlzaWJsZTtlbmFibGUtYmFja2dyb3VuZDphY2N1bXVsYXRlIgogICAgICAgICBpZD0icGF0aDI2MDQiCiAgICAgICAgIHNvZGlwb2RpOmN4PSI3NSIKICAgICAgICAgc29kaXBvZGk6Y3k9IjI1IgogICAgICAgICBzb2RpcG9kaTpyeD0iNCIKICAgICAgICAgc29kaXBvZGk6cnk9IjQiCiAgICAgICAgIGQ9Ik0gNzksMjUgQSA0LDQgMCAxIDEgNzEsMjUgQSA0LDQgMCAxIDEgNzksMjUgeiIKICAgICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTI2LjUsMzkuNSkiIC8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K' }}
@@ -15018,7 +15025,7 @@
 
     joint.shapes.logic.Nand = joint.shapes.logic.Gate21.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Nand',
             attrs: { image: { 'xlink:href': 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgo8c3ZnCiAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHdpZHRoPSIxMDAiCiAgIGhlaWdodD0iNTAiCiAgIGlkPSJzdmcyIgogICBzb2RpcG9kaTp2ZXJzaW9uPSIwLjMyIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ2IgogICB2ZXJzaW9uPSIxLjAiCiAgIHNvZGlwb2RpOmRvY25hbWU9Ik5BTkQgQU5TSS5zdmciCiAgIGlua3NjYXBlOm91dHB1dF9leHRlbnNpb249Im9yZy5pbmtzY2FwZS5vdXRwdXQuc3ZnLmlua3NjYXBlIj4KICA8ZGVmcwogICAgIGlkPSJkZWZzNCI+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMTUgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfej0iNTAgOiAxNSA6IDEiCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMjUgOiAxMCA6IDEiCiAgICAgICBpZD0icGVyc3BlY3RpdmUyNzE0IiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDAuNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF96PSIxIDogMC41IDogMSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIwLjUgOiAwLjMzMzMzMzMzIDogMSIKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI4MDYiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI4MTkiCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMzcyLjA0NzI0IDogMzUwLjc4NzM5IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9Ijc0NC4wOTQ0OCA6IDUyNi4xODEwOSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogNTI2LjE4MTA5IDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI3NzciCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iNzUgOiA0MCA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF96PSIxNTAgOiA2MCA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogNjAgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMzI3NSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSI1MCA6IDMzLjMzMzMzMyA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF96PSIxMDAgOiA1MCA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogNTAgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlNTUzMyIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIzMiA6IDIxLjMzMzMzMyA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF96PSI2NCA6IDMyIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiAzMiA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogIDwvZGVmcz4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9ImJhc2UiCiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcmNvbG9yPSIjNjY2NjY2IgogICAgIGJvcmRlcm9wYWNpdHk9IjEuMCIKICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMC4wIgogICAgIGlua3NjYXBlOnBhZ2VzaGFkb3c9IjIiCiAgICAgaW5rc2NhcGU6em9vbT0iMTYiCiAgICAgaW5rc2NhcGU6Y3g9Ijc4LjI4MzMwNyIKICAgICBpbmtzY2FwZTpjeT0iMTYuNDQyODQzIgogICAgIGlua3NjYXBlOmRvY3VtZW50LXVuaXRzPSJweCIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJsYXllcjEiCiAgICAgc2hvd2dyaWQ9InRydWUiCiAgICAgaW5rc2NhcGU6Z3JpZC1iYm94PSJ0cnVlIgogICAgIGlua3NjYXBlOmdyaWQtcG9pbnRzPSJ0cnVlIgogICAgIGdyaWR0b2xlcmFuY2U9IjEwMDAwIgogICAgIGlua3NjYXBlOndpbmRvdy13aWR0aD0iMTM5OSIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSI4NzQiCiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjMzIgogICAgIGlua3NjYXBlOndpbmRvdy15PSIwIgogICAgIGlua3NjYXBlOnNuYXAtYmJveD0idHJ1ZSI+CiAgICA8aW5rc2NhcGU6Z3JpZAogICAgICAgaWQ9IkdyaWRGcm9tUHJlMDQ2U2V0dGluZ3MiCiAgICAgICB0eXBlPSJ4eWdyaWQiCiAgICAgICBvcmlnaW54PSIwcHgiCiAgICAgICBvcmlnaW55PSIwcHgiCiAgICAgICBzcGFjaW5neD0iMXB4IgogICAgICAgc3BhY2luZ3k9IjFweCIKICAgICAgIGNvbG9yPSIjMDAwMGZmIgogICAgICAgZW1wY29sb3I9IiMwMDAwZmYiCiAgICAgICBvcGFjaXR5PSIwLjIiCiAgICAgICBlbXBvcGFjaXR5PSIwLjQiCiAgICAgICBlbXBzcGFjaW5nPSI1IgogICAgICAgdmlzaWJsZT0idHJ1ZSIKICAgICAgIGVuYWJsZWQ9InRydWUiIC8+CiAgPC9zb2RpcG9kaTpuYW1lZHZpZXc+CiAgPG1ldGFkYXRhCiAgICAgaWQ9Im1ldGFkYXRhNyI+CiAgICA8cmRmOlJERj4KICAgICAgPGNjOldvcmsKICAgICAgICAgcmRmOmFib3V0PSIiPgogICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PgogICAgICAgIDxkYzp0eXBlCiAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4KICAgICAgPC9jYzpXb3JrPgogICAgPC9yZGY6UkRGPgogIDwvbWV0YWRhdGE+CiAgPGcKICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlkPSJsYXllcjEiPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Ik0gNzksMjUgQyA5MS44LDI1IDk1LDI1IDk1LDI1IgogICAgICAgaWQ9InBhdGgzMDU5IgogICAgICAgc29kaXBvZGk6bm9kZXR5cGVzPSJjYyIgLz4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJNIDMxLDE1IDUsMTUiCiAgICAgICBpZD0icGF0aDMwNjEiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45OTk5OTk4ODtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgZD0iTSAzMiwzNSA1LDM1IgogICAgICAgaWQ9InBhdGgzOTQ0IiAvPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmb250LXNpemU6bWVkaXVtO2ZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7dGV4dC1pbmRlbnQ6MDt0ZXh0LWFsaWduOnN0YXJ0O3RleHQtZGVjb3JhdGlvbjpub25lO2xpbmUtaGVpZ2h0Om5vcm1hbDtsZXR0ZXItc3BhY2luZzpub3JtYWw7d29yZC1zcGFjaW5nOm5vcm1hbDt0ZXh0LXRyYW5zZm9ybTpub25lO2RpcmVjdGlvbjpsdHI7YmxvY2stcHJvZ3Jlc3Npb246dGI7d3JpdGluZy1tb2RlOmxyLXRiO3RleHQtYW5jaG9yOnN0YXJ0O2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MzttYXJrZXI6bm9uZTt2aXNpYmlsaXR5OnZpc2libGU7ZGlzcGxheTppbmxpbmU7b3ZlcmZsb3c6dmlzaWJsZTtlbmFibGUtYmFja2dyb3VuZDphY2N1bXVsYXRlO2ZvbnQtZmFtaWx5OkJpdHN0cmVhbSBWZXJhIFNhbnM7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpCaXRzdHJlYW0gVmVyYSBTYW5zIgogICAgICAgZD0iTSAzMCw1IEwgMzAsNi40Mjg1NzE0IEwgMzAsNDMuNTcxNDI5IEwgMzAsNDUgTCAzMS40Mjg1NzEsNDUgTCA1MC40NzYxOSw0NSBDIDYxLjc0NDA5OCw0NSA3MC40NzYxOSwzNS45OTk5NTUgNzAuNDc2MTksMjUgQyA3MC40NzYxOSwxNC4wMDAwNDUgNjEuNzQ0MDk5LDUuMDAwMDAwMiA1MC40NzYxOSw1IEMgNTAuNDc2MTksNSA1MC40NzYxOSw1IDMxLjQyODU3MSw1IEwgMzAsNSB6IE0gMzIuODU3MTQzLDcuODU3MTQyOSBDIDQwLjgzNDI2NCw3Ljg1NzE0MjkgNDUuOTE4MzY4LDcuODU3MTQyOSA0OC4wOTUyMzgsNy44NTcxNDI5IEMgNDkuMjg1NzE0LDcuODU3MTQyOSA0OS44ODA5NTIsNy44NTcxNDI5IDUwLjE3ODU3MSw3Ljg1NzE0MjkgQyA1MC4zMjczODEsNy44NTcxNDI5IDUwLjQwOTIyNyw3Ljg1NzE0MjkgNTAuNDQ2NDI5LDcuODU3MTQyOSBDIDUwLjQ2NTAyOSw3Ljg1NzE0MjkgNTAuNDcxNTQzLDcuODU3MTQyOSA1MC40NzYxOSw3Ljg1NzE0MjkgQyA2MC4yMzY4NTMsNy44NTcxNDMgNjcuMTQyODU3LDE1LjQ5NzA5OCA2Ny4xNDI4NTcsMjUgQyA2Ny4xNDI4NTcsMzQuNTAyOTAyIDU5Ljc2MDY2Miw0Mi4xNDI4NTcgNTAsNDIuMTQyODU3IEwgMzIuODU3MTQzLDQyLjE0Mjg1NyBMIDMyLjg1NzE0Myw3Ljg1NzE0MjkgeiIKICAgICAgIGlkPSJwYXRoMjg4NCIKICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2NjY2Njc2NjY2Nzc3Nzc2NjYyIgLz4KICAgIDxwYXRoCiAgICAgICBzb2RpcG9kaTp0eXBlPSJhcmMiCiAgICAgICBzdHlsZT0iZmlsbDpub25lO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDozO3N0cm9rZS1saW5lam9pbjptaXRlcjttYXJrZXI6bm9uZTtzdHJva2Utb3BhY2l0eToxO3Zpc2liaWxpdHk6dmlzaWJsZTtkaXNwbGF5OmlubGluZTtvdmVyZmxvdzp2aXNpYmxlO2VuYWJsZS1iYWNrZ3JvdW5kOmFjY3VtdWxhdGUiCiAgICAgICBpZD0icGF0aDQwMDgiCiAgICAgICBzb2RpcG9kaTpjeD0iNzUiCiAgICAgICBzb2RpcG9kaTpjeT0iMjUiCiAgICAgICBzb2RpcG9kaTpyeD0iNCIKICAgICAgIHNvZGlwb2RpOnJ5PSI0IgogICAgICAgZD0iTSA3OSwyNSBBIDQsNCAwIDEgMSA3MSwyNSBBIDQsNCAwIDEgMSA3OSwyNSB6IiAvPgogIDwvZz4KPC9zdmc+Cg==' }}
@@ -15033,7 +15040,7 @@
 
     joint.shapes.logic.Xor = joint.shapes.logic.Gate21.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Xor',
             attrs: { image: { 'xlink:href': 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgo8c3ZnCiAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHdpZHRoPSIxMDAiCiAgIGhlaWdodD0iNTAiCiAgIGlkPSJzdmcyIgogICBzb2RpcG9kaTp2ZXJzaW9uPSIwLjMyIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ2IgogICB2ZXJzaW9uPSIxLjAiCiAgIHNvZGlwb2RpOmRvY25hbWU9IlhPUiBBTlNJLnN2ZyIKICAgaW5rc2NhcGU6b3V0cHV0X2V4dGVuc2lvbj0ib3JnLmlua3NjYXBlLm91dHB1dC5zdmcuaW5rc2NhcGUiPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM0Ij4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiAxNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF96PSI1MCA6IDE1IDogMSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIyNSA6IDEwIDogMSIKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI3MTQiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMC41IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEgOiAwLjUgOiAxIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjAuNSA6IDAuMzMzMzMzMzMgOiAxIgogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgwNiIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjgxOSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIzNzIuMDQ3MjQgOiAzNTAuNzg3MzkgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNzQ0LjA5NDQ4IDogNTI2LjE4MTA5IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MjYuMTgxMDkgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMjc3NyIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSI3NSA6IDQwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjE1MCA6IDYwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA2MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmUzMjc1IgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjUwIDogMzMuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjEwMCA6IDUwIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiA1MCA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmU1NTMzIgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjMyIDogMjEuMzMzMzMzIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjY0IDogMzIgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDMyIDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI1NTciCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMjUgOiAxNi42NjY2NjcgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfej0iNTAgOiAyNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMjUgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICA8L2RlZnM+CiAgPHNvZGlwb2RpOm5hbWVkdmlldwogICAgIGlkPSJiYXNlIgogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzY2NjY2NiIKICAgICBib3JkZXJvcGFjaXR5PSIxLjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAuMCIKICAgICBpbmtzY2FwZTpwYWdlc2hhZG93PSIyIgogICAgIGlua3NjYXBlOnpvb209IjUuNjU2ODU0MiIKICAgICBpbmtzY2FwZTpjeD0iMjUuOTM4MTE2IgogICAgIGlua3NjYXBlOmN5PSIxNy4yMzAwNSIKICAgICBpbmtzY2FwZTpkb2N1bWVudC11bml0cz0icHgiCiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ibGF5ZXIxIgogICAgIHNob3dncmlkPSJ0cnVlIgogICAgIGlua3NjYXBlOmdyaWQtYmJveD0idHJ1ZSIKICAgICBpbmtzY2FwZTpncmlkLXBvaW50cz0idHJ1ZSIKICAgICBncmlkdG9sZXJhbmNlPSIxMDAwMCIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjEzOTkiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iODc0IgogICAgIGlua3NjYXBlOndpbmRvdy14PSIzMyIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMCIKICAgICBpbmtzY2FwZTpzbmFwLWJib3g9InRydWUiPgogICAgPGlua3NjYXBlOmdyaWQKICAgICAgIGlkPSJHcmlkRnJvbVByZTA0NlNldHRpbmdzIgogICAgICAgdHlwZT0ieHlncmlkIgogICAgICAgb3JpZ2lueD0iMHB4IgogICAgICAgb3JpZ2lueT0iMHB4IgogICAgICAgc3BhY2luZ3g9IjFweCIKICAgICAgIHNwYWNpbmd5PSIxcHgiCiAgICAgICBjb2xvcj0iIzAwMDBmZiIKICAgICAgIGVtcGNvbG9yPSIjMDAwMGZmIgogICAgICAgb3BhY2l0eT0iMC4yIgogICAgICAgZW1wb3BhY2l0eT0iMC40IgogICAgICAgZW1wc3BhY2luZz0iNSIKICAgICAgIHZpc2libGU9InRydWUiCiAgICAgICBlbmFibGVkPSJ0cnVlIiAvPgogIDwvc29kaXBvZGk6bmFtZWR2aWV3PgogIDxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTciPgogICAgPHJkZjpSREY+CiAgICAgIDxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj4KICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICA8ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+CiAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KICA8L21ldGFkYXRhPgogIDxnCiAgICAgaW5rc2NhcGU6bGFiZWw9IkxheWVyIDEiCiAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICBpZD0ibGF5ZXIxIj4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJtIDcwLDI1IGMgMjAsMCAyNSwwIDI1LDAiCiAgICAgICBpZD0icGF0aDMwNTkiCiAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9ImNjIiAvPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTk5OTk5ODg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Ik0gMzAuMzg1NzE3LDE1IEwgNC45OTk5OTk4LDE1IgogICAgICAgaWQ9InBhdGgzMDYxIiAvPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTk5OTk5NzY7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Ik0gMzEuMzYyMDkxLDM1IEwgNC45OTk5OTk4LDM1IgogICAgICAgaWQ9InBhdGgzOTQ0IiAvPgogICAgPGcKICAgICAgIGlkPSJnMjU2MCIKICAgICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjYuNSwtMzkuNSkiPgogICAgICA8cGF0aAogICAgICAgICBpZD0icGF0aDM1MTYiCiAgICAgICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjM7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgICAgZD0iTSAtMi4yNSw4MS41MDAwMDUgQyAtMy44NDczNzQsODQuMTQ0NDA1IC00LjUsODQuNTAwMDA1IC00LjUsODQuNTAwMDA1IEwgLTguMTU2MjUsODQuNTAwMDA1IEwgLTYuMTU2MjUsODIuMDYyNTA1IEMgLTYuMTU2MjUsODIuMDYyNTA1IC0wLjUsNzUuMDYyNDUxIC0wLjUsNjQuNSBDIC0wLjUsNTMuOTM3NTQ5IC02LjE1NjI1LDQ2LjkzNzUgLTYuMTU2MjUsNDYuOTM3NSBMIC04LjE1NjI1LDQ0LjUgTCAtNC41LDQ0LjUgQyAtMy43MTg3NSw0NS40Mzc1IC0zLjA3ODEyNSw0Ni4xNTYyNSAtMi4yODEyNSw0Ny41IEMgLTAuNDA4NTMxLDUwLjU5OTgxNSAyLjUsNTYuNTI2NjQ2IDIuNSw2NC41IEMgMi41LDcyLjQ1MDY1IC0wLjM5NjY5Nyw3OC4zNzk0MjUgLTIuMjUsODEuNTAwMDA1IHoiCiAgICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2NjY3NjY2Njc2MiIC8+CiAgICAgIDxwYXRoCiAgICAgICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjM7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgICAgZD0iTSAtMi40MDYyNSw0NC41IEwgLTAuNDA2MjUsNDYuOTM3NSBDIC0wLjQwNjI1LDQ2LjkzNzUgNS4yNSw1My45Mzc1NDkgNS4yNSw2NC41IEMgNS4yNSw3NS4wNjI0NTEgLTAuNDA2MjUsODIuMDYyNSAtMC40MDYyNSw4Mi4wNjI1IEwgLTIuNDA2MjUsODQuNSBMIDAuNzUsODQuNSBMIDE0Ljc1LDg0LjUgQyAxNy4xNTgwNzYsODQuNTAwMDAxIDIyLjQzOTY5OSw4NC41MjQ1MTQgMjguMzc1LDgyLjA5Mzc1IEMgMzQuMzEwMzAxLDc5LjY2Mjk4NiA0MC45MTE1MzYsNzQuNzUwNDg0IDQ2LjA2MjUsNjUuMjE4NzUgTCA0NC43NSw2NC41IEwgNDYuMDYyNSw2My43ODEyNSBDIDM1Ljc1OTM4Nyw0NC43MTU1OSAxOS41MDY1NzQsNDQuNSAxNC43NSw0NC41IEwgMC43NSw0NC41IEwgLTIuNDA2MjUsNDQuNSB6IE0gMy40Njg3NSw0Ny41IEwgMTQuNzUsNDcuNSBDIDE5LjQzNDE3Myw0Ny41IDMzLjAzNjg1LDQ3LjM2OTc5MyA0Mi43MTg3NSw2NC41IEMgMzcuOTUxOTY0LDcyLjkyOTA3NSAzMi4xOTc0NjksNzcuMTgzOTEgMjcsNzkuMzEyNSBDIDIxLjYzOTMzOSw4MS41MDc5MjQgMTcuMTU4MDc1LDgxLjUwMDAwMSAxNC43NSw4MS41IEwgMy41LDgxLjUgQyA1LjM3MzU4ODQsNzguMzkxNTY2IDguMjUsNzIuNDUwNjUgOC4yNSw2NC41IEMgOC4yNSw1Ni41MjY2NDYgNS4zNDE0Njg2LDUwLjU5OTgxNSAzLjQ2ODc1LDQ3LjUgeiIKICAgICAgICAgaWQ9InBhdGg0OTczIgogICAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9ImNjc2NjY2NzY2NjY2NjY2Njc2Njc2MiIC8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K' }}
@@ -15048,7 +15055,7 @@
 
     joint.shapes.logic.Xnor = joint.shapes.logic.Gate21.extend({
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Xnor',
             attrs: { image: { 'xlink:href': 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgo8c3ZnCiAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHdpZHRoPSIxMDAiCiAgIGhlaWdodD0iNTAiCiAgIGlkPSJzdmcyIgogICBzb2RpcG9kaTp2ZXJzaW9uPSIwLjMyIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ2IgogICB2ZXJzaW9uPSIxLjAiCiAgIHNvZGlwb2RpOmRvY25hbWU9IlhOT1IgQU5TSS5zdmciCiAgIGlua3NjYXBlOm91dHB1dF9leHRlbnNpb249Im9yZy5pbmtzY2FwZS5vdXRwdXQuc3ZnLmlua3NjYXBlIj4KICA8ZGVmcwogICAgIGlkPSJkZWZzNCI+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogMTUgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfej0iNTAgOiAxNSA6IDEiCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMjUgOiAxMCA6IDEiCiAgICAgICBpZD0icGVyc3BlY3RpdmUyNzE0IiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDAuNSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF96PSIxIDogMC41IDogMSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIwLjUgOiAwLjMzMzMzMzMzIDogMSIKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI4MDYiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI4MTkiCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iMzcyLjA0NzI0IDogMzUwLjc4NzM5IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9Ijc0NC4wOTQ0OCA6IDUyNi4xODEwOSA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogNTI2LjE4MTA5IDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIGlkPSJwZXJzcGVjdGl2ZTI3NzciCiAgICAgICBpbmtzY2FwZTpwZXJzcDNkLW9yaWdpbj0iNzUgOiA0MCA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF96PSIxNTAgOiA2MCA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogNjAgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlMzI3NSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSI1MCA6IDMzLjMzMzMzMyA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF96PSIxMDAgOiA1MCA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF95PSIwIDogMTAwMCA6IDAiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogNTAgOiAxIgogICAgICAgc29kaXBvZGk6dHlwZT0iaW5rc2NhcGU6cGVyc3AzZCIgLz4KICAgIDxpbmtzY2FwZTpwZXJzcGVjdGl2ZQogICAgICAgaWQ9InBlcnNwZWN0aXZlNTUzMyIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIzMiA6IDIxLjMzMzMzMyA6IDEiCiAgICAgICBpbmtzY2FwZTp2cF96PSI2NCA6IDMyIDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiAxMDAwIDogMCIKICAgICAgIGlua3NjYXBlOnZwX3g9IjAgOiAzMiA6IDEiCiAgICAgICBzb2RpcG9kaTp0eXBlPSJpbmtzY2FwZTpwZXJzcDNkIiAvPgogICAgPGlua3NjYXBlOnBlcnNwZWN0aXZlCiAgICAgICBpZD0icGVyc3BlY3RpdmUyNTU3IgogICAgICAgaW5rc2NhcGU6cGVyc3AzZC1vcmlnaW49IjI1IDogMTYuNjY2NjY3IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3o9IjUwIDogMjUgOiAxIgogICAgICAgaW5rc2NhcGU6dnBfeT0iMCA6IDEwMDAgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfeD0iMCA6IDI1IDogMSIKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiIC8+CiAgPC9kZWZzPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0iYmFzZSIKICAgICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiCiAgICAgYm9yZGVyb3BhY2l0eT0iMS4wIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwLjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp6b29tPSI0IgogICAgIGlua3NjYXBlOmN4PSI5NS43MjM2NiIKICAgICBpbmtzY2FwZTpjeT0iLTI2Ljc3NTAyMyIKICAgICBpbmtzY2FwZTpkb2N1bWVudC11bml0cz0icHgiCiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ibGF5ZXIxIgogICAgIHNob3dncmlkPSJ0cnVlIgogICAgIGlua3NjYXBlOmdyaWQtYmJveD0idHJ1ZSIKICAgICBpbmtzY2FwZTpncmlkLXBvaW50cz0idHJ1ZSIKICAgICBncmlkdG9sZXJhbmNlPSIxMDAwMCIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjEzOTkiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iODc0IgogICAgIGlua3NjYXBlOndpbmRvdy14PSIzMyIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMCIKICAgICBpbmtzY2FwZTpzbmFwLWJib3g9InRydWUiPgogICAgPGlua3NjYXBlOmdyaWQKICAgICAgIGlkPSJHcmlkRnJvbVByZTA0NlNldHRpbmdzIgogICAgICAgdHlwZT0ieHlncmlkIgogICAgICAgb3JpZ2lueD0iMHB4IgogICAgICAgb3JpZ2lueT0iMHB4IgogICAgICAgc3BhY2luZ3g9IjFweCIKICAgICAgIHNwYWNpbmd5PSIxcHgiCiAgICAgICBjb2xvcj0iIzAwMDBmZiIKICAgICAgIGVtcGNvbG9yPSIjMDAwMGZmIgogICAgICAgb3BhY2l0eT0iMC4yIgogICAgICAgZW1wb3BhY2l0eT0iMC40IgogICAgICAgZW1wc3BhY2luZz0iNSIKICAgICAgIHZpc2libGU9InRydWUiCiAgICAgICBlbmFibGVkPSJ0cnVlIiAvPgogIDwvc29kaXBvZGk6bmFtZWR2aWV3PgogIDxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTciPgogICAgPHJkZjpSREY+CiAgICAgIDxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj4KICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICA8ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+CiAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KICA8L21ldGFkYXRhPgogIDxnCiAgICAgaW5rc2NhcGU6bGFiZWw9IkxheWVyIDEiCiAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICBpZD0ibGF5ZXIxIj4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoyLjAwMDAwMDI0O3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJNIDc4LjMzMzMzMiwyNSBDIDkxLjY2NjY2NiwyNSA5NSwyNSA5NSwyNSIKICAgICAgIGlkPSJwYXRoMzA1OSIKICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2MiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45OTk5OTk4ODtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgZD0iTSAzMC4zODU3MTcsMTUgTCA0Ljk5OTk5OTgsMTUiCiAgICAgICBpZD0icGF0aDMwNjEiIC8+CiAgICA8cGF0aAogICAgICAgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45OTk5OTk3NjtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgZD0iTSAzMS4zNjIwOTEsMzUgTCA0Ljk5OTk5OTgsMzUiCiAgICAgICBpZD0icGF0aDM5NDQiIC8+CiAgICA8ZwogICAgICAgaWQ9ImcyNTYwIgogICAgICAgaW5rc2NhcGU6bGFiZWw9IkxheWVyIDEiCiAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNi41LC0zOS41KSI+CiAgICAgIDxwYXRoCiAgICAgICAgIGlkPSJwYXRoMzUxNiIKICAgICAgICAgc3R5bGU9ImZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6ZXZlbm9kZDtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MztzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgICBkPSJNIC0yLjI1LDgxLjUwMDAwNSBDIC0zLjg0NzM3NCw4NC4xNDQ0MDUgLTQuNSw4NC41MDAwMDUgLTQuNSw4NC41MDAwMDUgTCAtOC4xNTYyNSw4NC41MDAwMDUgTCAtNi4xNTYyNSw4Mi4wNjI1MDUgQyAtNi4xNTYyNSw4Mi4wNjI1MDUgLTAuNSw3NS4wNjI0NTEgLTAuNSw2NC41IEMgLTAuNSw1My45Mzc1NDkgLTYuMTU2MjUsNDYuOTM3NSAtNi4xNTYyNSw0Ni45Mzc1IEwgLTguMTU2MjUsNDQuNSBMIC00LjUsNDQuNSBDIC0zLjcxODc1LDQ1LjQzNzUgLTMuMDc4MTI1LDQ2LjE1NjI1IC0yLjI4MTI1LDQ3LjUgQyAtMC40MDg1MzEsNTAuNTk5ODE1IDIuNSw1Ni41MjY2NDYgMi41LDY0LjUgQyAyLjUsNzIuNDUwNjUgLTAuMzk2Njk3LDc4LjM3OTQyNSAtMi4yNSw4MS41MDAwMDUgeiIKICAgICAgICAgc29kaXBvZGk6bm9kZXR5cGVzPSJjY2Njc2NjY2NzYyIgLz4KICAgICAgPHBhdGgKICAgICAgICAgc3R5bGU9ImZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6ZXZlbm9kZDtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MztzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgICBkPSJNIC0yLjQwNjI1LDQ0LjUgTCAtMC40MDYyNSw0Ni45Mzc1IEMgLTAuNDA2MjUsNDYuOTM3NSA1LjI1LDUzLjkzNzU0OSA1LjI1LDY0LjUgQyA1LjI1LDc1LjA2MjQ1MSAtMC40MDYyNSw4Mi4wNjI1IC0wLjQwNjI1LDgyLjA2MjUgTCAtMi40MDYyNSw4NC41IEwgMC43NSw4NC41IEwgMTQuNzUsODQuNSBDIDE3LjE1ODA3Niw4NC41MDAwMDEgMjIuNDM5Njk5LDg0LjUyNDUxNCAyOC4zNzUsODIuMDkzNzUgQyAzNC4zMTAzMDEsNzkuNjYyOTg2IDQwLjkxMTUzNiw3NC43NTA0ODQgNDYuMDYyNSw2NS4yMTg3NSBMIDQ0Ljc1LDY0LjUgTCA0Ni4wNjI1LDYzLjc4MTI1IEMgMzUuNzU5Mzg3LDQ0LjcxNTU5IDE5LjUwNjU3NCw0NC41IDE0Ljc1LDQ0LjUgTCAwLjc1LDQ0LjUgTCAtMi40MDYyNSw0NC41IHogTSAzLjQ2ODc1LDQ3LjUgTCAxNC43NSw0Ny41IEMgMTkuNDM0MTczLDQ3LjUgMzMuMDM2ODUsNDcuMzY5NzkzIDQyLjcxODc1LDY0LjUgQyAzNy45NTE5NjQsNzIuOTI5MDc1IDMyLjE5NzQ2OSw3Ny4xODM5MSAyNyw3OS4zMTI1IEMgMjEuNjM5MzM5LDgxLjUwNzkyNCAxNy4xNTgwNzUsODEuNTAwMDAxIDE0Ljc1LDgxLjUgTCAzLjUsODEuNSBDIDUuMzczNTg4NCw3OC4zOTE1NjYgOC4yNSw3Mi40NTA2NSA4LjI1LDY0LjUgQyA4LjI1LDU2LjUyNjY0NiA1LjM0MTQ2ODYsNTAuNTk5ODE1IDMuNDY4NzUsNDcuNSB6IgogICAgICAgICBpZD0icGF0aDQ5NzMiCiAgICAgICAgIHNvZGlwb2RpOm5vZGV0eXBlcz0iY2NzY2NjY3NjY2NjY2NjY2NzY2NzYyIgLz4KICAgIDwvZz4KICAgIDxwYXRoCiAgICAgICBzb2RpcG9kaTp0eXBlPSJhcmMiCiAgICAgICBzdHlsZT0iZmlsbDpub25lO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDozO3N0cm9rZS1saW5lam9pbjptaXRlcjttYXJrZXI6bm9uZTtzdHJva2Utb3BhY2l0eToxO3Zpc2liaWxpdHk6dmlzaWJsZTtkaXNwbGF5OmlubGluZTtvdmVyZmxvdzp2aXNpYmxlO2VuYWJsZS1iYWNrZ3JvdW5kOmFjY3VtdWxhdGUiCiAgICAgICBpZD0icGF0aDM1NTEiCiAgICAgICBzb2RpcG9kaTpjeD0iNzUiCiAgICAgICBzb2RpcG9kaTpjeT0iMjUiCiAgICAgICBzb2RpcG9kaTpyeD0iNCIKICAgICAgIHNvZGlwb2RpOnJ5PSI0IgogICAgICAgZD0iTSA3OSwyNSBBIDQsNCAwIDEgMSA3MSwyNSBBIDQsNCAwIDEgMSA3OSwyNSB6IiAvPgogIDwvZz4KPC9zdmc+Cg==' }}
@@ -15081,7 +15088,7 @@
             '</g>'
         ].join(''),
 
-        defaults: _.defaultsDeep({
+        defaults: __.defaultsDeep({
 
             type: 'logic.Wire',
 
@@ -15123,7 +15130,7 @@
             // This is not needed anymore.
             graphOrCells = null;
 
-            opt = _.defaults(opt || {}, {
+            opt = __.defaults(opt || {}, {
                 resizeClusters: true,
                 clusterPadding: 10
             });
@@ -15225,7 +15232,7 @@
                 // 2. map id on cells
                 // 3. sort cells by their depth (the deepest first)
                 // 4. resize cell to fit their direct children only.
-                _.chain(glGraph.nodes())
+                __.chain(glGraph.nodes())
                     .filter(function(v) { return glGraph.children(v).length > 0; })
                     .map(graph.getCell, graph)
                     .sortBy(function(cluster) { return -cluster.getAncestors().length; })
@@ -15250,8 +15257,8 @@
 
             opt = opt || {};
 
-            var importNode = opt.importNode || _.noop;
-            var importEdge = opt.importEdge || _.noop;
+            var importNode = opt.importNode || __.noop;
+            var importEdge = opt.importEdge || __.noop;
             var graph = (this instanceof joint.dia.Graph) ? this : new joint.dia.Graph;
 
             // Import all nodes.
@@ -15272,11 +15279,11 @@
 
             opt = opt || {};
 
-            var glGraphType = _.pick(opt, 'directed', 'compound', 'multigraph');
+            var glGraphType = __.pick(opt, 'directed', 'compound', 'multigraph');
             var glGraph = new graphlib.Graph(glGraphType);
-            var setNodeLabel = opt.setNodeLabel || _.noop;
-            var setEdgeLabel = opt.setEdgeLabel || _.noop;
-            var setEdgeName = opt.setEdgeName || _.noop;
+            var setNodeLabel = opt.setNodeLabel || __.noop;
+            var setEdgeLabel = opt.setEdgeLabel || __.noop;
+            var setEdgeName = opt.setEdgeName || __.noop;
 
             graph.get('cells').each(function(cell) {
 
