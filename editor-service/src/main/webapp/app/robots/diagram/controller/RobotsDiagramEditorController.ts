@@ -44,6 +44,7 @@ export class RobotsDiagramEditorController extends DiagramEditorController {
         $scope.openFolderWindow = () => { this.menuController.openFolderWindow(); };
         $scope.saveCurrentDiagram = () => { this.menuController.saveCurrentDiagram(); };
         $scope.saveDiagramAs = () => { this.menuController.saveDiagramAs(); };
+        $scope.layoutDiagram = () => { this.menuController.layoutDiagram(); };
         $scope.clearAll = () => { this.clearAll(); };
 
         $scope.$on("interpret", (event, timeline) => {

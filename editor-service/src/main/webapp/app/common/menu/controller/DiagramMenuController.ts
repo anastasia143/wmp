@@ -380,4 +380,8 @@ export class DiagramMenuController {
             $('#enter-name-share-folder').modal('hide');
         });
     }
+
+    public layoutDiagram() {
+        this.diagramEditorController.layoutDiagram();
+    }
 }

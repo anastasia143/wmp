@@ -630,6 +630,7 @@ declare module "core/editorCore/controller/DiagramEditorController" {
         getNodeTypes(): Map<String, NodeType>;
         getLinkPatterns(): Map<String, joint.dia.Link>;
         addFromMap(diagramParts: DiagramParts): void;
+        layoutDiagram(): void;
         protected handleLoadedTypes(elementTypes: ElementTypes): void;
     }
 }

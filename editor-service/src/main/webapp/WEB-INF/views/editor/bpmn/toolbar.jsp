@@ -31,6 +31,14 @@
                         <li><a href="" role="menuitem" tabindex="-1" ng-click="saveDiagramAs()">SaveAs</a></li>
                     </ul>
                 </li>
+                <li id="layout-menu" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Layout<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="" role="menuitem" tabindex="-1" ng-click="layoutDiagram()">New</a></li>
+                        <li><a href="" role="menuitem" tabindex="-1" data-toggle="modal" data-target="#diagrams"
+                               ng-click="openFolderWindow()">Layout diagram</a></li>
+                    </ul>
+                </li>
                 <li>
                     <p id="undo-toolbar-button" class="navbar-text" ng-click="undo()">
                         <span class="glyphicon glyphicon-chevron-left"

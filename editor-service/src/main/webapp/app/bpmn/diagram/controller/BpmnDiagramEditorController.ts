@@ -42,6 +42,7 @@ export class BpmnDiagramEditorController extends DiagramEditorController {
         $scope.openFolderWindow = () => { this.menuController.openFolderWindow(); };
         $scope.saveCurrentDiagram = () => { this.menuController.saveCurrentDiagram(); };
         $scope.saveDiagramAs = () => { this.menuController.saveDiagramAs(); };
+        $scope.layoutDiagram = () => { this.menuController.layoutDiagram(); };
         $scope.clearAll = () => { this.clearAll(); };
 
         this.elementsTypeLoader.load((elementTypes: ElementTypes): void => {
