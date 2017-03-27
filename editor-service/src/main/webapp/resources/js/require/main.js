@@ -12,7 +12,9 @@ requirejs.config({
 
         bootstrap: '../libs/bootstrap/bootstrap',
 
-        jointjs: '../libs/joint/joint'
+        jointjs: '../libs/joint/joint',
+        graphlib: '../libs/graphlib/graphlib',
+        dagre: '../libs/dagre/dagre'
     },
     shim: {
         angular: {
@@ -38,9 +40,30 @@ requirejs(
     });
 
 requirejs(
+    ['lodash']
+    , function (lodash) {
+        console.log('Adding lodash to global');
+        this._ = lodash;
+    });
+
+requirejs(
+    ['graphlib']
+    , function (graphlib) {
+        console.log('Adding graphlib to global');
+        this.graphlib = graphlib;
+    });
+
+requirejs(
+    ['dagre']
+    , function (dagre) {
+        console.log('Adding dagre to global');
+        this.dagre = dagre;
+    });
+
+requirejs(
     ['angular', 'jointjs',
     'jquery', 'jqueryui', 'jquerytree',
-    'lodash', 'backbone',
+    'lodash', 'backbone', 'graphlib', 'dagre',
     'bootstrap',
     'require/app',
     'robots/RootDiagramController',

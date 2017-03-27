@@ -174,10 +174,10 @@ export class DiagramEditorController {
 
     public layoutDiagram(): void {
         var graph = this.diagramEditor.getGraph();
-        var newCells = this.buildGraphFromAdjacencyList(graph.getElements(), graph.getLinks());
-        graph.resetCells(newCells);
+        //var newCells = this.buildGraphFromAdjacencyList(graph.getElements(), graph.getLinks());
+        //graph.resetCells(newCells);
 
         //  { setLinkVertices: false }
-        joint.layout.DirectedGraph.layout(graph);
+        joint.layout.DirectedGraph.layout(graph.getCells());
     }
 }
